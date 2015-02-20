@@ -1,0 +1,150 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:orientation="vertical"
+    tools:context="com.example.viral.vetogame.NewGame">
+
+    <EditText
+        android:id="@+id/game_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="@string/name_hint"
+        android:inputType="text" />
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+
+        <TableRow
+            android:layout_margin="10dp">
+            <ImageView
+                android:id="@+id/ic_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tag_3x"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"/>
+
+            <Spinner
+                android:id="@+id/spin_game_topic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:layout_weight="0.8" />
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp">
+            <ImageView
+                android:id="@+id/ic_people"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/people_3x"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"/>
+
+            <Button
+                android:id="@+id/btn_invite_people"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="@string/btn_invite"
+                android:textColor="#a7a7a7"
+                android:gravity="left|center_vertical"
+                android:background="@drawable/btn_background"
+                android:layout_weight="0.8" />
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp">
+            <ImageView
+                android:id="@+id/ic_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/clock_3x"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"/>
+
+            <Button
+                android:id="@+id/btn_event_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="date"
+                android:gravity="left|center_vertical"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_weight="0.6"/>
+
+            <Button
+                android:id="@+id/btn_event_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="time"
+                android:gravity="left|center_vertical"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_weight="0.2"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp">
+            <ImageView
+                android:id="@+id/ic_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/timer_3x"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"/>
+
+            <Button
+                android:id="@+id/btn_limit_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="date"
+                android:gravity="left|center_vertical"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_weight="0.6"/>
+
+            <Button
+                android:id="@+id/btn_limit_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="time"
+                android:gravity="left|center_vertical"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_weight="0.2"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp">
+            <ImageView
+                android:id="@+id/ic_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search_3x"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"/>
+
+            <Button
+                android:id="@+id/btn_init_suggestion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="Initial suggestion"
+                android:textColor="#a7a7a7"
+                android:gravity="left|center_vertical"
+                android:background="@drawable/btn_background"
+                android:layout_weight="0.8" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

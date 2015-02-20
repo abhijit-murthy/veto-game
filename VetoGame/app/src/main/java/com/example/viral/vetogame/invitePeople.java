@@ -1,36 +1,37 @@
 package com.example.viral.vetogame;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import android.widget.ListView;
 
 
-public class GameList extends Activity {
+public class InvitePeople extends Activity {
+    ListView listPeople;
+    Person[] personItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_list);
+        setContentView(R.layout.activity_invite_people);
 
-        Button button = (Button) findViewById(R.id.btn_new_game);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(GameList.this,
-                        NewGame.class);
-                startActivity(intent);
-            }
-        });
+        listPeople = (ListView) findViewById(R.id.people);
+        personItems = new Person[5];
+        personItems[0] = new Person("Bryan Mishkin", 0);
+        personItems[1] = new Person("Drew Orr", 0);
+        personItems[2] = new Person("Mike Jung", 0);
+        personItems[3] = new Person("Nini Xia", 0);
+        personItems[4] = new Person("Sherry Liu", 0);
+        PeopleAdapter adapter = new PeopleAdapter(this, personItems);
+        listPeople.setAdapter(adapter);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_game_list, menu);
+        getMenuInflater().inflate(R.menu.menu_invite_people, menu);
         return true;
     }
 
