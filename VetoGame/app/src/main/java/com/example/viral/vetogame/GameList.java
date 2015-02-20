@@ -1,24 +1,36 @@
 package com.example.viral.vetogame;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
-public class AInitSuggestion extends Activity {
+public class GameList extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_init_suggestion);
+        setContentView(R.layout.activity_game_list);
+
+        Button button = (Button) findViewById(R.id.btn_new_game);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(GameList.this,
+                        NewGame.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_init_suggestion, menu);
+        getMenuInflater().inflate(R.menu.menu_game_list, menu);
         return true;
     }
 
