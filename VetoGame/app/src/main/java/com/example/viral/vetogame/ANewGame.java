@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 
-public class NewGame extends Activity {
+public class ANewGame extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,8 @@ public class NewGame extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(NewGame.this,
-                                InvitePeople.class);
+                        Intent intent = new Intent(ANewGame.this,
+                                AInvitePeople.class);
                         startActivity(intent);
 
                     }
@@ -41,8 +41,8 @@ public class NewGame extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(NewGame.this,
-                                InitSuggestion.class);
+                        Intent intent = new Intent(ANewGame.this,
+                                AInitSuggestion.class);
                         startActivity(intent);
 
                     }

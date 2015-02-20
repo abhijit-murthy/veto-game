@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".GameList"
+            android:name=".AGameList"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,17 +17,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewGame"
+            android:name=".ANewGame"
             android:label="New Game"
-            android:parentActivityName=".GameList" >
+            android:parentActivityName=".AGameList" >
         </activity>
         <activity
-            android:name=".InvitePeople"
+            android:name=".AInvitePeople"
             android:label="Invite"
-            android:parentActivityName=".NewGame" >
+            android:parentActivityName=".ANewGame" >
         </activity>
         <activity
-            android:name=".InitSuggestion"
+            android:name=".AInitSuggestion"
             android:label="Suggestion" >
         </activity>
     </application>

@@ -12,11 +12,11 @@ import android.widget.TextView;
 /**
  * Created by eunkikim on 2/19/15.
  */
-public class PeopleAdapter extends ArrayAdapter <Person>{
-    Person[] personItems = null;
+public class APeopleAdapter extends ArrayAdapter <APerson>{
+    APerson[] personItems = null;
     Context context;
 
-    public PeopleAdapter(Context context, Person[] resource) {
+    public APeopleAdapter(Context context, APerson[] resource) {
         super(context,R.layout.list_person,resource);
         // TODO Auto-generated constructor stub
         this.context = context;

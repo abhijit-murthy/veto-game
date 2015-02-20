@@ -16,14 +16,14 @@ import java.util.Collection;
 public class GameAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
-    private ArrayList<AGame> games;
+    private ArrayList<Game> games;
 
     public GameAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
-        this.games = new ArrayList<AGame>();
+        this.games = new ArrayList<Game>();
     }
 
-    public void replaceWith(Collection<AGame> newGames) {
+    public void replaceWith(Collection<Game> newGames) {
         this.games.clear();
         this.games.addAll(newGames);
         notifyDataSetChanged();
@@ -35,7 +35,7 @@ public class GameAdapter extends BaseAdapter {
     }
 
     @Override
-    public AGame getItem(int position) {
+    public Game getItem(int position) {
         return games.get(position);
     }
 
@@ -51,7 +51,7 @@ public class GameAdapter extends BaseAdapter {
         return view;
     }
 
-    private void bind(AGame game, View view) {
+    private void bind(Game game, View view) {
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.gameNameTextView.setText(game.getGameName());
         holder.currentSuggestionTextView.setText(game.getCurrentSuggestion().toString());
