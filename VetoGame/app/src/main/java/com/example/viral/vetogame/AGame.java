@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by Viral on 2/19/2015.
  */
-public class Game {
+public class AGame {
 
     private String gameName;
     private Suggestion currentSuggestion;
@@ -23,7 +23,7 @@ public class Game {
     private int locationRadius;
 
 
-    public Game (String gameName, Suggestion currentSuggestion, Date timeStarted, Date timeEnding,
+    public AGame(String gameName, Suggestion currentSuggestion, Date timeStarted, Date timeEnding,
                  int numberOfMembers, String gameType, int eventTime, Location location,
                  int locationRadius){
         this.gameName = gameName;

@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Created by Viral on 2/19/2015.
@@ -18,14 +16,14 @@ import java.util.Comparator;
 public class GameAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
-    private ArrayList<Game> games;
+    private ArrayList<AGame> games;
 
     public GameAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
-        this.games = new ArrayList<Game>();
+        this.games = new ArrayList<AGame>();
     }
 
-    public void replaceWith(Collection<Game> newGames) {
+    public void replaceWith(Collection<AGame> newGames) {
         this.games.clear();
         this.games.addAll(newGames);
         notifyDataSetChanged();
@@ -37,7 +35,7 @@ public class GameAdapter extends BaseAdapter {
     }
 
     @Override
-    public Game getItem(int position) {
+    public AGame getItem(int position) {
         return games.get(position);
     }
 
@@ -53,7 +51,7 @@ public class GameAdapter extends BaseAdapter {
         return view;
     }
 
-    private void bind(Game game, View view) {
+    private void bind(AGame game, View view) {
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.gameNameTextView.setText(game.getGameName());
         holder.currentSuggestionTextView.setText(game.getCurrentSuggestion().toString());
