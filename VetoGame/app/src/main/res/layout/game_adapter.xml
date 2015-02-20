@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:tag="gameType"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:padding="0dp"
+       android:src="@drawable/ic_launcher"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/game_type_icon"/>
+
+        <LinearLayout android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:tag="gameName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="@string/game_name"
+                    android:id="@+id/gameNameText"/>
+
+                <TextView
+                    android:tag="currentSuggestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="@string/current_suggestion"
+                    android:id="@+id/currentSuggestionText"/>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <ImageView android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_launcher"/>
+
+                <TextView
+                    android:tag="@string/time_remaining"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/time_remaining"/>
+
+            </LinearLayout>
+
+            <!--<TextView
+                android:tag="timeRemaining"
+                android:layout_marginTop="0dp"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="@string/time_remaining"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_launcher"
+                android:padding="5dp"
+                android:id="@+id/timeRemainingText"/>-->
+
+            <TextView
+                android:tag="@string/number_of_members"
+                android:layout_marginTop="0dp"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="@string/number_of_members"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_launcher"
+                android:padding="5dp"
+                android:id="@+id/numberOfCharacterText"/>
+
+           <!-- <LinearLayout android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_launcher"/>
+
+                <TextView
+                    android:tag="numberMembers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text = "@string/number_of_members"/>
+
+            </LinearLayout>-->
+
+        </LinearLayout>
+
+</LinearLayout>
