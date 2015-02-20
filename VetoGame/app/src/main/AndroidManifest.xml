@@ -16,6 +16,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".newGame"
+            android:label="New Game"
+            android:parentActivityName=".gameList" >
+        </activity>
+        <activity
+            android:name=".invitePeople"
+            android:label="Invite"
+            android:parentActivityName=".newGame" >
+        </activity>
+        <activity
+            android:name=".initSuggestion"
+            android:label="Suggestion" >
+        </activity>
     </application>
 
 </manifest>
