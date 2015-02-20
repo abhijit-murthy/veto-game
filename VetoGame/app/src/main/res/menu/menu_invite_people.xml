@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.viral.vetogame.invitePeople">
+    tools:context="com.example.viral.vetogame.InvitePeople">
     <item android:id="@+id/action_save"
         android:title=""
         android:icon="@drawable/ic_action_accept"

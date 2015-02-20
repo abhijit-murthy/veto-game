@@ -6,7 +6,7 @@
     android:paddingRight="16dp"
     android:paddingTop="16dp"
     android:orientation="vertical"
-    tools:context="com.example.viral.vetogame.newGame">
+    tools:context="com.example.viral.vetogame.NewGame">
 
     <EditText
         android:id="@+id/game_name"

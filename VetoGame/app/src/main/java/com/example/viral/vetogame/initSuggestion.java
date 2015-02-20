@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class initSuggestion extends Activity {
+public class InitSuggestion extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

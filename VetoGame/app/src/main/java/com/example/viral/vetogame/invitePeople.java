@@ -7,9 +7,9 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 
-public class invitePeople extends Activity {
+public class InvitePeople extends Activity {
     ListView listPeople;
-    person[] personItems;
+    Person[] personItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,13 +17,13 @@ public class invitePeople extends Activity {
         setContentView(R.layout.activity_invite_people);
 
         listPeople = (ListView) findViewById(R.id.people);
-        personItems = new person[5];
-        personItems[0] = new person("Bryan Mishkin", 0);
-        personItems[1] = new person("Drew Orr", 0);
-        personItems[2] = new person("Mike Jung", 0);
-        personItems[3] = new person("Nini Xia", 0);
-        personItems[4] = new person("Sherry Liu", 0);
-        peopleAdapter adapter = new peopleAdapter(this, personItems);
+        personItems = new Person[5];
+        personItems[0] = new Person("Bryan Mishkin", 0);
+        personItems[1] = new Person("Drew Orr", 0);
+        personItems[2] = new Person("Mike Jung", 0);
+        personItems[3] = new Person("Nini Xia", 0);
+        personItems[4] = new Person("Sherry Liu", 0);
+        PeopleAdapter adapter = new PeopleAdapter(this, personItems);
         listPeople.setAdapter(adapter);
     }
 

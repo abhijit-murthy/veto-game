@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 
-public class gameList extends Activity {
+public class GameList extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +19,8 @@ public class gameList extends Activity {
         Button button = (Button) findViewById(R.id.btn_new_game);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(gameList.this,
-                        newGame.class);
+                Intent intent = new Intent(GameList.this,
+                        NewGame.class);
                 startActivity(intent);
             }
         });
