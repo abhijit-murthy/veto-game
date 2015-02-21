@@ -3,7 +3,8 @@
 'use strict';
 
 var path = require('path')
-  , restify = require('restify');
+  , restify = require('restify')
+  , gameDataController = require('./controllers/game_data');
 
 
 exports.createServer = createServer;
@@ -41,9 +42,8 @@ function createServer (logger) {
     res.send({'result': 'test'});      
     return next();
   });
-
-
-  
+  server.get('/game_data',gameDataController.getGameData);
+  server.post('/game_data/create',gameDataController.createGame);
   
   return server;
 }
