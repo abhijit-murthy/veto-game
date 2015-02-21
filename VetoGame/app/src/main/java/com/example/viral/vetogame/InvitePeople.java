@@ -7,11 +7,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ToggleButton;
+import java.util.ArrayList;
+
 
 
 public class InvitePeople extends Activity {
     ListView listPeople;
-    Person[] personItems;
+    ArrayList<Person> personItems;
+    PeopleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,23 +22,24 @@ public class InvitePeople extends Activity {
         setContentView(R.layout.activity_invite_people);
 
         listPeople = (ListView) findViewById(R.id.people);
-        personItems = new Person[15];
-        personItems[0] = new Person("Bryan Mishkin", 0);
-        personItems[1] = new Person("Drew Orr", 0);
-        personItems[2] = new Person("Mike Jung", 0);
-        personItems[3] = new Person("Nini Xia", 0);
-        personItems[4] = new Person("Sherry Liu", 0);
-        personItems[5] = new Person("Bryan Mishkin", 0);
-        personItems[6] = new Person("Drew Orr", 0);
-        personItems[7] = new Person("Mike Jung", 0);
-        personItems[8] = new Person("Nini Xia", 0);
-        personItems[9] = new Person("Sherry Liu", 0);
-        personItems[10] = new Person("Bryan Mishkin", 0);
-        personItems[11] = new Person("Drew Orr", 0);
-        personItems[12] = new Person("Mike Jung", 0);
-        personItems[13] = new Person("Nini Xia", 0);
-        personItems[14] = new Person("Sherry Liu", 0);
-        PeopleAdapter adapter = new PeopleAdapter(this, personItems);
+
+        personItems = new ArrayList<Person>();
+        personItems.add(new Person("Bryan Mishkin", false));
+        personItems.add(new Person("Drew Orr", false));
+        personItems.add(new Person("Mike Jung", false));
+        personItems.add(new Person("Nini Xia", false));
+        personItems.add(new Person("Sherry Liu", false));
+        personItems.add(new Person("Jack Mishkin", false));
+        personItems.add(new Person("Drew Orr", false));
+        personItems.add(new Person("Mike Jung", false));
+        personItems.add(new Person("Nini Xia", false));
+        personItems.add(new Person("Sherry Liu", false));
+        personItems.add(new Person("Bryan Mishkin", false));
+        personItems.add(new Person("Drew Orr", false));
+        personItems.add(new Person("Mike Jung", false));
+        personItems.add(new Person("Nini Xia", false));
+        personItems.add(new Person("Sherry Liu", false));
+        adapter = new PeopleAdapter(this, personItems);
         listPeople.setAdapter(adapter);
     }
 
@@ -67,9 +71,20 @@ public class InvitePeople extends Activity {
         boolean on = ((ToggleButton) view).isChecked();
 
         if (on) {
-            // Enable vibrate
+            ArrayList<Person> personInvited = new ArrayList<Person>();
+            int j = 0;
+            for(int i=0; i<personItems.size(); i++){
+                if(personItems.get(i).getChecked()){
+                    personInvited.add(personItems.get(i));
+                    j++;
+                }
+            }
+
+            PeopleAdapter adapter = new PeopleAdapter(this, personInvited, true);
+            listPeople.setAdapter(adapter);
         } else {
-            // Disable vibrate
+            PeopleAdapter adapter = new PeopleAdapter(this, personItems);
+            listPeople.setAdapter(adapter);
         }
     }
 }
