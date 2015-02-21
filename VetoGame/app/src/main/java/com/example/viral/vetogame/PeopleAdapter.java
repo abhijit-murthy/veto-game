@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by eunkikim on 2/19/15.
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 public class PeopleAdapter extends ArrayAdapter <Person> {
     ArrayList<Person> personItems;
     ArrayList<Person> personInvited;
+    HashMap<Integer, Integer> map;
+
     Context context;
     boolean toggle = false;
 
@@ -31,14 +34,17 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
         toggle = false;
     }
 
-    public PeopleAdapter(Context context, ArrayList<Person> invited, boolean t) {
+    public PeopleAdapter(Context context, ArrayList<Person> resource, ArrayList<Person> invited) {
         super(context,R.layout.list_person,invited);
 
         // TODO Auto-generated constructor stub
         this.context = context;
+        personItems = new ArrayList<Person>();
+        this.personItems = resource;
         personInvited = new ArrayList<Person>();
         this.personInvited = invited;
-        toggle = t;
+        map = new HashMap<Integer, Integer>();
+        toggle = true;
     }
 
     @Override
@@ -51,18 +57,19 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
 
         if(toggle){
             name.setText(personInvited.get(position).getName());
-            cb.setChecked(true);
-
             cb.setOnClickListener(new View.OnClickListener() //the add tag button "+"
             {
                 public void onClick(View view)
                 {
                     if(!((CheckBox) view).isChecked()){
-
+                        personItems.get(map.get(position)).setChecked(false);
+                        personInvited.remove(position);
                         notifyDataSetChanged();
                     }
                 }
             });
+
+            cb.setChecked(true);
         }else{
             name.setText(personItems.get(position).getName());
             if(personItems.get(position).getChecked())
@@ -84,5 +91,10 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
         }
 
         return convertView;
+    }
+
+
+    public void setMap(HashMap map) {
+        this.map = map;
     }
 }

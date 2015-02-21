@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ToggleButton;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 
 
 public class InvitePeople extends Activity {
@@ -73,14 +73,18 @@ public class InvitePeople extends Activity {
         if (on) {
             ArrayList<Person> personInvited = new ArrayList<Person>();
             int j = 0;
+            HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+            personInvited.clear();
             for(int i=0; i<personItems.size(); i++){
                 if(personItems.get(i).getChecked()){
                     personInvited.add(personItems.get(i));
+                    map.put(j, i);
                     j++;
                 }
             }
 
-            PeopleAdapter adapter = new PeopleAdapter(this, personInvited, true);
+            PeopleAdapter adapter = new PeopleAdapter(this, personItems, personInvited);
+            adapter.setMap(map);
             listPeople.setAdapter(adapter);
         } else {
             PeopleAdapter adapter = new PeopleAdapter(this, personItems);
