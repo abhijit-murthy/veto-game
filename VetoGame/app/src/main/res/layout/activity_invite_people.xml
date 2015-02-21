@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -20,7 +20,21 @@
     <ListView
         android:id="@+id/people"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="16dp"
+        android:layout_below="@+id/search_name"
+        android:layout_above="@+id/tbtn_show_people" >
     </ListView>
 
-</LinearLayout>
+    <ToggleButton
+        android:id="@+id/tbtn_show_people"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:onClick="tbtn_onClick"
+        android:checked="false"
+        android:textOn="Show invited friends"
+        android:textOff="Show invited friends" />
+
+</RelativeLayout>

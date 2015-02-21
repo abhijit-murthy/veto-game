@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ToggleButton;
 
 
 public class InvitePeople extends Activity {
@@ -17,12 +19,22 @@ public class InvitePeople extends Activity {
         setContentView(R.layout.activity_invite_people);
 
         listPeople = (ListView) findViewById(R.id.people);
-        personItems = new Person[5];
+        personItems = new Person[15];
         personItems[0] = new Person("Bryan Mishkin", 0);
         personItems[1] = new Person("Drew Orr", 0);
         personItems[2] = new Person("Mike Jung", 0);
         personItems[3] = new Person("Nini Xia", 0);
         personItems[4] = new Person("Sherry Liu", 0);
+        personItems[5] = new Person("Bryan Mishkin", 0);
+        personItems[6] = new Person("Drew Orr", 0);
+        personItems[7] = new Person("Mike Jung", 0);
+        personItems[8] = new Person("Nini Xia", 0);
+        personItems[9] = new Person("Sherry Liu", 0);
+        personItems[10] = new Person("Bryan Mishkin", 0);
+        personItems[11] = new Person("Drew Orr", 0);
+        personItems[12] = new Person("Mike Jung", 0);
+        personItems[13] = new Person("Nini Xia", 0);
+        personItems[14] = new Person("Sherry Liu", 0);
         PeopleAdapter adapter = new PeopleAdapter(this, personItems);
         listPeople.setAdapter(adapter);
     }
@@ -48,5 +60,16 @@ public class InvitePeople extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void tbtn_onClick(View view) {
+        // Is the toggle on?
+        boolean on = ((ToggleButton) view).isChecked();
+
+        if (on) {
+            // Enable vibrate
+        } else {
+            // Disable vibrate
+        }
     }
 }
