@@ -28,7 +28,8 @@
         </activity>
         <activity
             android:name=".InitSuggestion"
-            android:label="Suggestion" >
+            android:label="Suggestion"
+            android:parentActivityName=".NewGame" >
         </activity>
     </application>
 

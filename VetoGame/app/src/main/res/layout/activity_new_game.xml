@@ -80,7 +80,8 @@
                 android:text="date"
                 android:gravity="left|center_vertical"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="0.6"/>
+                android:layout_weight="0.6"
+                android:onClick="onClick" />
 
             <Button
                 android:id="@+id/btn_event_time"
@@ -90,7 +91,8 @@
                 android:text="time"
                 android:gravity="left|center_vertical"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="0.2"/>
+                android:layout_weight="0.2"
+                android:onClick="onClick" />
         </TableRow>
 
         <TableRow
@@ -111,7 +113,8 @@
                 android:text="date"
                 android:gravity="left|center_vertical"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="0.6"/>
+                android:layout_weight="0.6"
+                android:onClick="onClick" />
 
             <Button
                 android:id="@+id/btn_limit_time"
@@ -121,7 +124,8 @@
                 android:text="time"
                 android:gravity="left|center_vertical"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="0.2"/>
+                android:layout_weight="0.2"
+                android:onClick="onClick" />
         </TableRow>
 
         <TableRow
