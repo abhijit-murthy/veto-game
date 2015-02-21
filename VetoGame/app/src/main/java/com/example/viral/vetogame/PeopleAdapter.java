@@ -96,6 +96,14 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
         return convertView;
     }
 
+    public int checkedCount(){
+        int count = 0;
+        for(int i=0; i<personItems.size(); i++){
+            if(personItems.get(i).getChecked())
+                count++;
+        }
+        return count;
+    }
 
     public void setMap(HashMap map) {
         this.map = map;
