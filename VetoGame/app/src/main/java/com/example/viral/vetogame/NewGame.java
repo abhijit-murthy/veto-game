@@ -102,14 +102,17 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         }
     }
 
+    // Date picker
     public void showDatePickerDialog(View v){
         DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show(getFragmentManager(), "datePicker");
     }
 
+    // Time picker
     public void showTimePickerDialog(View v){
         TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show(getFragmentManager(), "timePicker");
      }
 
+    // -1: initialization as current time, 0: event date, 1: event time, 2: date limit, 3: time limit
     private void update() {
         if(id==-1 || id==0)
             btnEventDate.setText(dateFormat.format(calendar.getTime()));

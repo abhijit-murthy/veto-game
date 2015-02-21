@@ -29,16 +29,16 @@ public class InvitePeople extends Activity {
         personItems.add(new Person("Mike Jung", false));
         personItems.add(new Person("Nini Xia", false));
         personItems.add(new Person("Sherry Liu", false));
-        personItems.add(new Person("Jack Mishkin", false));
-        personItems.add(new Person("Drew Orr", false));
-        personItems.add(new Person("Mike Jung", false));
-        personItems.add(new Person("Nini Xia", false));
-        personItems.add(new Person("Sherry Liu", false));
-        personItems.add(new Person("Bryan Mishkin", false));
-        personItems.add(new Person("Drew Orr", false));
-        personItems.add(new Person("Mike Jung", false));
-        personItems.add(new Person("Nini Xia", false));
-        personItems.add(new Person("Sherry Liu", false));
+        personItems.add(new Person("Jack Kim", false));
+        personItems.add(new Person("Erica Lee", false));
+        personItems.add(new Person("Michelle Davis", false));
+        personItems.add(new Person("Terry Min", false));
+        personItems.add(new Person("Jessica Denton", false));
+        personItems.add(new Person("John Mishkin", false));
+        personItems.add(new Person("Seth Orr", false));
+        personItems.add(new Person("Leo Yang", false));
+        personItems.add(new Person("Sally Watson", false));
+        personItems.add(new Person("Adair Liu", false));
         adapter = new PeopleAdapter(this, personItems);
         listPeople.setAdapter(adapter);
     }
@@ -66,6 +66,7 @@ public class InvitePeople extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    // toggle button - show invited people
     public void tbtn_onClick(View view) {
         // Is the toggle on?
         boolean on = ((ToggleButton) view).isChecked();
