@@ -4,7 +4,8 @@
 
 var path = require('path')
   , restify = require('restify')
-  , gameDataController = require('./controllers/game_data');
+  , gameDataController = require('./controllers/game_data')
+  , userDataController = require('./controllers/user_data');
 
 
 exports.createServer = createServer;
@@ -44,6 +45,8 @@ function createServer (logger) {
   });
   server.get('/game_data',gameDataController.getGameData);
   server.post('/game_data/create',gameDataController.createGame);
+  server.post('/user_data/create', userDataController.createUser);
+  server.get('/user_data/', userDataController.getUserData);
   
   return server;
 }
