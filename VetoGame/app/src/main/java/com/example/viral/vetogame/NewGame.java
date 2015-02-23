@@ -197,9 +197,11 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         //System.out.println("resultCode "+resultCode);
         //System.out.println("number = "+data.getIntExtra("numberInvited",0));
         if (requestCode == 1) {
-            TextView invitePeople = (TextView) findViewById(R.id.btn_invite_people);
-            numberInvited = data.getIntExtra("numberInvited",0);
-            invitePeople.setText(""+numberInvited+" people invited");
+            if(data != null) {
+                TextView invitePeople = (TextView) findViewById(R.id.btn_invite_people);
+                numberInvited = data.getIntExtra("numberInvited", 0);
+                invitePeople.setText("" + numberInvited + " people invited");
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

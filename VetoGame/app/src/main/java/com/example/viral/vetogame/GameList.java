@@ -69,9 +69,9 @@ public class GameList extends Activity {
                 System.out.println("null");
             }else{
                 System.out.println("not null");
+                Game game = (Game) data.getSerializableExtra("gameInfo");
+                adapter.addGame(game);
             }
-            Game game = (Game) data.getSerializableExtra("gameInfo");
-            adapter.addGame(game);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
