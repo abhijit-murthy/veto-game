@@ -27,6 +27,7 @@ function initDB ()
 				if (lines === null || lines.length != 2)
 				{
 					console.log("Username/password format incorrect");
+					console.log("GOT: " + lines);
 
 				}
 		
@@ -85,7 +86,7 @@ function initDB ()
 				});
 				
 			Game.hasMany(User);
-			User.belongsToMany(Game);
+			User.hasMany(Game);
 			
 			Game.hasMany(Suggestion);
 			Suggestion.belongsTo(Game);
