@@ -7,6 +7,7 @@ var path = require('path')
   , config = require('yaml-config')
   , settings = config.readConfig(path.join(__dirname, 'config.yaml'))
   , worker = require('./worker')
+  , db = require('./db')
   , logging = require('./logging');
 
 // if process.env.NODE_ENV has not been set, default to development
@@ -68,6 +69,8 @@ function run (cluster) {
   else {
     spawnWorker(logger);
   }
+  
+  db.initDB();
 
 }
 
