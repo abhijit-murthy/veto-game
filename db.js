@@ -11,7 +11,11 @@ var credentials_filename = "secure_this_file.txt";
 var db_name = "test";
 var mysql_port = 3306;
 
+var User, Suggestion, Game;
+
 exports.initDB = initDB;
+exports.createUser = createUser;
+exports.getUser = getUser;
 
 function initDB ()
 {
@@ -59,24 +63,24 @@ function initDB ()
 		
 		function(callback) {	//setupTables
 		
-			var User = sequelize.define('User', {
+			User = sequelize.define('User', {
 				  id: {
 					type: Sequelize.STRING,
 					primaryKey: true
 				  },
-                  name: Sequelize.STRING,
-                  wins: Sequelize.INTEGER.UNSIGNED,
+                 		  name: Sequelize.STRING,
+                 		  wins: Sequelize.INTEGER.UNSIGNED,
 				  points: Sequelize.INTEGER.UNSIGNED,
 				  extras: Sequelize.INTEGER.UNSIGNED
-                });
+                	});
 				
-			var Suggestion = sequelize.define('Suggestion', {
+			Suggestion = sequelize.define('Suggestion', {
 				name: Sequelize.STRING,
 				location: Sequelize.STRING,
 				votes: Sequelize.INTEGER.UNSIGNED
 				});
 				
-			var Game = sequelize.define('Game', {
+			Game = sequelize.define('Game', {
 				eventTime: Sequelize.TIME,
 				eventType: Sequelize.STRING,
 				timeEnding: Sequelize.TIME,
@@ -86,7 +90,7 @@ function initDB ()
 				});
 				
 			Game.hasMany(User);
-			User.hasMany(Game);
+			User.belongsTo(Game);
 			
 			Game.hasMany(Suggestion);
 			Suggestion.belongsTo(Game);
@@ -97,6 +101,8 @@ function initDB ()
 
 				
 			sequelize.sync({ force: true }).complete(function(err) {
+
+			
 
 			var testUser = User.build({ id: 'TESTID', name: 'john', wins: 2, points: 5, extras: 3 });
 			
@@ -115,21 +121,52 @@ function initDB ()
 							console.log('We have a persisted instance now');
 							
 							testUser.addSuggestion(testSuggestion);
-							//testSuggestion.setUser(testUser);
 							
 							sequelize.sync().complete(function(err) { }  );
-						}
+
+							createUser("ABCDE", "John Smith", function() { getUser("ABCDE", function(user)
+								{ 	console.log("Here's the user we got.");
+								  	console.log(user);
+									createGame("dinner", 5, "ATLANTA", 20, user, function() { console.log("game created");  } ); 
+															
+									} );  } );
+							
+							}
 						});
 					
 					}
 				});
 
 			});
-		
+
+			
 		}
 	],
 	function(err, result) {
 		
 	});
 	
+}
+
+function createUser (id, name, callback)
+{
+	User.create({id: id, name: name, wins: 0, points: 0, extras: 0}).then(callback); 
+}
+
+function getUser (id, callback)
+{
+	User.find(id).then(function(user){callback(user); } );
+}
+
+function createGame (eventType, suggestionTTL, center, radius, user, callback)
+{
+	var game = Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius});
+
+//	game.addUser(user).then(callback);
+	user.addGame(game).then(callback);
+}
+
+function getGame (id, callback)
+{
+	Game.find(id).then(function(game){callback(game); } );
 }
