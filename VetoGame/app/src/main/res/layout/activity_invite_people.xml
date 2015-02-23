@@ -34,7 +34,7 @@
         android:layout_alignParentBottom="true"
         android:onClick="tbtn_onClick"
         android:checked="false"
-        android:textOn="Show invited friends"
+        android:textOn="Show all friends"
         android:textOff="Show invited friends" />
 
 </RelativeLayout>
