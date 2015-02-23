@@ -28,7 +28,7 @@
                 android:id="@+id/ic_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/tag_3x"
+                android:src="@drawable/tag"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center_vertical"/>
 
@@ -46,7 +46,7 @@
                 android:id="@+id/ic_people"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/people_3x"
+                android:src="@drawable/people"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center_vertical"/>
 
@@ -68,7 +68,7 @@
                 android:id="@+id/ic_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/clock_3x"
+                android:src="@drawable/clock"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center_vertical"/>
 
@@ -101,7 +101,7 @@
                 android:id="@+id/ic_timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/timer_3x"
+                android:src="@drawable/timer"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center_vertical"/>
 
@@ -134,7 +134,7 @@
                 android:id="@+id/ic_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/search_3x"
+                android:src="@drawable/search"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center_vertical"/>
 

@@ -11,7 +11,7 @@
         android:layout_alignParentLeft="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/image_4x"
+        android:src="@drawable/image"
         android:layout_gravity="center_vertical" />
 
     <TextView
