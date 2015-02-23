@@ -33,12 +33,12 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private Button btnEventTime;
     private Button btnLimitDate;
     private Button btnLimitTime;
-    private Calendar calendar;
     private DateFormat dateFormat;
     private SimpleDateFormat timeFormat;
     private int id = -1;
-    private Calendar startTime;
-    private Calendar endTime;
+    private Calendar calendar;
+    private Calendar startTime; // event calendar (event date, event time)
+    private Calendar endTime;   // limit calendar (limit date, limit time)
     private int numberInvited = 0;
     private String gameType = "";
     private Spinner spinner;
@@ -58,11 +58,10 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         spinner.setAdapter(adapter);
 
         calendar = Calendar.getInstance();
-        dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
-        timeFormat = new SimpleDateFormat(TIME_PATTERN, Locale.getDefault());
-
         startTime = calendar;
         endTime = calendar;
+        dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
+        timeFormat = new SimpleDateFormat(TIME_PATTERN, Locale.getDefault());
 
         btnEventDate = (Button) findViewById(R.id.btn_event_date);
         btnEventTime = (Button) findViewById(R.id.btn_event_time);
@@ -128,18 +127,22 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
 
     // -1: initialization as current time, 0: event date, 1: event time, 2: date limit, 3: time limit
     private void update() {
-        if(id==-1 || id==0)
+        if(id==-1 || id==0) {
             startTime = calendar;
-            btnEventDate.setText(dateFormat.format(calendar.getTime()));
-        if(id==-1 || id==1)
+            btnEventDate.setText(dateFormat.format(startTime.getTime()));
+        }
+        if(id==-1 || id==1) {
             startTime = calendar;
-            btnEventTime.setText(timeFormat.format(calendar.getTime()));
-        if(id==-1 || id==2)
+            btnEventTime.setText(timeFormat.format(startTime.getTime()));
+        }
+        if(id==-1 || id==2) {
             endTime = calendar;
-            btnLimitDate.setText(dateFormat.format(calendar.getTime()));
-        if(id==-1 || id==3)
+            btnLimitDate.setText(dateFormat.format(endTime.getTime()));
+        }
+        if(id==-1 || id==3) {
             endTime = calendar;
-            btnLimitTime.setText(timeFormat.format(calendar.getTime()));
+            btnLimitTime.setText(timeFormat.format(endTime.getTime()));
+        }
     }
 
     @Override
