@@ -26,6 +26,8 @@ public class GameList extends Activity {
         ListView list = (ListView) findViewById(R.id.game_list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(createOnItemClickListener());
+        TextView emptyText = (TextView)findViewById(R.id.emptyGamesView);
+        list.setEmptyView(emptyText);
 
         Button button = (Button) findViewById(R.id.btn_new_game);
         button.setOnClickListener(new View.OnClickListener() {

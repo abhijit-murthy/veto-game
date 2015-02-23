@@ -12,6 +12,7 @@
     <string name="title_activity_new_game">newGame</string>
     <string name="name_hint">Name</string>
     <string name="btn_invite">Invite people</string>
+    <string name="empty_game_list">Currently you are not in any games.</string>
 
     <string-array name="game_topic">
         <item>Dinner</item>

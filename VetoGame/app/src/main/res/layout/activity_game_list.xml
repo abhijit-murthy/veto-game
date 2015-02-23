@@ -25,6 +25,13 @@
         android:layout_above="@+id/btn_new_game" >
     </ListView>
 
+    <TextView
+        android:id="@+id/emptyGamesView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/empty_game_list" />
+
     <Button
         android:id="@+id/btn_new_game"
         android:layout_width="match_parent"
