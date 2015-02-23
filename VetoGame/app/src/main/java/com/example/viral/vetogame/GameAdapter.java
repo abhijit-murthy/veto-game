@@ -29,6 +29,12 @@ public class GameAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void addGame(Game game){
+        games.add(game);
+        System.out.println("game added\nsize is: "+games.size());
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return games.size();
@@ -53,11 +59,15 @@ public class GameAdapter extends BaseAdapter {
 
     private void bind(Game game, View view) {
         ViewHolder holder = (ViewHolder) view.getTag();
+        if(holder == null){
+            System.out.println("holder null");
+        }else{
+            System.out.println(" holder not null");
+        }
         holder.gameNameTextView.setText(game.getGameName());
         holder.currentSuggestionTextView.setText(game.getCurrentSuggestion().toString());
         //TODO: get current time and subtract from end time.
-        holder.timeRemainingTextView.setText(""+(game.getTimeEnding().getTime()));
-
+        holder.timeRemainingTextView.setText("end time");//""+(game.getTimeEnding().getTime()));
         holder.numberOfMembersTextView.setText(""+game.getNumberOfMembers());
     }
 
@@ -77,9 +87,9 @@ public class GameAdapter extends BaseAdapter {
         final TextView numberOfMembersTextView;
 
         ViewHolder(View view) {
-            gameNameTextView = (TextView) view.findViewWithTag("Game Name");
+            gameNameTextView = (TextView) view.findViewWithTag("gameName");
             currentSuggestionTextView = (TextView) view.findViewWithTag("currentSuggestion");
-            timeRemainingTextView = (TextView) view.findViewWithTag("@string/time_remaining");
+            timeRemainingTextView = (TextView) view.findViewWithTag("timeRemaining");
             numberOfMembersTextView = (TextView) view.findViewWithTag("numberOfMembers");
         }
     }

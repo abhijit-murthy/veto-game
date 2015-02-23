@@ -17,6 +17,7 @@ public class InvitePeople extends Activity {
     ListView listPeople;
     ArrayList<Person> personItems;
     PeopleAdapter adapter;
+    private int numberInvited = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,17 @@ public class InvitePeople extends Activity {
         if (id == R.id.action_save) {
             Intent intent = new Intent(InvitePeople.this,
                     NewGame.class);
-            startActivity(intent);
+
+            numberInvited = 0;
+            for(int i=0;i<personItems.size();i++){
+                if(personItems.get(i).getChecked()){
+                    numberInvited++;
+                }
+            }
+            intent.putExtra("numberInvited",numberInvited);
+            //startActivity(intent);
+            setResult(RESULT_OK, intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

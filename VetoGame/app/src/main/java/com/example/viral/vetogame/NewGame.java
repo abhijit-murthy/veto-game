@@ -8,7 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.time.RadialPickerLayout;
@@ -17,6 +19,7 @@ import com.android.datetimepicker.time.TimePickerDialog;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -24,6 +27,8 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
 
     private static final String TIME_PATTERN = "HH:mm";
 
+
+    private EditText textGameName;
     private Button btnEventDate;
     private Button btnEventTime;
     private Button btnLimitDate;
@@ -32,13 +37,18 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private DateFormat dateFormat;
     private SimpleDateFormat timeFormat;
     private int id = -1;
+    private Calendar startTime;
+    private Calendar endTime;
+    private int numberInvited = 0;
+    private String gameType = "";
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spin_game_topic);
+        spinner = (Spinner) findViewById(R.id.spin_game_topic);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.game_topic, android.R.layout.simple_spinner_item);
@@ -51,10 +61,14 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
         timeFormat = new SimpleDateFormat(TIME_PATTERN, Locale.getDefault());
 
+        startTime = calendar;
+        endTime = calendar;
+
         btnEventDate = (Button) findViewById(R.id.btn_event_date);
         btnEventTime = (Button) findViewById(R.id.btn_event_time);
         btnLimitDate = (Button) findViewById(R.id.btn_limit_date);
         btnLimitTime = (Button) findViewById(R.id.btn_limit_time);
+        textGameName = (EditText)findViewById(R.id.game_name);
 
         findViewById(R.id.btn_invite_people).setOnClickListener(
                 new View.OnClickListener() {
@@ -62,7 +76,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                     public void onClick(View v) {
                         Intent intent = new Intent(NewGame.this,
                                 InvitePeople.class);
-                        startActivity(intent);
+                        startActivityForResult(intent,1);
 
                     }
                 });
@@ -115,12 +129,16 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     // -1: initialization as current time, 0: event date, 1: event time, 2: date limit, 3: time limit
     private void update() {
         if(id==-1 || id==0)
+            startTime = calendar;
             btnEventDate.setText(dateFormat.format(calendar.getTime()));
         if(id==-1 || id==1)
+            startTime = calendar;
             btnEventTime.setText(timeFormat.format(calendar.getTime()));
         if(id==-1 || id==2)
+            endTime = calendar;
             btnLimitDate.setText(dateFormat.format(calendar.getTime()));
         if(id==-1 || id==3)
+            endTime = calendar;
             btnLimitTime.setText(timeFormat.format(calendar.getTime()));
     }
 
@@ -139,9 +157,16 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         int id = item.getItemId();
 
         if (id == R.id.action_save) {
-            Intent intent = new Intent(NewGame.this,
-                    GameList.class);
-            startActivity(intent);
+            gameType = spinner.getSelectedItem().toString();
+            String gameName = textGameName.getText().toString();
+            Suggestion tempSuggestion = new Suggestion("The Muffin Bakery");
+            Game game = new Game(gameName, tempSuggestion, startTime, endTime, (numberInvited+1), gameType);
+            Intent intent = new Intent(NewGame.this,GameList.class);
+            System.out.println("put game in intent");
+            intent.putExtra("gameInfo",game);
+            //startActivity(intent);
+            setResult(RESULT_OK, intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -161,4 +186,19 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
 
         update();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        //System.out.println("requestCode "+requestCode);
+        //System.out.println("resultCode "+resultCode);
+        //System.out.println("number = "+data.getIntExtra("numberInvited",0));
+        if (requestCode == 1) {
+            TextView invitePeople = (TextView) findViewById(R.id.btn_invite_people);
+            numberInvited = data.getIntExtra("numberInvited",0);
+            invitePeople.setText(""+numberInvited+" people invited");
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 }

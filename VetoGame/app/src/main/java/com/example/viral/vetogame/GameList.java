@@ -6,22 +6,33 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class GameList extends Activity {
+
+    private GameAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
 
+        // Configure device list.
+        adapter = new GameAdapter(this);
+        ListView list = (ListView) findViewById(R.id.game_list);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(createOnItemClickListener());
+
         Button button = (Button) findViewById(R.id.btn_new_game);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(GameList.this,
                         NewGame.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
     }
@@ -47,5 +58,28 @@ public class GameList extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(data == null){
+                System.out.println("null");
+            }else{
+                System.out.println("not null");
+            }
+            Game game = (Game) data.getSerializableExtra("gameInfo");
+            adapter.addGame(game);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private AdapterView.OnItemClickListener createOnItemClickListener() {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("Need to go to game info screen");
+            }
+        };
     }
 }
