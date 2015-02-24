@@ -3,6 +3,7 @@
 , "version": "0.0.1"
 , "private": true
 , "main": "server.js"
+, "description": "API for the Veto Game"
 , "scripts": {
     "start": "./node_modules/.bin/forever start --append -o ./forever.log -e ./forever.log server.js"
   , "stop": "./node_modules/.bin/forever stop server.js"
@@ -22,5 +23,9 @@
   }
 , "engine": {
     "node": "~0.10"
+  }
+,
+  "apidoc": {
+    "title": "Veto Game API"
   }
 }
