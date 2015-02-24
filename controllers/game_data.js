@@ -11,20 +11,35 @@ function createGame(req,res,next){
 		console.log(user);
 		if(user == null){
 			res.send(new restify.InvalidArgumentError("Bad user ID"));
+			return;
 		}
 		var eventType = req.params.event_type;
 		if(eventType != 'dinner' &&
 			eventType != 'lunch' &&
 			eventType != 'breakfast'){
 			res.send(new restify.InvalidArgumentError("Bad event type"));
+			return;
 		}
 		var suggestionTTL = req.params.suggestion_ttl;
+		if(!suggestionTTL){
+			res.send(new restify.InvalidArgumentError("No Suggestion TTL"));
+			return;
+		}
 		var center = req.params.center;
+		if(!center){
+			res.send(new restify.InvalidArgumentError("No Center"));
+			return;
+		}
 		var radius = req.params.radius;
+		if(!radius){
+			res.send(new restify.InvalidArgumentError("No radius"));
+			return;
+		}
 		db.createGame(eventType,suggestionTTL,center,radius,user,function(game){
 			res.send({game_id: game.values.id});
 		});
 	});
+	next();
 }
 exports.createGame = createGame;
 
