@@ -26,6 +26,7 @@ function createServer (logger) {
   var server = restify.createServer(config);
 
   server.use(restify.acceptParser(server.acceptable));
+  server.use(restify.bodyParser());
   server.use(restify.queryParser());
 
   server.on('NotFound', function (req, res, next) {
@@ -43,7 +44,7 @@ function createServer (logger) {
     res.send({'result': 'test'});      
     return next();
   });
-  server.get('/game_data',gameDataController.getGameData);
+  server.get('/game_data/:id',gameDataController.getGameData);
   server.post('/game_data/create',gameDataController.createGame);
   server.post('/user_data/create', userDataController.createUser);
   server.get('/user_data/', userDataController.getUserData);

@@ -16,6 +16,8 @@ var User, Suggestion, Game;
 exports.initDB = initDB;
 exports.createUser = createUser;
 exports.getUser = getUser;
+exports.createGame = createGame;
+exports.getGame = getGame;
 
 function initDB ()
 {
@@ -103,7 +105,6 @@ function initDB ()
 			sequelize.sync({ force: true }).complete(function(err) {
 
 			
-
 			var testUser = User.build({ id: 'TESTID', name: 'john', wins: 2, points: 5, extras: 3 });
 			
 			testUser.save().complete(function(err) {
@@ -162,7 +163,7 @@ function createGame (eventType, suggestionTTL, center, radius, user, callback)
 {
 	Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius})
 	.then(function(game){
-		user.addGame(game);
+		user.addGame(game).then(callback(game));
 	});
 }
 
