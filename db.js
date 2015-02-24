@@ -90,7 +90,7 @@ function initDB ()
 				});
 				
 			Game.hasMany(User);
-			User.belongsTo(Game);
+			User.hasMany(Game);
 			
 			Game.hasMany(Suggestion);
 			Suggestion.belongsTo(Game);
@@ -160,10 +160,10 @@ function getUser (id, callback)
 
 function createGame (eventType, suggestionTTL, center, radius, user, callback)
 {
-	var game = Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius});
-
-//	game.addUser(user).then(callback);
-	user.addGame(game).then(callback);
+	Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius})
+	.then(function(game){
+		user.addGame(game);
+	});
 }
 
 function getGame (id, callback)
