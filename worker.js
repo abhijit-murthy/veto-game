@@ -47,7 +47,7 @@ function createServer (logger) {
   server.get('/game_data/:id',gameDataController.getGameData);
   server.post('/game_data/create',gameDataController.createGame);
   server.post('/user_data/create', userDataController.createUser);
-  server.get('/user_data/', userDataController.getUserData);
+  server.get('/user_data/:id', userDataController.getUserData);
   
   return server;
 }
