@@ -48,6 +48,10 @@ function createServer (logger) {
   server.post('/game_data/create',gameDataController.createGame);
   server.post('/user_data/create', userDataController.createUser);
   server.get('/user_data/:id', userDataController.getUserData);
+  server.get(/\/?.*/, restify.serveStatic({
+	default: 'index.html',
+	directory: './apidoc'
+	}));
   
   return server;
 }
