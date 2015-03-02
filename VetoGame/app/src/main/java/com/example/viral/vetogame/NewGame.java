@@ -25,7 +25,7 @@ import java.util.Locale;
 
 public class NewGame extends Activity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
-    private static final String TIME_PATTERN = "HH:mm";
+    private static final String TIME_PATTERN = "HH:mm a";
 
 
     private EditText textGameName;
@@ -122,7 +122,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
 
     // Time picker
     public void showTimePickerDialog(View v){
-        TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show(getFragmentManager(), "timePicker");
+        TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show(getFragmentManager(), "timePicker");
      }
 
     // -1: initialization as current time, 0: event date, 1: event time, 2: date limit, 3: time limit

@@ -47,7 +47,7 @@
                 android:text="date"
                 android:gravity="left|center_vertical"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="0.6"
+                android:layout_weight="0.5"
                 android:onClick="onClick" />
 
             <Button
@@ -58,7 +58,7 @@
                 android:text="time"
                 android:gravity="left|center_vertical"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="0.2"
+                android:layout_weight="0.3"
                 android:onClick="onClick" />
         </TableRow>
 
@@ -133,7 +133,7 @@
                 android:text="date"
                 android:gravity="left|center_vertical"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="0.6"
+                android:layout_weight="0.5"
                 android:onClick="onClick" />
 
             <Button
@@ -144,7 +144,7 @@
                 android:text="time"
                 android:gravity="left|center_vertical"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_weight="0.2"
+                android:layout_weight="0.3"
                 android:onClick="onClick" />
         </TableRow>
     </TableLayout>
