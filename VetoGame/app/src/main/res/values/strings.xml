@@ -7,18 +7,26 @@
     <string name="game_type_icon">Game Type Icon</string>
     <string name="game_name">Game Name</string>
     <string name="current_suggestion">Current Suggestion</string>
+    <string name="winning_suggestion">Winning Suggestion</string>
     <string name="time_remaining">Time Remaining</string>
+    <string name="time_past">Time Past</string>
     <string name="number_of_members">Number of Members</string>
     <string name="title_activity_new_game">newGame</string>
     <string name="name_hint">Name</string>
     <string name="btn_invite">Invite people</string>
-    <string name="empty_game_list">Currently you are not in any games.</string>
+    <string name="empty_game_list">Currently you are not in any games. Why not start one?</string>
+    <string name="empty_past_game_list">You have no previous games. You should start one.</string>
+    <string name="winner">Winner</string>
+    <string name="back">Back</string>
+    <string name="create_game">Create a new game</string>
+    <string name="view_past_games">View Past Games</string>
 
     <string-array name="game_topic">
-        <item>Dinner</item>
-        <item>Lunch</item>
-        <item>Brunch</item>
         <item>Breakfast</item>
+        <item>Brunch</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
     </string-array>
+    <string name="title_activity_past_game_list">PastGameList</string>
 
 </resources>

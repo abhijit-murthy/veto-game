@@ -6,7 +6,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".gameList">
 
     <SearchView
-        android:id="@+id/search_game"
+        android:id="@+id/search_past_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -16,34 +16,27 @@
     </SearchView>
 
     <ListView
-        android:id="@+id/game_list"
+        android:id="@+id/past_game_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:layout_marginBottom="16dp"
-        android:layout_below="@+id/search_game"
-        android:layout_above="@+id/btn_past_games" >
+        android:layout_below="@+id/search_past_game"
+        android:layout_above="@+id/btn_back" >
     </ListView>
 
     <TextView
-        android:id="@+id/emptyGamesView"
+        android:id="@+id/emptyPastGamesView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/empty_game_list" />
+        android:text="@string/empty_past_game_list" />
 
     <Button
-        android:id="@+id/btn_past_games"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_new_game"
-        android:text="@string/view_past_games"/>
-
-    <Button
-        android:id="@+id/btn_new_game"
+        android:id="@+id/btn_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/create_game"/>
+        android:text="@string/back"/>
 
 </RelativeLayout>

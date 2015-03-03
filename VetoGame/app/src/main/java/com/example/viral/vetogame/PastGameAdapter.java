@@ -16,13 +16,13 @@ import java.util.Locale;
 /**
  * Created by Viral on 2/19/2015.
  */
-public class GameAdapter extends BaseAdapter {
+public class PastGameAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private ArrayList<Game> games;
     private Calendar calendar = Calendar.getInstance();
 
-    public GameAdapter(Context context) {
+    public PastGameAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
         this.games = new ArrayList<Game>();
     }
@@ -61,11 +61,11 @@ public class GameAdapter extends BaseAdapter {
         return view;
     }
 
-    public String calcTimeRemaining (Calendar start, Calendar end )
+    public String calcTimePast (Calendar timeEnding, Calendar currentTime)
     {
-        long startTime = start.getTimeInMillis();
-        long endTime = end.getTimeInMillis();
-        long diffTime = endTime - startTime;
+        long endTime = timeEnding.getTimeInMillis();
+        long curTime = currentTime.getTimeInMillis();
+        long diffTime = curTime - endTime;
         // divide the milliseconds by # of milliseconds in a day to get days difference
         int days = (int)( diffTime / (1000 * 60 * 60 * 24) );
         int hours = (int)( diffTime / (1000 * 60 * 60) );
@@ -92,9 +92,10 @@ public class GameAdapter extends BaseAdapter {
             System.out.println(" holder not null");
         }
         holder.gameNameTextView.setText(game.getGameName());
-        holder.currentSuggestionTextView.setText(game.getCurrentSuggestion().toString());
-        String timeRemaining = calcTimeRemaining(calendar,game.getTimeEnding());
-        holder.timeRemainingTextView.setText(timeRemaining);
+        holder.winningSuggestionTextView.setText(game.getCurrentSuggestion().toString());
+        holder.winnerTextView.setText(game.getWinner().toString());
+        String timeRemaining = calcTimePast(game.getTimeEnding(),calendar);
+        holder.timePastTextView.setText(timeRemaining);
         holder.numberOfMembersTextView.setText(""+game.getNumberOfMembers());
     }
 
@@ -109,14 +110,16 @@ public class GameAdapter extends BaseAdapter {
 
     static class ViewHolder {
         final TextView gameNameTextView;
-        final TextView currentSuggestionTextView;
-        final TextView timeRemainingTextView;
+        final TextView winningSuggestionTextView;
+        final TextView winnerTextView;
+        final TextView timePastTextView;
         final TextView numberOfMembersTextView;
 
         ViewHolder(View view) {
             gameNameTextView = (TextView) view.findViewWithTag("gameName");
-            currentSuggestionTextView = (TextView) view.findViewWithTag("currentSuggestion");
-            timeRemainingTextView = (TextView) view.findViewWithTag("timeRemaining");
+            winningSuggestionTextView = (TextView) view.findViewWithTag("winningSuggestion");
+            winnerTextView = (TextView)view.findViewWithTag("winnerName");
+            timePastTextView = (TextView) view.findViewWithTag("timePast");
             numberOfMembersTextView = (TextView) view.findViewWithTag("numberOfMembers");
         }
     }

@@ -10,40 +10,29 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-public class GameList extends Activity {
+public class PastGameList extends Activity {
 
-    private GameAdapter adapter;
+    private PastGameAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_list);
+        setContentView(R.layout.activity_past_game_list);
 
         // Configure device list.
-        adapter = new GameAdapter(this);
-        ListView list = (ListView) findViewById(R.id.game_list);
+        adapter = new PastGameAdapter(this);
+        ListView list = (ListView) findViewById(R.id.past_game_list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(createOnItemClickListener());
-        TextView emptyText = (TextView)findViewById(R.id.emptyGamesView);
+        TextView emptyText = (TextView)findViewById(R.id.emptyPastGamesView);
         list.setEmptyView(emptyText);
 
-        Button button = (Button) findViewById(R.id.btn_new_game);
+        Button button = (Button) findViewById(R.id.btn_back);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(GameList.this,
-                        NewGame.class);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        Button past_games_button = (Button) findViewById(R.id.btn_past_games);
-        past_games_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(GameList.this, PastGameList.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
@@ -52,7 +41,7 @@ public class GameList extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_game_list, menu);
+        getMenuInflater().inflate(R.menu.menu_past_game_list, menu);
         return true;
     }
 
@@ -80,7 +69,6 @@ public class GameList extends Activity {
                 System.out.println("not null");
                 Game game = (Game) data.getSerializableExtra("gameInfo");
                 adapter.addGame(game);
-                Toast.makeText(getApplicationContext(), "Game Created", Toast.LENGTH_SHORT).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

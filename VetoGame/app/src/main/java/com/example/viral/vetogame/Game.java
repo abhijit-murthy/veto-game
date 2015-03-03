@@ -27,6 +27,7 @@ public class Game implements Serializable {//implements Parcelable {
     private ArrayList<Suggestion> pastSuggestions;
     private Location location;
     private int locationRadius;
+    private String winner;
 
 
     /*// 99.9% of the time you can just ignore this
@@ -194,5 +195,13 @@ public class Game implements Serializable {//implements Parcelable {
 
     public void setLocationRadius(int locationRadius) {
         this.locationRadius = locationRadius;
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
     }
 }

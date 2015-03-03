@@ -39,7 +39,7 @@
                     android:textStyle="bold"
                     android:text="@string/current_suggestion"
                     android:id="@+id/currentSuggestionText"
-                    android:paddingTop="10dp" />
+                    android:paddingTop="5dp" />
 
             </LinearLayout>
 
@@ -58,7 +58,7 @@
                     <ImageView android:layout_width="30dp"
                         android:layout_height="fill_parent"
                         android:layout_gravity="center"
-                        android:paddingTop="5dp"
+                        android:paddingTop="0dp"
                         android:src="@drawable/clock"/>
 
                     <TextView
@@ -101,7 +101,7 @@
                     <ImageView android:layout_width="30dp"
                         android:layout_height="fill_parent"
                         android:layout_gravity="center"
-                        android:paddingTop="5dp"
+                        android:paddingTop="0dp"
                         android:src="@drawable/people"/>
 
                     <TextView
@@ -110,7 +110,6 @@
                         android:layout_height="fill_parent"
                         android:gravity="center"
                         android:text = "@string/number_of_members"/>
-
                 </LinearLayout>
 
             </LinearLayout>

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.time.RadialPickerLayout;
@@ -25,7 +26,7 @@ import java.util.Locale;
 
 public class NewGame extends Activity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
-    private static final String TIME_PATTERN = "HH:mm a";
+    private static final String TIME_PATTERN = "hh:mm a";
 
 
     private EditText textGameName;
@@ -39,9 +40,15 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private Calendar calendar;
     private Calendar startTime; // event calendar (event date, event time)
     private Calendar endTime;   // limit calendar (limit date, limit time)
+
+    private boolean startTimeChanged = false;
+    private boolean endTimeChanged = false;
+
     private int numberInvited = 0;
     private String gameType = "";
     private Spinner spinner;
+
+    private int dayLimit = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,21 +134,57 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
 
     // -1: initialization as current time, 0: event date, 1: event time, 2: date limit, 3: time limit
     private void update() {
-        if(id==-1 || id==0) {
+        Calendar currentTime = Calendar.getInstance();
+        if(id==0) {
             startTime = calendar;
-            btnEventDate.setText(dateFormat.format(startTime.getTime()));
+            startTimeChanged = true;
+            if(timeDiffInDays(currentTime,startTime) > dayLimit){
+                Toast.makeText(getApplicationContext(), "Choose a time within "+dayLimit+"days",
+                        Toast.LENGTH_SHORT).show();
+            }else if(currentTime.after(startTime)){
+                if(startTimeChanged) {
+                    Toast.makeText(getApplicationContext(), "Choose a future time",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                btnEventDate.setText(dateFormat.format(startTime.getTime()));
+            }
         }
-        if(id==-1 || id==1) {
+        if(id==1) {
             startTime = calendar;
-            btnEventTime.setText(timeFormat.format(startTime.getTime()));
+            startTimeChanged = true;
+            if(currentTime.after(startTime)){
+                if(startTimeChanged) {
+                    Toast.makeText(getApplicationContext(), "Choose a future time",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                btnEventTime.setText(timeFormat.format(startTime.getTime()));
+            }
         }
-        if(id==-1 || id==2) {
+        if(id==2) {
             endTime = calendar;
-            btnLimitDate.setText(dateFormat.format(endTime.getTime()));
+            endTimeChanged = true;
+            if(currentTime.after(startTime)||startTime.after(endTime)){
+                if(endTimeChanged) {
+                    Toast.makeText(getApplicationContext(), "Choose a future time, but before event time",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                btnLimitDate.setText(dateFormat.format(endTime.getTime()));
+            }
         }
-        if(id==-1 || id==3) {
+        if(id==3) {
             endTime = calendar;
-            btnLimitTime.setText(timeFormat.format(endTime.getTime()));
+            endTimeChanged = true;
+            if(currentTime.after(startTime)||endTime.after(startTime)){
+                if(endTimeChanged) {
+                    Toast.makeText(getApplicationContext(), "Choose a future time, but before event time",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                btnLimitTime.setText(timeFormat.format(endTime.getTime()));
+            }
         }
     }
 
@@ -204,6 +247,16 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public int timeDiffInDays(Calendar currentTime, Calendar chosenTime)
+    {
+        long curTime = currentTime.getTimeInMillis();
+        long choseTime = chosenTime.getTimeInMillis();
+        long diffTime = choseTime - curTime;
+        // divide the milliseconds by # of milliseconds in a day to get days difference
+        int days = (int)( diffTime / (1000 * 60 * 60 * 24) );
+        return days;
     }
 
 }
