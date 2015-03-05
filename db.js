@@ -147,6 +147,7 @@ function initDB ()
 									} );  } );
 							*/
 							
+							
 							createGame("dinner", 5, "Atlanta", 20, testUser, 
 								function(game) {addInitialSuggestion("Jimmy Johns", "Atlanta", testUser, game, function(){ callback(null, testUser, game); } )} );
 							
@@ -161,13 +162,24 @@ function initDB ()
 		
 		function (game, callback)
 		{
-			createUser("ABCDE", "John Smith", function(user) {addUserToGame(game, user, function() {} ); } );
-			
 			//unrelated - no dependency
 			
 			getGameSuggestionHistory(game, function(suggestions) {console.log('*********SUGG HISTORY***********'); console.log(suggestions); });
 			getCurrentSuggestion(game, function(currentSuggestion) {console.log('********CURRENT*********'); console.log(currentSuggestion); });
+			
+			createUser("ABCDE", "John Smith", function(user) {
+				addUserToGame(game, user, function() { callback(null, user); } ); 
+			}
+			);
 		
+		},
+		
+		function (user, callback)
+		{
+			createGame("lunch", 3, "Sandy Springs", 10, user, function() 
+			{ 
+				getUserGames(user, function(games) {console.log('********USER ABCDE GAMES*********'); console.log(games);} );
+			} ); 
 		}
 	],
 	function(err, result) {
@@ -190,7 +202,8 @@ function createGame (eventType, suggestionTTL, center, radius, user, callback)
 {
 	Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius})
 	.then(function(game){
-		user.addGame(game).then(callback(game));
+		//user.addGame(game).then(callback(game));	//doesn't work with promises
+		user.addGame(game).then(function() {callback(game) });
 	});
 }
 
@@ -253,8 +266,15 @@ function getGameSuggestionHistory (game, callback)
 	game.getSuggestions().then(function(suggestions) {callback(suggestions);} );
 }
 
+function getUserGames (user, callback)	//not tested yet
+{
+	user.getGames().then(function(games) {callback(games);} );
+}
+
 function getCurrentSuggestion (game, callback)
 {
 	game.getCurrentSuggestion().then(function(currentSuggestion) {callback(currentSuggestion);} );
 }
+
+
 
