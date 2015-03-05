@@ -96,51 +96,78 @@ function initDB ()
 			
 			Game.hasMany(Suggestion);
 			Suggestion.belongsTo(Game);
+			Game.belongsTo(Suggestion, { as: 'CurrentSuggestion', constraints: false } );
 			
 			Suggestion.belongsTo(User);
 			User.hasMany(Suggestion);
 			
 
 				
-			sequelize.sync({ force: true }).complete(function(err) {
-
-			
-			var testUser = User.build({ id: 'TESTID', name: 'john', wins: 2, points: 5, extras: 3 });
+			sequelize.sync({ force: true }).complete(function(err) { callback(null); } );
+	
+		},
+		
+		function (callback) {
+		
+		var testUser = User.build({ id: 'TESTID', name: 'john', wins: 2, points: 5, extras: 3 });
 			
 			testUser.save().complete(function(err) {
 				if (!!err) {
-					console.log('The instance has not been saved:', err);
+						console.log('The instance has not been saved:', err);
+						callback(err);
 					} else {
-					console.log('We have a persisted instance now');
-						
-					var testSuggestion = Suggestion.build({ name: "Moe's", location: "Atlanta", votes: 2 });
+						console.log('We have a persisted instance now');
+						callback(null, testUser);
+					}
+				});
+		
+		},
+		
+		function (testUser, callback)
+		{
+			var testSuggestion = Suggestion.build({ name: "Moe's", location: "Atlanta", votes: 2 });
 						
 					testSuggestion.save().complete(function(err) {
 						if (!!err) {
 							console.log('The instance has not been saved:', err);
+							callback(err);
 						} else {
 							console.log('We have a persisted instance now');
 							
 							testUser.addSuggestion(testSuggestion);
 							
-							sequelize.sync().complete(function(err) { }  );
+							//sequelize.sync().complete(function(err) { }  );
 
+							/*
 							createUser("ABCDE", "John Smith", function() { getUser("ABCDE", function(user)
 								{ 	console.log("Here's the user we got.");
 								  	console.log(user);
 									createGame("dinner", 5, "ATLANTA", 20, user, function() { console.log("game created");  } ); 
 															
 									} );  } );
+							*/
+							
+							createGame("dinner", 5, "Atlanta", 20, testUser, 
+								function(game) {addInitialSuggestion("Jimmy Johns", "Atlanta", testUser, game, function(){ callback(null, testUser, game); } )} );
 							
 							}
 						});
-					
-					}
-				});
-
-			});
-
+		},
+		
+		function (testUser, game, callback)
+		{
+			addInitialSuggestion("Subway", "Atlanta", testUser, game, function(){ callback(null, game); } );
+		},
+		
+		function (game, callback)
+		{
+			createUser("ABCDE", "John Smith", function(user) {addUserToGame(game, user, function() {} ); } );
 			
+			//unrelated - no dependency
+			
+			getGameSuggestionHistory(game, function(suggestions) {console.log('*********SUGG HISTORY***********'); console.log(suggestions); });
+			getCurrentSuggestion(game, function(currentSuggestion) {console.log('********CURRENT*********'); console.log(currentSuggestion); });
+		
 		}
 	],
 	function(err, result) {
@@ -151,7 +178,7 @@ function initDB ()
 
 function createUser (id, name, callback)
 {
-	User.create({id: id, name: name, wins: 0, points: 0, extras: 0}).then(callback); 
+	User.create({id: id, name: name, wins: 0, points: 0, extras: 0}).then(function(user) {callback(user)} ); 
 }
 
 function getUser (id, callback)
@@ -171,3 +198,63 @@ function getGame (id, callback)
 {
 	Game.find(id).then(function(game){callback(game); } );
 }
+
+function addInitialSuggestion (name, location, user, game, suggestionCallback)
+{
+	async.waterfall([
+	
+		function(callback) {
+			var suggestion = Suggestion.build({name: name, location: location, votes: 0});
+			
+			suggestion.save().complete(function(err) {
+				if (!!err) {
+						console.log('The instance has not been saved:', err);
+						callback(err);
+					} else {
+						console.log('We have a persisted instance now');
+						callback(null, suggestion);
+					}
+				});
+		},
+		
+		function(suggestion, callback)
+		{
+			user.addSuggestion(suggestion).then(function() {callback(null, suggestion)});
+		},
+		
+		function (suggestion, callback)
+		{
+			game.addSuggestion(suggestion).then(function() {callback(null, suggestion)});
+		},
+		
+		function (suggestion, callback)
+		{
+			game.setCurrentSuggestion(suggestion).then(function() {callback(null, suggestion)});
+		},
+		
+		function (suggestion, callback)
+		{
+			suggestionCallback(suggestion);
+		}
+	
+	],
+	function(err, result) {
+		
+	});
+}
+
+function addUserToGame (game, user, callback)
+{
+	game.addUser(user).then(callback());
+}
+
+function getGameSuggestionHistory (game, callback)
+{
+	game.getSuggestions().then(function(suggestions) {callback(suggestions);} );
+}
+
+function getCurrentSuggestion (game, callback)
+{
+	game.getCurrentSuggestion().then(function(currentSuggestion) {callback(currentSuggestion);} );
+}
+
