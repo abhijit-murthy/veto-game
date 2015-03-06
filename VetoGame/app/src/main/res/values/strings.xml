@@ -16,8 +16,16 @@
     <string name="btn_invite">Invite people</string>
     <string name="empty_game_list">Currently you are not in any games. Why not start one?</string>
     <string name="empty_past_game_list">You have no previous games. You should start one.</string>
+    <string name="empty_suggestion_list">There are no suggestions in your area.\n
+                                         Try increasing the search radius or change your location.
+                                         </string>
     <string name="winner">Winner</string>
     <string name="back">Back</string>
+    <string name="address">Address</string>
+    <string name="within">Within</string>
+    <string name="milesOf">Miles of</string>
+    <string name="radius">(Radius)</string>
+    <string name="zipCode">(Zip Code)</string>
     <string name="create_game">Create a new game</string>
     <string name="view_past_games">View Past Games</string>
 
@@ -28,5 +36,15 @@
         <item>Dinner</item>
     </string-array>
     <string name="title_activity_past_game_list">PastGameList</string>
+
+
+    <!-- ========================================================================================= -->
+    <string name="dummy_section_text">Section %1d is just a dummy section.</string>
+
+    <string name="demo_external_activity">Demo External Activity</string>
+    <string name="demo_collection">Demo Collection</string>
+    <string name="title_activity_new_suggestion">Suggestion</string>
+    <!-- ========================================================================================= -->
+
 
 </resources>

@@ -92,7 +92,9 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(NewGame.this,
-                                InitSuggestion.class);
+                                NewSuggestion.class);
+                                //MainActivity.class);
+                                //InitSuggestion.class);
                         startActivity(intent);
 
                     }
