@@ -18,6 +18,11 @@ exports.createUser = createUser;
 exports.getUser = getUser;
 exports.createGame = createGame;
 exports.getGame = getGame;
+exports.addSuggestion = addSuggestion;
+exports.addUserToGame = addUserToGame;
+exports.getGameSuggestionHistory = getGameSuggestionHistory;
+exports.getUserGames = getUserGames;
+exports.getCurrentSuggestion = getCurrentSuggestion
 
 function initDB ()
 {
@@ -212,7 +217,7 @@ function getGame (id, callback)
 	Game.find(id).then(function(game){callback(game); } );
 }
 
-function addInitialSuggestion (name, location, user, game, suggestionCallback)
+function addSuggestion (name, location, user, game, suggestionCallback)
 {
 	async.waterfall([
 	
