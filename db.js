@@ -154,7 +154,7 @@ function initDB ()
 							
 							
 							createGame("dinner", 5, "Atlanta", 20, testUser, 
-								function(game) {addInitialSuggestion("Jimmy Johns", "Atlanta", testUser, game, function(){ callback(null, testUser, game); } )} );
+								function(game) {addSuggestion("Jimmy Johns", "Atlanta", testUser, game, function(){ callback(null, testUser, game); } )} );
 							
 							}
 						});
@@ -162,7 +162,7 @@ function initDB ()
 		
 		function (testUser, game, callback)
 		{
-			addInitialSuggestion("Subway", "Atlanta", testUser, game, function(){ callback(null, game); } );
+			addSuggestion("Subway", "Atlanta", testUser, game, function(){ callback(null, game); } );
 		},
 		
 		function (game, callback)
@@ -193,28 +193,28 @@ function initDB ()
 	
 }
 
-function createUser (id, name, callback)
+function createUser (id, name)
 {
-	User.create({id: id, name: name, wins: 0, points: 0, extras: 0}).then(function(user) {callback(user)} ); 
+	return User.create({id: id, name: name, wins: 0, points: 0, extras: 0}); 
 }
 
-function getUser (id, callback)
+function getUser (id)
 {
-	User.find(id).then(function(user){callback(user); } );
+	return User.find(id);
 }
 
-function createGame (eventType, suggestionTTL, center, radius, user, callback)
+function createGame (eventType, suggestionTTL, center, radius, user)
 {
-	Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius})
+	return Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius})
 	.then(function(game){
 		//user.addGame(game).then(callback(game));	//doesn't work with promises
-		user.addGame(game).then(function() {callback(game) });
+		return user.addGame(game);
 	});
 }
 
-function getGame (id, callback)
+function getGame (id)
 {
-	Game.find(id).then(function(game){callback(game); } );
+	return Game.find(id);
 }
 
 function addSuggestion (name, location, user, game, suggestionCallback)
@@ -261,24 +261,24 @@ function addSuggestion (name, location, user, game, suggestionCallback)
 	});
 }
 
-function addUserToGame (game, user, callback)
+function addUserToGame (game, user)
 {
-	game.addUser(user).then(callback());
+	return game.addUser(user);
 }
 
-function getGameSuggestionHistory (game, callback)
+function getGameSuggestionHistory (game)
 {
-	game.getSuggestions().then(function(suggestions) {callback(suggestions);} );
+	return game.getSuggestions();
 }
 
-function getUserGames (user, callback)	//not tested yet
+function getUserGames (user)	//not tested yet
 {
-	user.getGames().then(function(games) {callback(games);} );
+	return user.getGames();
 }
 
-function getCurrentSuggestion (game, callback)
+function getCurrentSuggestion (game)
 {
-	game.getCurrentSuggestion().then(function(currentSuggestion) {callback(currentSuggestion);} );
+	return game.getCurrentSuggestion();
 }
 
 

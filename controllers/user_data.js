@@ -19,18 +19,28 @@ var restify = require('restify')
 	@apiError InvalidArgumentError User already exists
 */
 function createUser(req,res,next){
-	db.getUser(req.params.user_id,function(user){
-		if(user != null){
-			res.send(new restify.InvalidArgumentError("User already exists"));
-		}else {
-			db.createUser(req.params.user_id,
-				req.params.user_name,
-				function(){
-					res.send(200);
-				});
-		}
+	// db.getUser(req.params.user_id,function(user){
+	// 	if(user != null){
+	// 		res.send(new restify.InvalidArgumentError("User already exists"));
+	// 	}else {
+	// 		db.createUser(req.params.user_id,
+	// 			req.params.user_name,
+	// 			function(){
+	// 				res.send(200);
+	// 			});
+	// 	}
+	// });
+	db.getUser(req.params.user_id)
+	.then(function(user){
+		if(user != null)
+			res.send(new restify.InvalidArgumentError("User already exists" + user));
+		else
+			return db.createUser(req.params.user_id,req.params.user_name);
+	})
+	.then(function(user){
+		return res.send(user.id);
 	});
-}
+};
 exports.createUser = createUser;
 
 /**
