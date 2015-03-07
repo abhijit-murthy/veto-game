@@ -162,7 +162,10 @@ function initDB ()
 		
 		function (testUser, game, callback)
 		{
-			addSuggestion("Subway", "Atlanta", testUser, game, function(){ callback(null, game); } );
+			addSuggestion("Subway", "Atlanta", testUser, game)
+			.then(function(suggestion){
+				console.log(suggestion);
+			});
 		},
 		
 		function (game, callback)
@@ -219,46 +222,26 @@ function getGame (id)
 
 function addSuggestion (name, location, user, game, suggestionCallback)
 {
-	async.waterfall([
-	
-		function(callback) {
-			var suggestion = Suggestion.build({name: name, location: location, votes: 0});
-			
-			suggestion.save().complete(function(err) {
-				if (!!err) {
-						console.log('The instance has not been saved:', err);
-						callback(err);
-					} else {
-						console.log('We have a persisted instance now');
-						callback(null, suggestion);
-					}
-				});
-		},
-		
-		function(suggestion, callback)
-		{
-			user.addSuggestion(suggestion).then(function() {callback(null, suggestion)});
-		},
-		
-		function (suggestion, callback)
-		{
-			game.addSuggestion(suggestion).then(function() {callback(null, suggestion)});
-		},
-		
-		function (suggestion, callback)
-		{
-			game.setCurrentSuggestion(suggestion).then(function() {callback(null, suggestion)});
-		},
-		
-		function (suggestion, callback)
-		{
-			suggestionCallback(suggestion);
+	return Suggestion.build({name: name, location: location, votes: 0})
+
+	.save()
+
+	.then(
+		function(suggestion){
+			user.addSuggestion(suggestion);
+			return suggestion;
 		}
-	
-	],
-	function(err, result) {
-		
-	});
+	).then(
+		function(suggestion){
+			game.addSuggestion(suggestion);
+			return suggestion; 
+		}
+	).then(
+		function(suggestion){
+			game.setCurrentSuggestion(suggestion);
+			return suggestion; 
+		}
+	);
 }
 
 function addUserToGame (game, user)

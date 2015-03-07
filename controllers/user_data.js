@@ -1,11 +1,10 @@
 /*global module:true, require:true, console:true, process:true */
 
-
-
 'use strict';
 
 var restify = require('restify')
-  , db = require('../db');
+  , db = require('../db')
+  , sequelize = require('sequelize');
 /**
 	@api {post} /user_data/create Create a new User
 	@apiName CreateUser
@@ -31,15 +30,22 @@ function createUser(req,res,next){
 	// 	}
 	// });
 	db.getUser(req.params.user_id)
-	.then(function(user){
-		if(user != null)
-			res.send(new restify.InvalidArgumentError("User already exists" + user));
-		else
-			return db.createUser(req.params.user_id,req.params.user_name);
-	})
-	.then(function(user){
-		return res.send(user.id);
-	});
+	.then(
+		function(user){
+			if(user != null)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("User already exists"));
+			else
+				return db.createUser(req.params.user_id,req.params.user_name);
+		}
+	)
+	.then(
+		function(user){
+			return res.send({id: user.id});
+		},
+		function(error){
+			return res.send(error);
+		}
+	);
 };
 exports.createUser = createUser;
 
@@ -59,13 +65,16 @@ exports.createUser = createUser;
 	@apiError InvalidArgumentError Thrown when the user queried does not exist 
 */
 function getUserData(req,res,next){
-	db.getUser(req.params.id,function(user){
-		if(user != null){
-			res.send(user.values);
-		}else {
-			res.send(new restify.InvalidArgumentError("Bad User Id"));
+	db.getUser(req.params.id)
+	.then(
+		function(user){
+			if(user != null){
+				res.send(user.values);
+			}else {
+				res.send(new restify.InvalidArgumentError("Bad User Id"));
+			}
 		}
-	});
+	);
 	next();
 }
 exports.getUserData = getUserData;

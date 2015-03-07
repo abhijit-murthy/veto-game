@@ -5,7 +5,8 @@
 var path = require('path')
   , restify = require('restify')
   , gameDataController = require('./controllers/game_data')
-  , userDataController = require('./controllers/user_data');
+  , userDataController = require('./controllers/user_data')
+  , suggestionDataController = require('./controllers/suggestion_data');
 
 
 exports.createServer = createServer;
@@ -48,6 +49,7 @@ function createServer (logger) {
   server.post('/game_data/create',gameDataController.createGame);
   server.post('/user_data/create', userDataController.createUser);
   server.get('/user_data/:id', userDataController.getUserData);
+  server.post('/suggestion_data/create',suggestionDataController.createSuggestion);
   server.get(/\/?.*/, restify.serveStatic({
 	default: 'index.html',
 	directory: './apidoc'

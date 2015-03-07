@@ -168,6 +168,76 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/suggestion_data/create",
+    "title": "Create a new Suggestion",
+    "description": "<p>Creates a new Suggestion for a given User and adds it to a given Game as the current Suggestion.</p> ",
+    "name": "CreateSuggestion",
+    "group": "Suggestion",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Creating User&#39;s Facebook ID</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "game_id",
+            "description": "<p>Game to add to</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Name of the location</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "location",
+            "description": "<p>Location of the suggestion</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Integer",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The ID of the newly created suggestion</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad User ID</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/suggestion_data.js",
+    "groupTitle": "Suggestion"
+  },
+  {
+    "type": "post",
     "url": "/user_data/create",
     "title": "Create a new User",
     "name": "CreateUser",
