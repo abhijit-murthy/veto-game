@@ -26,7 +26,7 @@ public class GameResponse {
     private int suggestionTtl;
 
     @SerializedName("center")
-    private String center;
+    private String center;  // originally Location type, currently DB type is String
 
     @SerializedName("radius")
     private int radius;

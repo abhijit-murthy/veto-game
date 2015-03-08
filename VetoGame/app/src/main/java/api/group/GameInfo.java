@@ -15,7 +15,7 @@ import retrofit.http.Body;
  */
 public interface GameInfo {
     @POST("/game_data/create")
-    public void createGame(@Body Game game);
+    public void createGame(@Body Game game, Callback<Game> callback);
 
     @GET("/game_data/{id}")
     public void getGame(@Path("id") String gameId, Callback<GameResponse> callback);

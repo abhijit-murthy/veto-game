@@ -21,6 +21,8 @@ import retrofit.client.Response;
 
 import android.util.Log;
 
+import java.util.Calendar;
+
 
 public class GameList extends Activity {
 
@@ -57,6 +59,21 @@ public class GameList extends Activity {
         });
 
         RestClient restClient = new RestClient();
+
+        Game newGame = new Game(null, "lunch", null, 15, "BUCKHEAD", 10);
+
+        restClient.getGameInfo().createGame(newGame, new Callback<Game>() {
+            @Override
+            public void success(Game game, Response response) {
+                int check = 0;
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Error ", error.getMessage());
+            }
+        });
+
         restClient.getGameInfo().getGame("1", new Callback<GameResponse>() {
             @Override
             public void success(GameResponse gameResponse, Response response) {

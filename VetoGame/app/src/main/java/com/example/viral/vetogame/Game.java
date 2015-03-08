@@ -11,14 +11,20 @@ import java.util.Calendar;
  */
 public class Game implements Serializable {//implements Parcelable {
 
+    private int gameId;
+
     // current game DB
     // needs to think about suggestionTTL
-    private int gameId;
+    private String userId;
     private Calendar eventTime;
     private String eventType;
+    private int suggestionTTL;
     private Calendar timeEnding;
-    private Location center;
+
+    //private Location center;
+    private String center;
     private int radius;
+
 
     // maybe need to add to DB
     private String gameName;
@@ -77,8 +83,30 @@ public class Game implements Serializable {//implements Parcelable {
         radius = in.readInt();
     }*/
 
+    // temporary constructor for matching DB
+    public Game(String userId, String eventType,
+                int suggestionTTL, String center, int radius){
+        this.userId = userId;
+        this.eventType = eventType;
+        this.suggestionTTL = suggestionTTL;
+        this.center = center;
+        this.radius = radius;
+    }
+
+    // temporary constructor for matching DB
+    public Game(Calendar eventTime, String eventType, Calendar timeEnding,
+                int suggestionTTL, String center, int radius){
+        this.eventType = eventType;
+        this.eventTime = eventTime;
+        this.timeEnding = timeEnding;
+        this.suggestionTTL = suggestionTTL;
+        this.center = center;
+        this.radius = radius;
+    }
+
+
     public Game(String gameName, Suggestion currentSuggestion, Calendar eventTime, Calendar timeEnding,
-                  int numberOfMembers, String eventType){
+                int numberOfMembers, String eventType){
         this.gameName = gameName;
         this.currentSuggestion = currentSuggestion;
         this.eventTime = eventTime;
@@ -87,8 +115,6 @@ public class Game implements Serializable {//implements Parcelable {
         this.eventType = eventType;
         pastSuggestions = new ArrayList<Suggestion>();
     }
-
-
 
 
     //---------------------- Getters and Setters ---------------------------------------------------
@@ -157,13 +183,13 @@ public class Game implements Serializable {//implements Parcelable {
         this.pastSuggestions = pastSuggestions;
     }
 
-    public Location getCenter() {
+    /*public Location getCenter() {
         return center;
     }
 
     public void setCenter(Location center) {
         this.center = center;
-    }
+    }*/
 
     public int getRadius() {
         return radius;
@@ -179,5 +205,38 @@ public class Game implements Serializable {//implements Parcelable {
 
     public void setWinner(String winner) {
         this.winner = winner;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Calendar getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(Calendar eventTime) {
+        this.eventTime = eventTime;
+    }
+
+    public int getSuggestionTTL() {
+        return suggestionTTL;
+    }
+
+    public void setSuggestionTTL(int suggestionTTL) {
+        this.suggestionTTL = suggestionTTL;
+    }
+
+    // temporary until DB is fixed
+    public String getCenter() {
+        return center;
+    }
+
+    public void setCenter(String center) {
+        this.center = center;
     }
 }
