@@ -1,7 +1,5 @@
 package com.example.viral.vetogame;
 
-import android.text.Layout;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.app.Activity;
 import android.content.Context;
@@ -27,7 +25,7 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
 
     // when it needs to show all people
     public PeopleAdapter(Context context, ArrayList<Person> resource) {
-        super(context,R.layout.list_person,resource);
+        super(context,R.layout.person_adapter,resource);
 
         // TODO Auto-generated constructor stub
         this.context = context;
@@ -38,7 +36,7 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
 
     // when it needs to show only invited people
     public PeopleAdapter(Context context, ArrayList<Person> resource, ArrayList<Person> invited) {
-        super(context,R.layout.list_person,invited);
+        super(context,R.layout.person_adapter,invited);
 
         // TODO Auto-generated constructor stub
         this.context = context;
@@ -54,7 +52,7 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-        convertView = inflater.inflate(R.layout.list_person, parent, false);
+        convertView = inflater.inflate(R.layout.person_adapter, parent, false);
         TextView name = (TextView) convertView.findViewById(R.id.person_name);
         CheckBox cb = (CheckBox) convertView.findViewById(R.id.person_chk);
 

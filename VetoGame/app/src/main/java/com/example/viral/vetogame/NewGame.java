@@ -94,8 +94,8 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                     public void onClick(View v) {
                         Intent intent = new Intent(NewGame.this,
                                 NewSuggestion.class);
-                                //MainActivity.class);
-                                //InitSuggestion.class);
+                        //MainActivity.class);
+                        //InitSuggestion.class);
                         startActivity(intent);
 
                     }
@@ -133,7 +133,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     // Time picker
     public void showTimePickerDialog(View v){
         TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show(getFragmentManager(), "timePicker");
-     }
+    }
 
     // -1: initialization as current time, 0: event date, 1: event time, 2: date limit, 3: time limit
     private void update() {

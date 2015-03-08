@@ -43,6 +43,15 @@
             android:parentActivityName=".GameList" >
         </activity>
 
+        <activity
+            android:name=".CurrGame"
+            android:label="@string/title_activity_curr_game" >
+        </activity>
+        <activity
+            android:name=".PastSuggestion"
+            android:label="@string/title_activity_past_suggestion_list" >
+        </activity>
+
        <activity
             android:name=".NewSuggestion"
             android:label="@string/title_activity_new_suggestion"
@@ -53,7 +62,6 @@
                <category android:name="android.intent.category.LAUNCHER" />
            </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

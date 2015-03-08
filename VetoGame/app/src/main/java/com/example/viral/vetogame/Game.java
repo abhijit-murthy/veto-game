@@ -1,34 +1,34 @@
 package com.example.viral.vetogame;
 
 import android.location.Location;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.provider.CalendarContract;
-import android.widget.ArrayAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Viral on 2/19/2015.
  */
 public class Game implements Serializable {//implements Parcelable {
 
+    // current game DB
+    // needs to think about suggestionTTL
+    private int gameId;
+    private Calendar eventTime;
+    private String eventType;
+    private Calendar timeEnding;
+    private Location center;
+    private int radius;
+
+    // maybe need to add to DB
     private String gameName;
     private Suggestion currentSuggestion;
-    private Calendar startTime;
-    private Calendar endTime;
     private int numberOfMembers;
-    private String gameType;
-    private int gameId;
-    private int eventTime;
-    private ArrayList<Suggestion> pastSuggestions;
-    private Location location;
-    private int locationRadius;
-    private String winner;
 
+    private ArrayList<Suggestion> pastSuggestions;
+
+    // need for past game?
+    private String winner;
 
     /*// 99.9% of the time you can just ignore this
     public int describeContents() {
@@ -39,15 +39,15 @@ public class Game implements Serializable {//implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(gameName);
         out.writeValue(currentSuggestion);
-        out.writeValue(startTime);
-        out.writeValue(endTime);
+        out.writeValue(eventTime);
+        out.writeValue(timeEnding);
         out.writeInt(numberOfMembers);
-        out.writeString(gameType);
+        out.writeString(eventType);
         out.writeInt(gameId);
         out.writeInt(eventTime);
         out.writeValue(pastSuggestions);
-        out.writeValue(location);
-        out.writeInt(locationRadius);
+        out.writeValue(center);
+        out.writeInt(radius);
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
@@ -66,41 +66,25 @@ public class Game implements Serializable {//implements Parcelable {
         mData = in.readInt();
         gameName = in.readString();
         currentSuggestion = (Suggestion)in.readValue(Suggestion.class.getClassLoader());
-        startTime = (Calendar)in.readValue(Calendar.class.getClassLoader());
-        endTime = (Calendar)in.readValue(Calendar.class.getClassLoader());
+        eventTime = (Calendar)in.readValue(Calendar.class.getClassLoader());
+        timeEnding = (Calendar)in.readValue(Calendar.class.getClassLoader());
         numberOfMembers = in.readInt();
-        gameType = in.readString();
+        eventType = in.readString();
         gameId = in.readInt();
         eventTime = in.readInt();
         pastSuggestions = (ArrayAdapter<Suggestion>)in.readValue(ArrayList<Suggestion>.class.getClassLoader());
-        location = (Location)in.readValue(Location.class.getClassLoader());
-        locationRadius = in.readInt();
+        center = (Location)in.readValue(Location.class.getClassLoader());
+        radius = in.readInt();
     }*/
 
-
-    public Game(String gameName, Suggestion currentSuggestion, Calendar startTime, Calendar endTime,
-                int numberOfMembers, String gameType, int eventTime, Location location,
-                int locationRadius){
+    public Game(String gameName, Suggestion currentSuggestion, Calendar eventTime, Calendar timeEnding,
+                  int numberOfMembers, String eventType){
         this.gameName = gameName;
         this.currentSuggestion = currentSuggestion;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.numberOfMembers = numberOfMembers;
-        this.gameType = gameType;
         this.eventTime = eventTime;
-        this.location = location;
-        this.locationRadius = locationRadius;
-        pastSuggestions = new ArrayList<Suggestion>();
-    }
-
-    public Game(String gameName, Suggestion currentSuggestion, Calendar startTime, Calendar endTime,
-                int numberOfMembers, String gameType){
-        this.gameName = gameName;
-        this.currentSuggestion = currentSuggestion;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.timeEnding = timeEnding;
         this.numberOfMembers = numberOfMembers;
-        this.gameType = gameType;
+        this.eventType = eventType;
         pastSuggestions = new ArrayList<Suggestion>();
     }
 
@@ -126,19 +110,19 @@ public class Game implements Serializable {//implements Parcelable {
     }
 
     public Calendar getTimeStarted() {
-        return startTime;
+        return eventTime;
     }
 
     public void setTimeStarted(Calendar startTime) {
-        this.startTime = startTime;
+        this.eventTime = startTime;
     }
 
     public Calendar getTimeEnding() {
-        return endTime;
+        return timeEnding;
     }
 
     public void setTimeEnding(Calendar endTime) {
-        this.endTime = endTime;
+        this.timeEnding = endTime;
     }
 
     public int getNumberOfMembers() {
@@ -149,12 +133,12 @@ public class Game implements Serializable {//implements Parcelable {
         this.numberOfMembers = numberOfMembers;
     }
 
-    public String getGameType() {
-        return gameType;
+    public String getEventType() {
+        return eventType;
     }
 
-    public void setGameType(String gameType) {
-        this.gameType = gameType;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
     public int getGameId() {
@@ -165,14 +149,6 @@ public class Game implements Serializable {//implements Parcelable {
         this.gameId = gameId;
     }
 
-    public int getEventTime() {
-        return eventTime;
-    }
-
-    public void setEventTime(int eventTime) {
-        this.eventTime = eventTime;
-    }
-
     public ArrayList<Suggestion> getPastSuggestions() {
         return pastSuggestions;
     }
@@ -181,20 +157,20 @@ public class Game implements Serializable {//implements Parcelable {
         this.pastSuggestions = pastSuggestions;
     }
 
-    public Location getLocation() {
-        return location;
+    public Location getCenter() {
+        return center;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setCenter(Location center) {
+        this.center = center;
     }
 
-    public int getLocationRadius() {
-        return locationRadius;
+    public int getRadius() {
+        return radius;
     }
 
-    public void setLocationRadius(int locationRadius) {
-        this.locationRadius = locationRadius;
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 
     public String getWinner() {
