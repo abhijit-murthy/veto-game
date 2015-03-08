@@ -17,7 +17,7 @@
     <string name="empty_game_list">Currently you are not in any games. Why not start one?</string>
     <string name="empty_past_game_list">You have no previous games. You should start one.</string>
     <string name="empty_suggestion_list">There are no suggestions in your area.\n
-                                         Try increasing the search radius or change your location.
+                                         Try increasing the search radius or change your center.
                                          </string>
     <string name="winner">Winner</string>
     <string name="back">Back</string>
