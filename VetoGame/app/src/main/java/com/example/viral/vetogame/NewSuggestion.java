@@ -11,9 +11,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class NewSuggestion extends FragmentActivity implements ActionBar.TabListener {
@@ -86,5 +88,40 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_new_suggestion, menu);
+        //super.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        Toast.makeText(getApplicationContext(), "clicked",Toast.LENGTH_SHORT);
+        if (id == R.id.action_save_suggestion) {
+            /*gameType = spinner.getSelectedItem().toString();
+            String gameName = textGameName.getText().toString();
+            Suggestion tempSuggestion = new Suggestion("The Muffin Bakery");
+            Game game = new Game(gameName, tempSuggestion, startTime, endTime, (numberInvited+1), gameType);
+            Intent intent = new Intent(NewGame.this,GameList.class);
+            System.out.println("put game in intent");
+            intent.putExtra("gameInfo",game);
+            //startActivity(intent);
+            setResult(RESULT_OK, intent);
+            finish();*/
+            //Toast.makeText(getApplicationContext(),"pushed",Toast.LENGTH_SHORT);
+            //return true;
+            return false;
+        }
+
+        return false;
+        //return super.onOptionsItemSelected(item);
     }
 }

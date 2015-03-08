@@ -61,7 +61,7 @@ public class InvitePeople extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_save) {
+        if (id == R.id.action_save_people) {
             Intent intent = new Intent(InvitePeople.this,
                     NewGame.class);
 

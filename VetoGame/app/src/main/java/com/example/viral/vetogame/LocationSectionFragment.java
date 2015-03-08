@@ -3,6 +3,7 @@ package com.example.viral.vetogame;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,7 +16,7 @@ public class LocationSectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_section_location, container, false);
-
+        setHasOptionsMenu(true);
         // Demonstration of a collection-browsing activity.
             /*rootView.findViewById(R.id.demo_collection_button)
                     .setOnClickListener(new View.OnClickListener() {
@@ -45,4 +46,13 @@ public class LocationSectionFragment extends Fragment {
 */
         return rootView;
     }
+
+    /*@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_save_suggestion) {
+            return true;
+        }
+        return false;
+    }*/
 }
