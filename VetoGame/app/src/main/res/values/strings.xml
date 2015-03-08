@@ -27,6 +27,9 @@
         <item>Lunch</item>
         <item>Dinner</item>
     </string-array>
+
     <string name="title_activity_past_game_list">PastGameList</string>
+    <string name="title_activity_curr_game">CurrGame</string>
+    <string name="title_activity_past_suggestion_list">PastSuggestionList</string>
 
 </resources>

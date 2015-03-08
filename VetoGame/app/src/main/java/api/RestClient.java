@@ -1,0 +1,7 @@
+package api;
+
+/**
+ * Created by eunkikim on 3/7/15.
+ */
+public class RestClient {
+}

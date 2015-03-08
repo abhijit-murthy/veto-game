@@ -39,6 +39,14 @@
             android:name=".PastGameList"
             android:label="@string/title_activity_past_game_list" >
         </activity>
+        <activity
+            android:name=".CurrGame"
+            android:label="@string/title_activity_curr_game" >
+        </activity>
+        <activity
+            android:name=".PastSuggestion"
+            android:label="@string/title_activity_past_suggestion_list" >
+        </activity>
     </application>
 
 </manifest>
