@@ -49,6 +49,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private Spinner spinner;
 
     private int dayLimit = 3;
+    private Suggestion suggestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,9 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(NewGame.this,
-                                InitSuggestion.class);
+                                NewSuggestion.class);
+                        //MainActivity.class);
+                        //InitSuggestion.class);
                         startActivity(intent);
 
                     }
@@ -130,18 +133,18 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     // Time picker
     public void showTimePickerDialog(View v){
         TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show(getFragmentManager(), "timePicker");
-     }
+    }
 
     // -1: initialization as current time, 0: event date, 1: event time, 2: date limit, 3: time limit
     private void update() {
         Calendar currentTime = Calendar.getInstance();
         if(id==0) {
-            startTime = calendar;
+            startTime = (Calendar)calendar.clone();
             startTimeChanged = true;
             if(timeDiffInDays(currentTime,startTime) > dayLimit){
-                Toast.makeText(getApplicationContext(), "Choose a time within "+dayLimit+"days",
+                Toast.makeText(getApplicationContext(), "Choose a time within "+dayLimit+" days",
                         Toast.LENGTH_SHORT).show();
-            }else if(currentTime.after(startTime)){
+            }else if(timeDiffInDays(currentTime,startTime)<0){//currentTime.after(startTime)){
                 if(startTimeChanged) {
                     Toast.makeText(getApplicationContext(), "Choose a future time",
                             Toast.LENGTH_SHORT).show();
@@ -151,9 +154,9 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             }
         }
         if(id==1) {
-            startTime = calendar;
+            startTime = (Calendar)calendar.clone();
             startTimeChanged = true;
-            if(currentTime.after(startTime)){
+            if(timeDifference(currentTime,startTime) == -1){
                 if(startTimeChanged) {
                     Toast.makeText(getApplicationContext(), "Choose a future time",
                             Toast.LENGTH_SHORT).show();
@@ -163,11 +166,11 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             }
         }
         if(id==2) {
-            endTime = calendar;
+            endTime = (Calendar)calendar.clone();
             endTimeChanged = true;
-            if(currentTime.after(startTime)||startTime.after(endTime)){
+            if(timeDifference(startTime,endTime)>0 || timeDifference(currentTime,endTime)<0){
                 if(endTimeChanged) {
-                    Toast.makeText(getApplicationContext(), "Choose a future time, but before event time",
+                    Toast.makeText(getApplicationContext(), "Choose a future day, but on or before the event day",
                             Toast.LENGTH_SHORT).show();
                 }
             }else {
@@ -175,11 +178,11 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             }
         }
         if(id==3) {
-            endTime = calendar;
+            endTime = (Calendar)calendar.clone();
             endTimeChanged = true;
-            if(currentTime.after(startTime)||endTime.after(startTime)){
+            if(timeDifference(startTime,endTime)>=0){
                 if(endTimeChanged) {
-                    Toast.makeText(getApplicationContext(), "Choose a future time, but before event time",
+                    Toast.makeText(getApplicationContext(), "Choose a time before event time",
                             Toast.LENGTH_SHORT).show();
                 }
             }else {
@@ -249,14 +252,67 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        savedInstanceState.putString("gameName", textGameName.getText().toString());
+        savedInstanceState.putSerializable("eventTime", startTime);
+        savedInstanceState.putString("gameType", gameType);
+        savedInstanceState.putInt("numberInvited", numberInvited);
+        savedInstanceState.putSerializable("endTime", endTime);
+        savedInstanceState.putSerializable("suggestion", suggestion);
+
+        // etc.
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
     public int timeDiffInDays(Calendar currentTime, Calendar chosenTime)
     {
         long curTime = currentTime.getTimeInMillis();
         long choseTime = chosenTime.getTimeInMillis();
         long diffTime = choseTime - curTime;
+        //System.out.println("cur time "+curTime);
+        //System.out.println("cho time "+choseTime);
+        //System.out.println("dif time "+diffTime);
         // divide the milliseconds by # of milliseconds in a day to get days difference
         int days = (int)( diffTime / (1000 * 60 * 60 * 24) );
+        System.out.println("days "+days);
         return days;
+    }
+
+    public int timeDifference(Calendar currentTime, Calendar chosenTime)
+    {
+        long curTime = currentTime.getTimeInMillis();
+        long choseTime = chosenTime.getTimeInMillis();
+        long diffTime = choseTime - curTime;
+        //System.out.println("cur time "+curTime);
+        //System.out.println("cho time "+choseTime);
+        //System.out.println("dif time "+diffTime);
+        // divide the milliseconds by # of milliseconds in a day to get days difference
+        int days = (int)( diffTime / (1000 * 60 * 60 * 24) );
+        int hours = (int)( diffTime / (1000 * 60 * 60) );
+        int minutes = (int)( diffTime / (1000 * 60) );
+        //System.out.println("hours "+hours);
+        //System.out.println("min "+minutes);
+
+        if(days > 0){
+            return 1;
+        }else{
+            if(hours > 0){
+                return 1;
+            }else{
+                if(minutes > 0){
+                    return 1;
+                }else if(minutes == 0){
+                    return 0;
+                }else{
+                    return -1;
+                }
+            }
+        }
     }
 
 }
