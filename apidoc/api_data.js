@@ -256,7 +256,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "name",
+            "field": "user_name",
             "description": "<p>Users Name</p> "
           }
         ]

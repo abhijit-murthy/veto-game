@@ -11,7 +11,7 @@ var restify = require('restify')
 	@apiGroup User
 
 	@apiParam {String} user_id 	Users Facebook ID (remember to get this from the Facebook API)
-	@apiParam {String} name Users Name
+	@apiParam {String} user_name Users Name
 
 	@apiSuccess (200)	Just the HTTP 200 Response
 
