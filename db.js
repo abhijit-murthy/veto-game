@@ -97,8 +97,8 @@ function initDB ()
 				finished: Sequelize.BOOLEAN
 				});
 				
-			Game.hasMany(User);
-			User.hasMany(Game);
+			Game.belongsToMany(User,{through:"GamesUsers"});
+			User.belongsToMany(Game,{through:"GamesUsers"});
 			
 			Game.hasMany(Suggestion);
 			Suggestion.belongsTo(Game);
@@ -133,34 +133,35 @@ function initDB ()
 		{
 			var testSuggestion = Suggestion.build({ name: "Moe's", location: "Atlanta", votes: 2 });
 						
-					testSuggestion.save().complete(function(err) {
-						if (!!err) {
-							console.log('The instance has not been saved:', err);
-							callback(err);
-						} else {
-							console.log('We have a persisted instance now');
-							
-							testUser.addSuggestion(testSuggestion);
-							
-							//sequelize.sync().complete(function(err) { }  );
+			testSuggestion.save().complete(function(err) {
+				if (!!err) {
+					console.log('The instance has not been saved:', err);
+					callback(err);
+				} else {
+					console.log('We have a persisted instance now');
+					
+					testUser.addSuggestion(testSuggestion);
+					
+					//sequelize.sync().complete(function(err) { }  );
 
-							/*
-							createUser("ABCDE", "John Smith", function() { getUser("ABCDE", function(user)
-								{ 	console.log("Here's the user we got.");
-								  	console.log(user);
-									createGame("dinner", 5, "ATLANTA", 20, user, function() { console.log("game created");  } ); 
-															
-									} );  } );
-							*/
-							
-							
-							createGame("dinner", 5, "Atlanta", 20, testUser).then(function(game) { 
-								addSuggestion("Jimmy Johns", "Atlanta", testUser, game).then(function(suggestion)  {
-									console.log("*!*!*!*!*!*!*!*!*"); callback(null, testUser, game); } );
-								} ); 
-							
-							}
-						});
+					/*
+					createUser("ABCDE", "John Smith", function() { getUser("ABCDE", function(user)
+						{ 	console.log("Here's the user we got.");
+						  	console.log(user);
+							createGame("dinner", 5, "ATLANTA", 20, user, function() { console.log("game created");  } ); 
+													
+							} );  } );
+					*/
+					
+					
+					createGame("dinner", 5, "Atlanta", 20, testUser).then(function(game) {
+						addSuggestion("Jimmy Johns", "Atlanta", testUser, game);
+						return game;
+					}).then(function(game){
+						callback(null,testUser,game);
+					});
+				}
+			});
 		},
 		
 		function (testUser, game, callback)
@@ -212,7 +213,9 @@ function createGame (eventType, suggestionTTL, center, radius, user)
 {
 	return Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius, finished: false})
 	.then(function(game){
-		return user.addGame(game);
+		// user.addGame(game);
+		game.addUser(user);
+		return game;
 	});
 }
 
