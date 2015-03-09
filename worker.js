@@ -49,6 +49,7 @@ function createServer (logger) {
   server.post('/game_data/create',gameDataController.createGame);
   server.post('/user_data/create', userDataController.createUser);
   server.get('/user_data/:id', userDataController.getUserData);
+  server.post('/game_data/add_user_to_game',gameDataController.addUserToGame);
   server.post('/suggestion_data/create',suggestionDataController.createSuggestion);
   server.get(/\/?.*/, restify.serveStatic({
 	default: 'index.html',

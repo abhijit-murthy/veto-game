@@ -98,3 +98,54 @@ function getGameData(req,res,next){
 	next();
 }
 exports.getGameData = getGameData;
+
+/**
+	@api {post} /game_data/add_user_to_game Add a given user to a Game
+	@apiName AddUserToGame
+	@apiGroup Game
+
+	@apiParam {String} user_id Creating User's id
+	@apiParam {String} game_id Target Game id
+
+	@apiSuccess {String} user_id Creating User's id
+	@apiSuccess {String} game_id Target Game id
+
+	@apiError InvalidArgumentError Bad Game/User id, Could not add user to game
+*/
+function addUserToGame(req,res,next){
+	var gameId = req.params.game_id;
+	var game,user;
+	db.getGame(gameId)
+	.then(
+		function(result){
+			if(result != null){
+				game = result;
+				return db.getUser(req.params.user_id);
+			}else{
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad game ID"));
+			}
+		}
+	).then(
+		function(result){
+			if(result != null){
+				user = result;
+				return db.addUserToGame(game,user);
+			}else {
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad User ID"));
+			}
+		}
+	).then(
+		function(gameUser){
+			if(gameUser != null){
+				res.send({user_id: gameUser.UserId,game_id:gameUser.GameId});
+			}else {
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Could not add user to Game"));
+			}
+		}
+	).error(
+		function(err){
+			res.send(err);
+		}
+	);
+}
+exports.addUserToGame = addUserToGame;

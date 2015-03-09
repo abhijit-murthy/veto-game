@@ -1,6 +1,68 @@
 define({ "api": [
   {
     "type": "post",
+    "url": "/game_data/add_user_to_game",
+    "title": "Add a given user to a Game",
+    "name": "AddUserToGame",
+    "group": "Game",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Creating User&#39;s id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "game_id",
+            "description": "<p>Target Game id</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>Creating User&#39;s id</p> "
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "game_id",
+            "description": "<p>Target Game id</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad Game/User id, Could not add user to game</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/game_data.js",
+    "groupTitle": "Game"
+  },
+  {
+    "type": "post",
     "url": "/game_data/create",
     "title": "Create a new Game",
     "description": "<p>Creates a new Game and adds the creating User to it.</p> ",
