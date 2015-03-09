@@ -93,7 +93,8 @@ function initDB ()
 				timeEnding: Sequelize.TIME,
 				suggestionTTL: Sequelize.INTEGER.UNSIGNED,
 				center: Sequelize.STRING,
-				radius: Sequelize.INTEGER.UNSIGNED
+				radius: Sequelize.INTEGER.UNSIGNED,
+				finished: Sequelize.BOOLEAN
 				});
 				
 			Game.hasMany(User);
@@ -153,8 +154,10 @@ function initDB ()
 							*/
 							
 							
-							createGame("dinner", 5, "Atlanta", 20, testUser, 
-								function(game) {addSuggestion("Jimmy Johns", "Atlanta", testUser, game, function(){ callback(null, testUser, game); } )} );
+							createGame("dinner", 5, "Atlanta", 20, testUser).then(function(game) { 
+								addSuggestion("Jimmy Johns", "Atlanta", testUser, game).then(function(suggestion)  {
+									console.log("*!*!*!*!*!*!*!*!*"); callback(null, testUser, game); } );
+								} ); 
 							
 							}
 						});
@@ -170,24 +173,23 @@ function initDB ()
 		
 		function (game, callback)
 		{
-			//unrelated - no dependency
 			
-			getGameSuggestionHistory(game, function(suggestions) {console.log('*********SUGG HISTORY***********'); console.log(suggestions); });
-			getCurrentSuggestion(game, function(currentSuggestion) {console.log('********CURRENT*********'); console.log(currentSuggestion); });
+			getGameSuggestionHistory(game).then(function(suggestions){console.log('*********SUGG HISTORY***********'); console.log(suggestions); } );
+			getCurrentSuggestion(game).then(function(currentSuggestion) {console.log('********CURRENT*********'); console.log(currentSuggestion);} );
 			
-			createUser("ABCDE", "John Smith", function(user) {
-				addUserToGame(game, user, function() { callback(null, user); } ); 
-			}
-			);
+
+			
+			createUser("ABCDE", "John Smith").then(function(user) { 
+				addUserToGame(game, user).then( function() {callback(null, user);} ); 
+				} );
 		
 		},
 		
 		function (user, callback)
 		{
-			createGame("lunch", 3, "Sandy Springs", 10, user, function() 
-			{ 
-				getUserGames(user, function(games) {console.log('********USER ABCDE GAMES*********'); console.log(games);} );
-			} ); 
+			createGame("lunch", 3, "Sandy Springs", 10, user).then(function(game) {
+				getUserGames(user).then(function(games) {console.log('********USER ABCDE GAMES*********'); console.log(games);} );
+				} );
 		}
 	],
 	function(err, result) {
@@ -208,9 +210,8 @@ function getUser (id)
 
 function createGame (eventType, suggestionTTL, center, radius, user)
 {
-	return Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius})
+	return Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius, finished: false})
 	.then(function(game){
-		//user.addGame(game).then(callback(game));	//doesn't work with promises
 		return user.addGame(game);
 	});
 }
@@ -220,7 +221,7 @@ function getGame (id)
 	return Game.find(id);
 }
 
-function addSuggestion (name, location, user, game, suggestionCallback)
+function addSuggestion (name, location, user, game)
 {
 	return Suggestion.build({name: name, location: location, votes: 0})
 
@@ -254,7 +255,7 @@ function getGameSuggestionHistory (game)
 	return game.getSuggestions();
 }
 
-function getUserGames (user)	//not tested yet
+function getUserGames (user)
 {
 	return user.getGames();
 }
@@ -262,6 +263,22 @@ function getUserGames (user)	//not tested yet
 function getCurrentSuggestion (game)
 {
 	return game.getCurrentSuggestion();
+}
+
+function getUsers ()
+{
+	return User.findAll();
+}
+
+function getPastGames (user)
+{
+	//return Game.findAll({ where: {finished: true, } });
+	return user.getGames({where: {finished:true}});
+}
+
+function getCurrentGames (user)
+{
+	return user.getGames({where: {finished:false}});
 }
 
 
