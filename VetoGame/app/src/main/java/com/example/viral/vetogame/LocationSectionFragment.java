@@ -2,48 +2,72 @@ package com.example.viral.vetogame;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
 
 /**
  * Created by Viral on 3/5/2015.
  */
 public class LocationSectionFragment extends Fragment {
 
+    private SeekBar seekBar;
+    private EditText radiusText;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_section_location, container, false);
         setHasOptionsMenu(true);
-        // Demonstration of a collection-browsing activity.
-            /*rootView.findViewById(R.id.demo_collection_button)
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(getActivity(), CollectionDemoActivity.class);
-                            startActivity(intent);
-                        }
-                    });
+        seekBar = (SeekBar) rootView.findViewById(R.id.RadiusSeekBar);
+        radiusText = (EditText) rootView.findViewById(R.id.RadiusEditText);
 
-            // Demonstration of navigating to external activities.
-            rootView.findViewById(R.id.demo_external_activity)
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // Create an intent that asks the user to pick a photo, but using
-                            // FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET, ensures that relaunching
-                            // the application from the device home screen does not return
-                            // to the external activity.
-                            Intent externalActivityIntent = new Intent(Intent.ACTION_PICK);
-                            externalActivityIntent.setType("image/*");
-                            externalActivityIntent.addFlags(
-                                    Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                            startActivity(externalActivityIntent);
-                        }
-                    });
-*/
+        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            int progress = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                progress = progressValue;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                radiusText.setText(""+(progress+1));
+            }
+        });
+
+        radiusText.addTextChangedListener(new TextWatcher(){
+            int radius;
+            public void afterTextChanged(Editable s) {
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count){
+                if(s.length()>0) {
+                    radius = Integer.parseInt(s.toString());
+                }else{
+                    radius = 1;
+                }
+                if(radius<=50 && radius>0) {
+                    seekBar.setProgress((radius-1));
+                }else{
+                    Toast.makeText(getActivity(),"Enter a radius between 1 and 50",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         return rootView;
     }
 

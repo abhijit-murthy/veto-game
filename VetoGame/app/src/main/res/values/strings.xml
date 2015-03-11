@@ -24,8 +24,8 @@
     <string name="address">Address</string>
     <string name="within">Within</string>
     <string name="milesOf">Miles of</string>
-    <string name="radius">(Radius)</string>
-    <string name="zipCode">(Zip Code)</string>
+    <string name="radius">Radius 1-50</string>
+    <string name="zipCode">Zip Code</string>
     <string name="create_game">Create a new game</string>
     <string name="view_past_games">View Past Games</string>
 
