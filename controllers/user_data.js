@@ -5,6 +5,8 @@
 var restify = require('restify')
   , db = require('../db')
   , sequelize = require('sequelize');
+
+exports.endpointBase = '/user_data';
 /**
 	@api {post} /user_data/create Create a new User
 	@apiName CreateUser
@@ -48,6 +50,7 @@ function createUser(req,res,next){
 	);
 };
 exports.createUser = createUser;
+exports.createUserEndpoint = exports.endpointBase + '/create';
 
 /**
 	@api {get} /user_data/:id Get User information
@@ -78,3 +81,4 @@ function getUserData(req,res,next){
 	next();
 }
 exports.getUserData = getUserData;
+exports.getUserDataEndpoint = exports.endpointBase + '/:id';

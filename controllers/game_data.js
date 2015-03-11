@@ -5,6 +5,8 @@
 var restify = require('restify')
   , db = require('../db')
   , sequelize = require('sequelize');
+
+exports.endpointBase = '/game_data';
 /**
 	@api {post} /game_data/create Create a new Game
 	@apiDescription Creates a new Game and adds the creating User to it.
@@ -64,6 +66,7 @@ function createGame(req,res,next){
 	next();
 }
 exports.createGame = createGame;
+exports.createGameEndpoint = exports.endpointBase + '/create'
 
 /**
 	@api {get} /game_data/:id Get Game information
@@ -98,6 +101,7 @@ function getGameData(req,res,next){
 	next();
 }
 exports.getGameData = getGameData;
+exports.getGameDataEndpoint = exports.endpointBase + '/:id';
 
 /**
 	@api {post} /game_data/add_user_to_game Add a given user to a Game
@@ -149,3 +153,33 @@ function addUserToGame(req,res,next){
 	);
 }
 exports.addUserToGame = addUserToGame;
+exports.addUserToGameEndpoint = exports.endpointBase + '/add_user_to_game';
+
+function getUserGames(req,res,next){
+	db.getUser(req.params.id)
+
+	.then(
+		function(user){
+			if(user == null)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad User ID"));
+			else
+				return db.getUserGames(user);
+		}
+	)
+	.then(
+		function(games){
+			if(games == null)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Could not retrieve Games"));
+			else
+				res.send(games);
+		}
+	)
+	.error(
+		function(err){
+			res.send(err);
+		}
+	);
+	next();
+}
+exports.getUserGames = getUserGames;
+exports.getUserGamesEndpoint = exports.endpointBase + '/get_user_games/:id';

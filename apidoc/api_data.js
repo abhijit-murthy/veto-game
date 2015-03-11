@@ -299,6 +299,104 @@ define({ "api": [
     "groupTitle": "Suggestion"
   },
   {
+    "type": "get",
+    "url": "/suggestion_data/current_suggestion/:id",
+    "title": "Get current Suggestion",
+    "description": "<p>Gets the current Suggestion in an ongoing Game</p> ",
+    "name": "GetCurrentSuggestion",
+    "group": "Suggestion",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The Game ID</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Suggestion",
+            "optional": false,
+            "field": "Unamed",
+            "description": "<p>The current Suggestion</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad Game Id</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/suggestion_data.js",
+    "groupTitle": "Suggestion"
+  },
+  {
+    "type": "get",
+    "url": "/suggestion_data/game_history/:id",
+    "title": "Get Suggestion history",
+    "description": "<p>Gets the Suggestion history for an ongoing Game</p> ",
+    "name": "GetGameSuggestionHistory",
+    "group": "Suggestion",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The Game ID</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Array",
+            "optional": false,
+            "field": "Unamed",
+            "description": "<p>An array of Suggestions</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad Game Id</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/suggestion_data.js",
+    "groupTitle": "Suggestion"
+  },
+  {
     "type": "post",
     "url": "/user_data/create",
     "title": "Create a new User",

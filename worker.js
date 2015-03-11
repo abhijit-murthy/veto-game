@@ -45,12 +45,20 @@ function createServer (logger) {
     res.send({'result': 'test'});      
     return next();
   });
-  server.get('/game_data/:id',gameDataController.getGameData);
-  server.post('/game_data/create',gameDataController.createGame);
-  server.post('/user_data/create', userDataController.createUser);
-  server.get('/user_data/:id', userDataController.getUserData);
-  server.post('/game_data/add_user_to_game',gameDataController.addUserToGame);
-  server.post('/suggestion_data/create',suggestionDataController.createSuggestion);
+  //User data endpoints
+  server.post(userDataController.createUserEndpoint, userDataController.createUser);
+  server.get(userDataController.getUserDataEndpoint, userDataController.getUserData);
+
+  //Game data endpoints
+  server.get(gameDataController.getGameDataEndpoint,gameDataController.getGameData);
+  server.post(gameDataController.createGameEndpoint,gameDataController.createGame);
+  server.post(gameDataController.addUserToGameEndpoint,gameDataController.addUserToGame);
+  server.get(gameDataController.getUserGamesEndpoint,gameDataController.getUserGames);
+
+  //Suggestion data endpoints
+  server.post(suggestionDataController.createSuggestionEndpoint,suggestionDataController.createSuggestion);
+  server.get(suggestionDataController.getGameSuggestionHistoryEndpoint,suggestionDataController.getGameSuggestionHistory);
+  server.get(suggestionDataController.getCurrentSuggestionEndpoint,suggestionDataController.getCurrentSuggestion);
   server.get(/\/?.*/, restify.serveStatic({
 	default: 'index.html',
 	directory: './apidoc'

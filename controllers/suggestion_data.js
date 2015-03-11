@@ -5,6 +5,8 @@
 var restify = require('restify')
   , db = require('../db')
   , sequelize = require('sequelize');
+
+exports.endpointBase = '/suggestion_data';
 /**
 	@api {post} /suggestion_data/create Create a new Suggestion
 	@apiDescription Creates a new Suggestion for a given User and adds it to a given Game as the current Suggestion.
@@ -64,3 +66,82 @@ function createSuggestion(req,res,next){
 	);
 }
 exports.createSuggestion = createSuggestion;
+exports.createSuggestionEndpoint = exports.endpointBase + '/create';
+
+/**
+	@api {get} /suggestion_data/game_history/:id Get Suggestion history
+	@apiDescription Gets the Suggestion history for an ongoing Game
+	@apiName GetGameSuggestionHistory
+	@apiGroup Suggestion
+
+	@apiParam {String} id The Game ID
+
+	@apiSuccess (200) {Array} Unamed An array of Suggestions
+
+	@apiError InvalidArgumentError Bad Game Id
+*/
+function getGameSuggestionHistory(req,res,next){
+	db.getGame(req.params.id)
+
+	.then(
+		function(game){
+			if(game == null)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game ID"));
+			else
+				return db.getGameSuggestionHistory(game);
+		}
+	)
+	.then(
+		function(suggestions){
+			if(suggestions != null)
+				res.send(suggestions);
+		}
+	)
+	.error(
+		function(err){
+			res.send(err);
+		}
+	);
+	next();
+}
+exports.getGameSuggestionHistory = getGameSuggestionHistory;
+exports.getGameSuggestionHistoryEndpoint = exports.endpointBase + '/game_history/:id';
+
+/**
+	@api {get} /suggestion_data/current_suggestion/:id Get current Suggestion
+	@apiDescription Gets the current Suggestion in an ongoing Game
+	@apiName GetCurrentSuggestion
+	@apiGroup Suggestion
+
+	@apiParam {String} id The Game ID
+
+	@apiSuccess (200) {Suggestion} Unamed The current Suggestion
+
+	@apiError InvalidArgumentError Bad Game Id
+*/
+function getCurrentSuggestion(req,res,next){
+	db.getGame(req.params.id)
+
+	.then(
+		function(game){
+			if(game == null)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game Id"));
+			else
+				return db.getCurrentSuggestion(game);
+		}
+	)
+	.then(
+		function(suggestion){
+			if(suggestion != null)
+				res.send(suggestion);
+		}
+	)
+	.error(
+		function(err){
+			res.send(err);
+		}
+	);
+	next();
+}
+exports.getCurrentSuggestion = getCurrentSuggestion;
+exports.getCurrentSuggestionEndpoint = exports.endpointBase + '/current_suggestion/:id';
