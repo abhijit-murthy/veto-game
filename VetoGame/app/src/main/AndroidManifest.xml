@@ -22,25 +22,45 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".NewGame"
             android:label="New Game"
             android:parentActivityName=".GameList" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.viral.vetogame.GameList" />
         </activity>
+
         <activity
             android:name=".InvitePeople"
             android:label="Invite"
             android:parentActivityName=".NewGame" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.viral.vetogame.NewGame" />
         </activity>
+
         <activity
             android:name=".InitSuggestion"
             android:label="Suggestion"
             android:parentActivityName=".NewGame" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.viral.vetogame.NewGame" />
         </activity>
+
         <activity
             android:name=".PastGameList"
             android:label="@string/title_activity_past_game_list"
             android:parentActivityName=".GameList" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.viral.vetogame.GameList" />
         </activity>
 
         <activity
@@ -61,6 +81,10 @@
                <action android:name="android.intent.action.MAIN" />
                <category android:name="android.intent.category.LAUNCHER" />
            </intent-filter>
+           <!-- Parent activity meta-data to support 4.0 and lower -->
+           <meta-data
+               android:name="android.support.PARENT_ACTIVITY"
+               android:value="com.example.viral.vetogame.NewGame" />
         </activity>
     </application>
 

@@ -119,6 +119,9 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
             //Toast.makeText(getApplicationContext(),"pushed",Toast.LENGTH_SHORT);
             //return true;
             return false;
+        }else if(id == android.R.id.home) {
+            finish();
+            return true;
         }
 
         return false;

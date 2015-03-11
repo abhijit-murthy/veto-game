@@ -75,6 +75,9 @@ public class InvitePeople extends Activity {
             //startActivity(intent);
             setResult(RESULT_OK, intent);
             finish();
+        }else if(id == android.R.id.home) {
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
