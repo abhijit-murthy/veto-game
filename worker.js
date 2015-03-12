@@ -59,6 +59,7 @@ function createServer (logger) {
   server.post(suggestionDataController.createSuggestionEndpoint,suggestionDataController.createSuggestion);
   server.get(suggestionDataController.getGameSuggestionHistoryEndpoint,suggestionDataController.getGameSuggestionHistory);
   server.get(suggestionDataController.getCurrentSuggestionEndpoint,suggestionDataController.getCurrentSuggestion);
+  server.get(suggestionDataController.getYelpSuggestionsEndpoint, suggestionDataController.getYelpSuggestions);
   server.get(/\/?.*/, restify.serveStatic({
 	default: 'index.html',
 	directory: './apidoc'

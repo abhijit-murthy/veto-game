@@ -161,7 +161,6 @@ exports.getCurrentSuggestionEndpoint = exports.endpointBase + '/current_suggesti
 	@apiError InvalidArgumentError 	Bad game Id
 */
 function getYelpSuggestions(req, res, next) {
-	var game;
 	db.getGame(req.params.game_id)
 	.then(
 		function(result){
@@ -169,46 +168,47 @@ function getYelpSuggestions(req, res, next) {
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad game Id"));
 			}
 			else {
-				game = result;
+				return req.params.game_id;
 			}
 		}
 	).then(
+		function(game){
+			var location = 'location='+game.center+'&'
+			  , radius_filter = 'radius_filter='+game.radius+'&'
+			  , category_filter = 'category_filter='+game.event_type+'&' //need to check supported categories or use term
+			  , sort = 'sort=1'; //sort by distance
 
-	)
+			var search = 'https://api.yelp.com/v2/search?'+location+radius_filter+category_filter+sort;
 
+			var yelp = OAuth({
+			    consumer: {
+			        public: 'pI2SJJxe5YBSJ6OjLrWUOQ',
+			        secret: 'PfUhZKeyTza3VpMfrgn8CuBDynQ'
+			    }
+			});
 
-//
-	var location = 'location='+game.center+'&'
-	  , radius_filter = 'radius_filter='+game.radius+'&'
-	  , category_filter = 'category_filter='+game.event_type+'&' //need to check supported categories or use term
-	  , sort = 'sort=1'; //sort by distance
+			yelp.setToken({
+			    public: 'vcn_ks3F6lDaGJsG4MApdxkk1XDqOT5x', 
+			    secret: '86r0tTOvF978mE7QKnE2-5Mlp5Q'
+			});
 
-	var search = 'https://api.yelp.com/v2/search?'+location+radius_filter+category_filter+sort;
-
-	var yelp = OAuth({
-	    consumer: {
-	        public: 'pI2SJJxe5YBSJ6OjLrWUOQ',
-	        secret: 'PfUhZKeyTza3VpMfrgn8CuBDynQ'
-	    }
-	});
-
-	yelp.setToken({
-	    public: 'vcn_ks3F6lDaGJsG4MApdxkk1XDqOT5x', 
-	    secret: '86r0tTOvF978mE7QKnE2-5Mlp5Q'
-	});
-
-	yelp.get({
-	    url: search,
-	    qs: {
-	        count: 5
-	    },
-	    json: true
-	}, function(err, res, feed) {
-	    //console.log(feed);
-	    res.send(feed);
-	    //TODO: do whatever needs to be done with information (json)
-		});
+			yelp.get({
+			    url: search,
+			    qs: {
+			        count: 5
+			    },
+			    json: true
+			}, function(err, res, feed) {
+			    //console.log(feed);
+			    res.send(feed);
+			    //TODO: do whatever needs to be done with information (json)
+				});
+	).error(
+		function(err){
+			res.send(err);
+		}
+	);
 }
-
-//export yelpsuggestions
+exports.getYelpSuggestions = getYelpSuggestions;
+exports.getYelpSuggestionsEndpoint = exports.endpointBase + '/yelp_suggestions/:id';
 

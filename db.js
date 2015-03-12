@@ -284,5 +284,9 @@ function getCurrentGames (user)
 	return user.getGames({where: {finished:false}});
 }
 
+function getYelpSuggestions(game)
+{
+	return game.getYelpSuggestions();
+}
 
 
