@@ -203,6 +203,7 @@ function getYelpSuggestions(req, res, next) {
 			    res.send(feed);
 			    //TODO: do whatever needs to be done with information (json)
 				});
+		}
 	).error(
 		function(err){
 			res.send(err);
