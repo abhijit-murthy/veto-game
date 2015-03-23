@@ -1,9 +1,11 @@
 package com.example.viral.vetogame;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class CurrGame extends Activity {
@@ -12,6 +14,16 @@ public class CurrGame extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curr_game);
+
+        findViewById(R.id.btn_past_suggestions).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(CurrGame.this,
+                                PastSuggestion.class);
+                        startActivity(intent);
+                    }
+                });
     }
 
 

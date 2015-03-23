@@ -60,12 +60,24 @@ public class GameList extends Activity {
 
         RestClient restClient = new RestClient();
 
-        Game newGame = new Game(null, "lunch", null, 15, "BUCKHEAD", 10);
+        /*Game newGame = new Game(null, "lunch", null, 15, "BUCKHEAD", 10);
 
         restClient.getGameInfo().createGame(newGame, new Callback<Game>() {
             @Override
             public void success(Game game, Response response) {
                 int check = 0;
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Error ", error.getMessage());
+            }
+        });*/
+
+        restClient.getUserInfo().createUser("User3", "Jess", new Callback<UserResponse>() {
+            @Override
+            public void success(UserResponse userResponse, Response response) {
+                int check=0;
             }
 
             @Override

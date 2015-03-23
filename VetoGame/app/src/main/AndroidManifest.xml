@@ -45,11 +45,13 @@
 
         <activity
             android:name=".CurrGame"
-            android:label="@string/title_activity_curr_game" >
+            android:label="@string/title_activity_curr_game"
+            android:parentActivityName=".GameList" >
         </activity>
         <activity
             android:name=".PastSuggestion"
-            android:label="@string/title_activity_past_suggestion_list" >
+            android:label="@string/title_activity_past_suggestion_list"
+            android:parentActivityName=".CurrGame" >
         </activity>
 
        <activity
