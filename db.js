@@ -6,7 +6,6 @@ var fs = require('fs');
 var Sequelize = require('sequelize');
 var sequelize;
 var async = require('async');
-var Promise = require("bluebird");
 
 var credentials_filename = "secure_this_file.txt";
 var db_name = "test";
@@ -272,7 +271,7 @@ function isGameFinished (game)
 	//if any, set finished to true and return true
 	//else return false
 	
-	return new Promise (function(fulfill, reject){
+	return new sequelize.Promise (function(fulfill, reject){
 		
 		if (game.finished == true)
 		{
