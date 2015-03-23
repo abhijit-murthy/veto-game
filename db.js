@@ -6,6 +6,7 @@ var fs = require('fs');
 var Sequelize = require('sequelize');
 var sequelize;
 var async = require('async');
+var Promise = require("bluebird");
 
 var credentials_filename = "secure_this_file.txt";
 var db_name = "test";
@@ -22,7 +23,8 @@ exports.addSuggestion = addSuggestion;
 exports.addUserToGame = addUserToGame;
 exports.getGameSuggestionHistory = getGameSuggestionHistory;
 exports.getUserGames = getUserGames;
-exports.getCurrentSuggestion = getCurrentSuggestion
+exports.getCurrentSuggestion = getCurrentSuggestion;
+exports.isGameFinished = isGameFinished;
 
 function initDB ()
 {
@@ -90,7 +92,7 @@ function initDB ()
 			Game = sequelize.define('Game', {
 				eventTime: Sequelize.TIME,
 				eventType: Sequelize.STRING,
-				timeEnding: Sequelize.TIME,
+				timeEnding: Sequelize.DATE,
 				suggestionTTL: Sequelize.INTEGER.UNSIGNED,
 				center: Sequelize.STRING,
 				radius: Sequelize.INTEGER.UNSIGNED,
@@ -153,8 +155,10 @@ function initDB ()
 							} );  } );
 					*/
 					
+					var date1 = new Date();
+					date1.setHours(date1.getHours() - 5);
 					
-					createGame("dinner", 5, "Atlanta", 20, testUser).then(function(game) {
+					createGame("dinner", 5, "Atlanta", 20, testUser, date1).then(function(game) {
 						addSuggestion("Jimmy Johns", "Atlanta", testUser, game);
 						return game;
 					}).then(function(game){
@@ -169,12 +173,14 @@ function initDB ()
 			addSuggestion("Subway", "Atlanta", testUser, game)
 			.then(function(suggestion){
 				console.log(suggestion);
+				callback(null, game);
 			});
 		},
 		
 		function (game, callback)
 		{
 			
+			isGameFinished(game).then(function(finished) { console.log("********************FINISHED???******************"); console.log(finished); } );
 			getGameSuggestionHistory(game).then(function(suggestions){console.log('*********SUGG HISTORY***********'); console.log(suggestions); } );
 			getCurrentSuggestion(game).then(function(currentSuggestion) {console.log('********CURRENT*********'); console.log(currentSuggestion);} );
 			
@@ -188,8 +194,11 @@ function initDB ()
 		
 		function (user, callback)
 		{
-			createGame("lunch", 3, "Sandy Springs", 10, user).then(function(game) {
-				getUserGames(user).then(function(games) {console.log('********USER ABCDE GAMES*********'); console.log(games);} );
+			var date2 = new Date();
+				date2.setHours(date2.getHours() + 8);			
+			
+			createGame("lunch", 3, "Sandy Springs", 10, user, date2).then(function(game) {
+				getUserGames(user).then(function(games) {console.log('********USER ABCDE GAMES*********'); console.log(games); } );
 				} );
 		}
 	],
@@ -209,9 +218,9 @@ function getUser (id)
 	return User.find(id);
 }
 
-function createGame (eventType, suggestionTTL, center, radius, user)
+function createGame (eventType, suggestionTTL, center, radius, user, timeEnding)
 {
-	return Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius, finished: false})
+	return Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius, finished: false, timeEnding: timeEnding})
 	.then(function(game){
 		// user.addGame(game);
 		game.addUser(user);
@@ -246,6 +255,90 @@ function addSuggestion (name, location, user, game)
 			return suggestion; 
 		}
 	);
+}
+
+function isGameFinished (game)
+{
+	//if finished flag is true, return true
+	//else, check for
+	//1) current suggestion TTL expiry
+	//2) game reaches end time
+	//3) unanimous upvotes for current suggestion
+	//if any, set finished to true and return true
+	//else return false
+	
+	return new Promise (function(fulfill, reject){
+		
+		if (game.finished == true)
+		{
+			console.log("Finished flag was true");
+			//return true;
+			fulfill(true);
+		}
+		else
+		{
+			var ttl = game.suggestionTTL;
+		
+			getCurrentSuggestion(game)
+			.then(
+				function(suggestion){	
+				
+						var suggestionExpiration = new Date(suggestion.createdAt);
+						suggestionExpiration.setMinutes(suggestionExpiration.getMinutes() + ttl);
+						var now = new Date();
+					 
+						if (now >= suggestionExpiration)
+						{
+							console.log ("Suggestion TTL has expired");
+							console.log ("Suggestion created at " + suggestion.createdAt);
+							console.log ("Suggestion TTL is " + ttl);
+							console.log ("Suggestion expires at " + suggestionExpiration);
+							console.log ("Now it is " + now);
+							
+							//set finished to true
+							game.finished = true;
+							game.save().then(function() { } );
+							fulfill(true);					
+						}
+						else if (now >= new Date(game.timeEnding))
+						{
+						
+							console.log ("Game ending time reached");
+							console.log ("Game ends at " + game.timeEnding);
+							console.log ("Now it is " + now);						
+						
+							game.finished = true;
+							game.save().then(function() { } );	
+							fulfill(true);	
+						}
+					
+					return suggestion;
+					}
+				)
+				.then(function(suggestion) {
+					game.getUsers().then(function(users) { 
+					
+							if (users.count == suggestion.votes - 1)   
+							{
+								game.finished = true;
+								game.save().then(function() { } );	
+								fulfill(true);	
+							}
+							else
+							{
+								fulfill(false);
+							}
+							
+								});					
+					
+					});
+		}
+		
+		});
+	
+	
+	
+	
 }
 
 function addUserToGame (game, user)
