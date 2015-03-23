@@ -189,8 +189,20 @@ function initDB ()
 				} );
 			
 
+
+			createUser("JKL", "Carl Rogers").then(function(user) { 
+				addUserToGame(game, user).then( function() { } ); 
+				} );
+				
+			createUser("GHI", "Marco Rodriguez").then(function(user) { 
+				addUserToGame(game, user).then( function() { } ); 
+				} );
+
+			createUser("DEF", "Sally Johnson").then(function(user) { 
+				addUserToGame(game, user).then( function() { } ); 
+				} );
 			
-			createUser("ABCDE", "John Smith").then(function(user) { 
+			createUser("ABC", "John Smith").then(function(user) { 
 				addUserToGame(game, user).then( function() {callback(null, user);} ); 
 				} );
 		
