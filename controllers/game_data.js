@@ -62,7 +62,7 @@ function createGame(req,res,next){
 
 			var eventTime = req.params.event_time;
 			if(!eventTime)
-				return sequelize.Promise.reject(new restify.InvalidArgumentError("No Event Time");
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("No Event Time"));
 			
 			var timeEnding = req.params.time_ending;
 			if(!timeEnding)
