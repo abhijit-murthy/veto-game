@@ -156,7 +156,7 @@ function initDB ()
 					*/
 					
 					var date1 = new Date();
-					date1.setHours(date1.getHours() - 5);
+					date1.setHours(date1.getHours() + 5);
 					
 					createGame("dinner", 5, "Atlanta", 20, testUser, date1).then(function(game) {
 						addSuggestion("Jimmy Johns", "Atlanta", testUser, game);
@@ -181,8 +181,9 @@ function initDB ()
 		{
 			
 			isGameFinished(game).then(function(finished) { console.log("********************FINISHED???******************"); console.log(finished); } );
-			getGameSuggestionHistory(game).then(function(suggestions){console.log('*********SUGG HISTORY***********'); console.log(suggestions); } );
-			getCurrentSuggestion(game).then(function(currentSuggestion) {console.log('********CURRENT*********'); console.log(currentSuggestion);} );
+			getGameSuggestionHistory(game).then(function(suggestions){ console.log('*********SUGG HISTORY***********'); console.log(suggestions); } );
+			getCurrentSuggestion(game).then(function(currentSuggestion) { 
+				console.log('********CURRENT*********'); console.log(currentSuggestion); upvote(game, currentSuggestion); } );
 			
 
 			
@@ -335,10 +336,7 @@ function isGameFinished (game)
 		}
 		
 		});
-	
-	
-	
-	
+
 }
 
 function addUserToGame (game, user)
@@ -364,6 +362,19 @@ function getCurrentSuggestion (game)
 function getUsers ()
 {
 	return User.findAll();
+}
+
+
+
+function upvote (game, suggestionToUpvote)
+{
+	getCurrentSuggestion(game).then(function(suggestion) {
+		if (suggestionToUpvote.id == suggestion.id)
+		{
+			suggestion.votes++;
+			suggestion.save().then(function() { } );
+		}
+	});
 }
 
 function getPastGames (user)
