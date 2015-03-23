@@ -173,17 +173,21 @@ function initDB ()
 			addSuggestion("Subway", "Atlanta", testUser, game)
 			.then(function(suggestion){
 				console.log(suggestion);
-				callback(null, game);
+				callback(null, game, testUser);
 			});
 		},
 		
-		function (game, callback)
+		function (game, user, callback)
 		{
 			
 			isGameFinished(game).then(function(finished) { console.log("********************FINISHED???******************"); console.log(finished); } );
 			getGameSuggestionHistory(game).then(function(suggestions){ console.log('*********SUGG HISTORY***********'); console.log(suggestions); } );
 			getCurrentSuggestion(game).then(function(currentSuggestion) { 
-				console.log('********CURRENT*********'); console.log(currentSuggestion); upvote(game, currentSuggestion); } );
+				console.log('********CURRENT*********');
+				console.log(currentSuggestion);
+				//upvote(game, currentSuggestion);
+				vetoAndSuggest(game, user, currentSuggestion, "The Varsity", "Atlanta");
+				} );
 			
 
 			
@@ -364,7 +368,12 @@ function getUsers ()
 	return User.findAll();
 }
 
-
+function vetoAndSuggest (game, user, suggestionToVeto, newSuggestionName, newSuggestionLocation)
+{
+	getCurrentSuggestion(game).then(function(suggestion) { 
+		if (suggestionToVeto.id == suggestion.id) addSuggestion(newSuggestionName, newSuggestionLocation, user, game);
+			});
+}
 
 function upvote (game, suggestionToUpvote)
 {
