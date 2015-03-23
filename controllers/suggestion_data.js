@@ -168,18 +168,17 @@ function getYelpSuggestions(req, res, next) {
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad game Id"));
 			}
 			else {
-				return req.params.game_id;
+				return result;
 			}
 		}
 	).then(
 		function(game){
 			var location = 'location='+game.center+'&'
 			  , radius_filter = 'radius_filter='+game.radius+'&'
-			  , category_filter = 'category_filter='+game.event_type+'&' //need to check supported categories or use term
+			  , category_filter = 'term='+game.eventType+'&' //need to check supported categories or use term
 			  , sort = 'sort=1'; //sort by distance
 
 			var search = 'https://api.yelp.com/v2/search?'+location+radius_filter+category_filter+sort;
-
 			var yelp = OAuth({
 			    consumer: {
 			        public: 'pI2SJJxe5YBSJ6OjLrWUOQ',
@@ -198,8 +197,9 @@ function getYelpSuggestions(req, res, next) {
 			        count: 5
 			    },
 			    json: true
-			}, function(err, res, feed) {
+			}, function(err, response, feed) {
 			    //console.log(feed);
+			    console.log("Amount returned" + feed.businesses.length);
 			    res.send(feed);
 			    //TODO: do whatever needs to be done with information (json)
 				});
@@ -211,5 +211,5 @@ function getYelpSuggestions(req, res, next) {
 	);
 }
 exports.getYelpSuggestions = getYelpSuggestions;
-exports.getYelpSuggestionsEndpoint = exports.endpointBase + '/yelp_suggestions/:id';
+exports.getYelpSuggestionsEndpoint = exports.endpointBase + '/yelp_suggestions/:game_id';
 
