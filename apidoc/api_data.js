@@ -105,6 +105,27 @@ define({ "api": [
             "optional": false,
             "field": "radius",
             "description": "<p>Radius of the circle in which we are filtering suggestions</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Name of the Game being created</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "event_time",
+            "description": "<p>Time of the event</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "time_ending",
+            "description": "<p>Ending time of the Game</p> "
           }
         ]
       }

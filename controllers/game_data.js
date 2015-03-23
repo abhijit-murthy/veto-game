@@ -18,6 +18,9 @@ exports.endpointBase = '/game_data';
 	@apiParam {Integer} suggestion_ttl 	Time to Live of a suggestion before the game ends (in minutes)
 	@apiParam {Location} center 	Center of the circle in which we are filtering suggestions
 	@apiParam {Integer} radius 	Radius of the circle in which we are filtering suggestions
+	@apiParam {String} name Name of the Game being created
+	@apiParam {String} event_time	Time of the event
+	@apiParam {String} time_ending	Ending time of the Game
 
 	@apiSuccess (200) {Integer} game_id 	The ID of the newly created game
 
@@ -52,7 +55,20 @@ function createGame(req,res,next){
 			if(!radius){
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("No radius"));
 			}
-			return db.createGame(eventType,suggestionTTL,center,radius,user);
+
+			var name = req.params.game_name;
+			if(!name)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("No Name"));
+
+			var eventTime = req.params.event_time;
+			if(!eventTime)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("No Event Time");
+			
+			var timeEnding = req.params.time_ending;
+			if(!timeEnding)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("No Time Ending"));
+
+			return db.createGame(name,eventType,suggestionTTL,center,radius,user,eventTime,timeEnding);
 		}
 	)
 	.then(
@@ -195,3 +211,4 @@ function getUserGames(req,res,next){
 }
 exports.getUserGames = getUserGames;
 exports.getUserGamesEndpoint = exports.endpointBase + '/get_user_games/:id';
+
