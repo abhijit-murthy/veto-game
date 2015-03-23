@@ -6,7 +6,6 @@ var fs = require('fs');
 var Sequelize = require('sequelize');
 var sequelize;
 var async = require('async');
-var Promise = require("bluebird");
 
 var credentials_filename = "secure_this_file.txt";
 var db_name = "test";
@@ -190,8 +189,20 @@ function initDB ()
 				} );
 			
 
+
+			createUser("JKL", "Carl Rogers").then(function(user) { 
+				addUserToGame(game, user).then( function() { } ); 
+				} );
+				
+			createUser("GHI", "Marco Rodriguez").then(function(user) { 
+				addUserToGame(game, user).then( function() { } ); 
+				} );
+
+			createUser("DEF", "Sally Johnson").then(function(user) { 
+				addUserToGame(game, user).then( function() { } ); 
+				} );
 			
-			createUser("ABCDE", "John Smith").then(function(user) { 
+			createUser("ABC", "John Smith").then(function(user) { 
 				addUserToGame(game, user).then( function() {callback(null, user);} ); 
 				} );
 		
@@ -272,7 +283,7 @@ function isGameFinished (game)
 	//if any, set finished to true and return true
 	//else return false
 	
-	return new Promise (function(fulfill, reject){
+	return new sequelize.Promise (function(fulfill, reject){
 		
 		if (game.finished == true)
 		{
