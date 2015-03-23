@@ -142,6 +142,7 @@ define({ "api": [
     "type": "get",
     "url": "/game_data/:id",
     "title": "Get Game information",
+    "description": "<p>Get detailed Game information</p> ",
     "name": "GetGameData",
     "group": "Game",
     "parameter": {
@@ -220,6 +221,55 @@ define({ "api": [
             "optional": false,
             "field": "InvalidArgumentError",
             "description": "<p>Bad Game ID</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/game_data.js",
+    "groupTitle": "Game"
+  },
+  {
+    "type": "get",
+    "url": "/game_data/get_user_games/:id",
+    "title": "Get User's Games",
+    "description": "<p>Get all the Games that a given User is associated with</p> ",
+    "name": "GetUserGames",
+    "group": "Game",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The requesting User&#39;s ID</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "Games",
+            "description": "<p>that the User is a part of</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad User ID/Could not retrieve list of games</p> "
           }
         ]
       }
@@ -376,6 +426,54 @@ define({ "api": [
             "optional": false,
             "field": "Unamed",
             "description": "<p>An array of Suggestions</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad Game Id</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/suggestion_data.js",
+    "groupTitle": "Suggestion"
+  },
+  {
+    "type": "get",
+    "url": "Get",
+    "title": "Suggestions from Yelp Api",
+    "description": "<p>Gets Suggestions from the Yelp API using information about the Game.</p> ",
+    "name": "GetYelpSuggestions",
+    "group": "Suggestion",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "game_id",
+            "description": "<p>Game to get information from</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "Suggestions",
+            "description": "<p>from Yelp</p> "
           }
         ]
       }

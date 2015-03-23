@@ -149,16 +149,16 @@ exports.getCurrentSuggestion = getCurrentSuggestion;
 exports.getCurrentSuggestionEndpoint = exports.endpointBase + '/current_suggestion/:id';
 
 /**
-	@api {get} Get suggestions from Yelp Api
-	@apiDescription Gets suggestions from the Yelp API using information about the game.
-	@apiName getYelpSuggestions
+	@api {get} Get Suggestions from Yelp Api
+	@apiDescription Gets Suggestions from the Yelp API using information about the Game.
+	@apiName GetYelpSuggestions
 	@apiGroup Suggestion
 
 	@apiParam {String} game_id	Game to get information from
 
-	@apiSuccess (200) 
+	@apiSuccess (200) Suggestions from Yelp
 
-	@apiError InvalidArgumentError 	Bad game Id
+	@apiError InvalidArgumentError 	Bad Game Id
 */
 function getYelpSuggestions(req, res, next) {
 	db.getGame(req.params.game_id)

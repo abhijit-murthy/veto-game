@@ -70,6 +70,7 @@ exports.createGameEndpoint = exports.endpointBase + '/create'
 
 /**
 	@api {get} /game_data/:id Get Game information
+	@apiDescription Get detailed Game information
 	@apiName GetGameData
 	@apiGroup Game
 
@@ -154,7 +155,18 @@ function addUserToGame(req,res,next){
 }
 exports.addUserToGame = addUserToGame;
 exports.addUserToGameEndpoint = exports.endpointBase + '/add_user_to_game';
+/**
+	@api {get} /game_data/get_user_games/:id Get User's Games
+	@apiDescription Get all the Games that a given User is associated with
+	@apiName GetUserGames
+	@apiGroup Game
 
+	@apiParam {String} id The requesting User's ID
+
+	@apiSuccess {Array} Games that the User is a part of
+
+	@apiError InvalidArgumentError Bad User ID/Could not retrieve list of games
+*/
 function getUserGames(req,res,next){
 	db.getUser(req.params.id)
 
