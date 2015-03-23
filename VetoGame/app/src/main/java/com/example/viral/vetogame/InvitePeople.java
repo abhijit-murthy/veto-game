@@ -61,7 +61,7 @@ public class InvitePeople extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_save) {
+        if (id == R.id.action_save_people) {
             Intent intent = new Intent(InvitePeople.this,
                     NewGame.class);
 
@@ -75,6 +75,9 @@ public class InvitePeople extends Activity {
             //startActivity(intent);
             setResult(RESULT_OK, intent);
             finish();
+        }else if(id == android.R.id.home) {
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

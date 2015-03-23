@@ -2,6 +2,7 @@ package com.example.viral.vetogame;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import com.android.datetimepicker.time.TimePickerDialog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -101,7 +103,43 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                     }
                 });
 
+        if(savedInstanceState!= null){
+            System.out.println("savedIntance not null");
+            textGameName.setText(savedInstanceState.getString("gameName"));
+            startTime = (Calendar) savedInstanceState.getSerializable("eventTime");
+            gameType = savedInstanceState.getString("gameType");
+            numberInvited = savedInstanceState.getInt("numberInvited");
+            endTime = (Calendar) savedInstanceState.getSerializable("endTime");
+            suggestion = (Suggestion) savedInstanceState.getSerializable("suggestion");
+        }else{
+            System.out.println("savedIntance is null");
+        }
+
         update();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        System.out.println("On stop " + this.getClass());
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        System.out.println("On destroy " + this.getClass());
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        System.out.println("On pause " + this.getClass());
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        System.out.println("On resume " + this.getClass());
     }
 
     public void onClick(View view) {
@@ -216,6 +254,9 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             //startActivity(intent);
             setResult(RESULT_OK, intent);
             finish();
+        }else if(id == android.R.id.home){
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -258,15 +299,48 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.
+
+        System.out.println("OnSave");
         savedInstanceState.putString("gameName", textGameName.getText().toString());
         savedInstanceState.putSerializable("eventTime", startTime);
         savedInstanceState.putString("gameType", gameType);
         savedInstanceState.putInt("numberInvited", numberInvited);
         savedInstanceState.putSerializable("endTime", endTime);
         savedInstanceState.putSerializable("suggestion", suggestion);
-
-        // etc.
         super.onSaveInstanceState(savedInstanceState);
+        System.out.println("data saved");
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        System.out.println("OnRestore");
+        textGameName.setText(savedInstanceState.getString("gameName"));
+        startTime = (Calendar) savedInstanceState.getSerializable("eventTime");
+        gameType = savedInstanceState.getString("gameType");
+        numberInvited = savedInstanceState.getInt("numberInvited");
+        endTime = (Calendar) savedInstanceState.getSerializable("endTime");
+
+        suggestion = (Suggestion) savedInstanceState.getSerializable("suggestion");
+
+        btnEventDate.setText(dateFormat.format(startTime.getTime()));
+        btnEventTime.setText(timeFormat.format(startTime.getTime()));
+        btnLimitDate.setText(dateFormat.format(endTime.getTime()));
+        btnLimitTime.setText(timeFormat.format(endTime.getTime()));
+        Resources res = getResources();
+        String [] topics = res.getStringArray(R.array.game_topic);
+        spinner.setSelection(getIndex(topics,gameType));
+    }
+
+    public int getIndex(String [] array, String value){
+        for(int i=0;i<array.length;i++){
+            if(array[i].equals(value)){
+                return i;
+            }else{
+                return -1;
+            }
+        }
+        return -1;
     }
 
     public int timeDiffInDays(Calendar currentTime, Calendar chosenTime)
