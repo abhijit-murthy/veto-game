@@ -89,6 +89,7 @@ function initDB ()
 				});
 				
 			Game = sequelize.define('Game', {
+				name: Sequelize.STRING,
 				eventTime: Sequelize.DATE,
 				eventType: Sequelize.STRING,
 				timeEnding: Sequelize.DATE,
@@ -157,7 +158,7 @@ function initDB ()
 					var date1 = new Date();
 					date1.setHours(date1.getHours() + 5);
 					
-					createGame("dinner", 5, "Atlanta", 20, testUser, date1, date1).then(function(game) {
+					createGame("GameA", "dinner", 5, "Atlanta", 20, testUser, date1, date1).then(function(game) {
 						addSuggestion("Jimmy Johns", "Atlanta", testUser, game);
 						return game;
 					}).then(function(game){
@@ -213,7 +214,7 @@ function initDB ()
 			var date2 = new Date();
 				date2.setHours(date2.getHours() + 8);			
 			
-			createGame("lunch", 3, "Sandy Springs", 10, user, date2, date2).then(function(game) {
+			createGame("GameB", "lunch", 3, "Sandy Springs", 10, user, date2, date2).then(function(game) {
 				getUserGames(user).then(function(games) {console.log('********USER ABCDE GAMES*********'); console.log(games); } );
 				} );
 		}
@@ -234,9 +235,9 @@ function getUser (id)
 	return User.find(id);
 }
 
-function createGame (eventType, suggestionTTL, center, radius, user, eventTime, timeEnding)
+function createGame (name, eventType, suggestionTTL, center, radius, user, eventTime, timeEnding)
 {
-	return Game.create({eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius, finished: false, eventTime: eventTime, timeEnding: timeEnding})
+	return Game.create({name: name, eventType: eventType, suggestionTTL: suggestionTTL, center: center, radius: radius, finished: false, eventTime: eventTime, timeEnding: timeEnding})
 	.then(function(game){
 		// user.addGame(game);
 		game.addUser(user);
