@@ -34,6 +34,8 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
+    String TabFragmentL;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_suggestion);
@@ -126,5 +128,13 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
 
         return false;
         //return super.onOptionsItemSelected(item);
+    }
+
+    public String getTabFragmentL() {
+        return TabFragmentL;
+    }
+
+    public void setTabFragmentL(String tabFragmentL) {
+        TabFragmentL = tabFragmentL;
     }
 }

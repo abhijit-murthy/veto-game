@@ -57,66 +57,6 @@ public class GameList extends Activity {
                 startActivity(intent);
             }
         });
-
-        RestClient restClient = new RestClient();
-
-        /*Game newGame = new Game(null, "lunch", null, 15, "BUCKHEAD", 10);
-
-        restClient.getGameInfo().createGame(newGame, new Callback<Game>() {
-            @Override
-            public void success(Game game, Response response) {
-                int check = 0;
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.i("Error ", error.getMessage());
-            }
-        });*/
-
-        restClient.getUserInfo().createUser("User3", "Jess", new Callback<UserResponse>() {
-            @Override
-            public void success(UserResponse userResponse, Response response) {
-                int check=0;
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.i("Error ", error.getMessage());
-            }
-        });
-
-        restClient.getGameInfo().getGame("1", new Callback<GameResponse>() {
-            @Override
-            public void success(GameResponse gameResponse, Response response) {
-                // success!
-                Log.i("User ID ", gameResponse.getUserId());
-                Log.i("Event type ", gameResponse.getEventType());
-                Log.i("Radius ", Integer.toString(gameResponse.getRadius()));
-                // you get the point...
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.i("Error ", error.getMessage());
-            }
-        });
-
-        restClient.getUserInfo().getUser("ABCDE", new Callback<UserResponse>() {
-            @Override
-            public void success(UserResponse userResponse, Response response) {
-                // success!
-                Log.i("User ID ", userResponse.getUserId());
-                Log.i("User Name ", userResponse.getUserName());
-                Log.i("Wins ", Integer.toString(userResponse.getWins()));
-                // you get the point...
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.i("Error ", error.getMessage());
-            }
-        });
     }
 
 

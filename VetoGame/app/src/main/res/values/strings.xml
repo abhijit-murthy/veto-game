@@ -30,10 +30,9 @@
     <string name="view_past_games">View Past Games</string>
 
     <string-array name="game_topic">
-        <item>Breakfast</item>
-        <item>Brunch</item>
-        <item>Lunch</item>
-        <item>Dinner</item>
+        <item>breakfast</item>
+        <item>lunch</item>
+        <item>dinner</item>
     </string-array>
 
     <string name="title_activity_past_game_list">PastGameList</string>
