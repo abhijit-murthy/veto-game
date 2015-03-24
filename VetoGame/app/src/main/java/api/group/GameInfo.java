@@ -28,6 +28,11 @@ public interface GameInfo {
                            @Field("event_time") String eventTime, @Field("time_ending") String timeEnding,
                            Callback<GameResponse> callback);
 
+    @FormUrlEncoded
+    @POST("/game_data/add_user_to_game")
+    public void addUsers(@Field("user_id") String userId, @Field("game_id") String gameId,
+                           Callback<GameResponse> callback);
+
     @GET("/game_data/{id}")
     public void getGame(@Path("id") String gameId, Callback<GameResponse> callback);
 }

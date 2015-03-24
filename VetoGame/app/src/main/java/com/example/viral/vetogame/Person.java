@@ -5,15 +5,19 @@ package com.example.viral.vetogame;
  */
 public class Person {
     String name;
+    String userId;
     boolean checked; /* 1 = checkbox checked */
 
-    Person(String name, Boolean checked){
+    Person(String name, String userId, Boolean checked){
         this.name = name;
+        this.userId = userId;
         this.checked = checked;
     }
+
     public String getName(){
         return this.name;
     }
+    public String getUserId() { return userId; }
     public Boolean getChecked(){
         return this.checked;
     }

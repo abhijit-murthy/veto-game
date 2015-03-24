@@ -37,7 +37,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
 
     private static final String TIME_PATTERN = "hh:mm a";
 
-
+    private RestClient restClient;
     private EditText textGameName;
     private Button btnEventDate;
     private Button btnEventTime;
@@ -53,10 +53,12 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private boolean startTimeChanged = false;
     private boolean endTimeChanged = false;
 
+    private String gameId ="";
     private int radius = 0;
     private String center ="";
     private int suggestionTtl = 0;
     private int numberInvited = 0;
+    private String userIds = "";
     private String gameType = "";
     private Spinner spinner;
 
@@ -108,7 +110,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                                 NewSuggestion.class);
                         //MainActivity.class);
                         //InitSuggestion.class);
-                        startActivityForResult(intent,2);
+                        startActivityForResult(intent, 2);
 
                     }
                 });
@@ -259,12 +261,27 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             Suggestion tempSuggestion = new Suggestion("The Muffin Bakery");
             Game game = new Game(gameName, tempSuggestion, startTime, endTime, (numberInvited+1), gameType);
 
-            RestClient restClient = new RestClient();
+            restClient = new RestClient();
 
-            restClient.getGameInfo().createGame("ABC", gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
+            restClient.getGameInfo().createGame("TESTID", gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
                 @Override
                 public void success(GameResponse gameResponse, Response response) {
-                    int check=0;
+                    gameId = gameResponse.getGameId();
+
+                    String[] users = userIds.split(" ");
+                    for(int i=0; i<users.length; i++) {
+                        restClient.getGameInfo().addUsers(users[i], gameId, new Callback<GameResponse>() {
+                            @Override
+                            public void success(GameResponse gameResponse, Response response) {
+                                int check = 0;
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.i("Error ", error.getMessage());
+                            }
+                        });
+                    }
                 }
 
                 @Override
@@ -313,6 +330,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                 TextView invitePeople = (TextView) findViewById(R.id.btn_invite_people);
                 numberInvited = data.getIntExtra("numberInvited", 0);
                 invitePeople.setText("" + numberInvited + " people invited");
+                userIds = data.getStringExtra("userIds");
             }
         }else if (requestCode == 2) {
             if(data != null) {

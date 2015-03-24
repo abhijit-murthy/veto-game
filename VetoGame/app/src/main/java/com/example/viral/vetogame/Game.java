@@ -11,7 +11,7 @@ import java.util.Calendar;
  */
 public class Game implements Serializable {//implements Parcelable {
 
-    private int gameId;
+    private String gameId;
 
     // current game DB
     // needs to think about suggestionTTL
@@ -167,11 +167,11 @@ public class Game implements Serializable {//implements Parcelable {
         this.eventType = eventType;
     }
 
-    public int getGameId() {
+    public String getGameId() {
         return gameId;
     }
 
-    public void setGameId(int gameId) {
+    public void setGameId(String gameId) {
         this.gameId = gameId;
     }
 
