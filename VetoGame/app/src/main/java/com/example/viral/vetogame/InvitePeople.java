@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ToggleButton;
@@ -27,6 +26,7 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
 
     private PeopleAdapter adapter;
     private int numberInvited = 0;
+    private String userIds = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +36,11 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
         listPeople = (ListView) findViewById(R.id.people);
 
         personItems = new ArrayList<Person>();
-        personItems.add(new Person("Bryan Mishkin", false));
-        personItems.add(new Person("Drew Orr", false));
-        personItems.add(new Person("Mike Jung", false));
-        personItems.add(new Person("Nini Xia", false));
-        personItems.add(new Person("Sherry Liu", false));
+        personItems.add(new Person("John Smith", "ABC", false));
+        personItems.add(new Person("Sally Johnson", "DEF", false));
+        personItems.add(new Person("Marco Rodriguez", "GHI", false));
+        personItems.add(new Person("Carl Rogers", "JKL", false));
+        /*personItems.add(new Person("Sherry Liu", false));
         personItems.add(new Person("Jack Kim", false));
         personItems.add(new Person("Erica Lee", false));
         personItems.add(new Person("Michelle Davis", false));
@@ -50,7 +50,7 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
         personItems.add(new Person("Seth Orr", false));
         personItems.add(new Person("Leo Yang", false));
         personItems.add(new Person("Sally Watson", false));
-        personItems.add(new Person("Adair Liu", false));
+        personItems.add(new Person("Adair Liu", false));*/
         adapter = new PeopleAdapter(this, personItems);
         listPeople.setAdapter(adapter);
     }
@@ -89,9 +89,11 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
             for(int i=0;i<personItems.size();i++){
                 if(personItems.get(i).getChecked()){
                     numberInvited++;
+                    userIds = userIds + personItems.get(i).getUserId()+" ";
                 }
             }
             intent.putExtra("numberInvited",numberInvited);
+            intent.putExtra("userIds",userIds);
             //startActivity(intent);
             setResult(RESULT_OK, intent);
             finish();

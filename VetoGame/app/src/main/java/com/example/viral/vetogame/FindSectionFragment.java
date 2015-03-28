@@ -1,6 +1,6 @@
 package com.example.viral.vetogame;
 
-import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,11 +24,19 @@ public class FindSectionFragment extends Fragment {
     ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>();
     private SuggestionAdapter adapter;
     private ListView suggestionList;
+    private int radius;
+    private String centerText;
+    private LocationSectionFragment locationFragment;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_section_find, container, false);
+
+        String tabLocation = ((NewSuggestion)getActivity()).getTabFragmentL();
+        locationFragment = (LocationSectionFragment) getActivity().getSupportFragmentManager().findFragmentByTag(tabLocation);
+
         //Bundle args = getArguments();
         //((TextView) rootView.findViewById(android.R.id.text1)).setText(
         //getString(R.string.dummy_section_text, args.getInt(ARG_SECTION_NUMBER)));
@@ -64,8 +73,14 @@ public class FindSectionFragment extends Fragment {
         int id = item.getItemId();
         System.out.println("pushed");
         if (id == R.id.action_save_suggestion) {
-            Toast.makeText(getActivity(),"Clicked!",Toast.LENGTH_SHORT).show();
-            return true;
+            radius = locationFragment.getRadius();
+            centerText = locationFragment.getCenterText().getText().toString();
+            Intent intent = new Intent(getActivity(),
+                    NewGame.class);
+            intent.putExtra("radius", radius);
+            intent.putExtra("center", centerText);
+            getActivity().setResult(getActivity().RESULT_OK, intent);
+            getActivity().finish();
         }
         return super.onOptionsItemSelected(item);
     }

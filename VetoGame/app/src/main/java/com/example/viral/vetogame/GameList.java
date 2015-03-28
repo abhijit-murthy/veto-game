@@ -21,6 +21,8 @@ import retrofit.client.Response;
 
 import android.util.Log;
 
+import java.util.Calendar;
+
 
 public class GameList extends Activity {
 
@@ -53,39 +55,6 @@ public class GameList extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(GameList.this, PastGameList.class);
                 startActivity(intent);
-            }
-        });
-
-        RestClient restClient = new RestClient();
-        restClient.getGameInfo().getGame("1", new Callback<GameResponse>() {
-            @Override
-            public void success(GameResponse gameResponse, Response response) {
-                // success!
-                Log.i("User ID ", gameResponse.getUserId());
-                Log.i("Event type ", gameResponse.getEventType());
-                Log.i("Radius ", Integer.toString(gameResponse.getRadius()));
-                // you get the point...
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.i("Error ", error.getMessage());
-            }
-        });
-
-        restClient.getUserInfo().getUser("ABCDE", new Callback<UserResponse>() {
-            @Override
-            public void success(UserResponse userResponse, Response response) {
-                // success!
-                Log.i("User ID ", userResponse.getUserId());
-                Log.i("User Name ", userResponse.getUserName());
-                Log.i("Wins ", Integer.toString(userResponse.getWins()));
-                // you get the point...
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.i("Error ", error.getMessage());
             }
         });
     }

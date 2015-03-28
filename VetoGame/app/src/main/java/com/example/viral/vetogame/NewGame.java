@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,12 +26,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import api.RestClient;
+import api.model.GameResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 
 public class NewGame extends Activity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
     private static final String TIME_PATTERN = "hh:mm a";
 
-
+    private RestClient restClient;
     private EditText textGameName;
     private Button btnEventDate;
     private Button btnEventTime;
@@ -46,7 +53,12 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private boolean startTimeChanged = false;
     private boolean endTimeChanged = false;
 
+    private String gameId ="";
+    private int radius = 0;
+    private String center ="";
+    private int suggestionTtl = 0;
     private int numberInvited = 0;
+    private String userIds = "";
     private String gameType = "";
     private Spinner spinner;
 
@@ -98,7 +110,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                                 NewSuggestion.class);
                         //MainActivity.class);
                         //InitSuggestion.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, 2);
 
                     }
                 });
@@ -248,6 +260,36 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             String gameName = textGameName.getText().toString();
             Suggestion tempSuggestion = new Suggestion("The Muffin Bakery");
             Game game = new Game(gameName, tempSuggestion, startTime, endTime, (numberInvited+1), gameType);
+
+            restClient = new RestClient();
+
+            restClient.getGameInfo().createGame("TESTID", gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
+                @Override
+                public void success(GameResponse gameResponse, Response response) {
+                    gameId = gameResponse.getGameId();
+
+                    String[] users = userIds.split(" ");
+                    for(int i=0; i<users.length; i++) {
+                        restClient.getGameInfo().addUsers(users[i], gameId, new Callback<GameResponse>() {
+                            @Override
+                            public void success(GameResponse gameResponse, Response response) {
+                                int check = 0;
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.i("Error ", error.getMessage());
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.i("Error ", error.getMessage());
+                }
+            });
+
             Intent intent = new Intent(NewGame.this,GameList.class);
             System.out.println("put game in intent");
             intent.putExtra("gameInfo",game);
@@ -288,6 +330,12 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                 TextView invitePeople = (TextView) findViewById(R.id.btn_invite_people);
                 numberInvited = data.getIntExtra("numberInvited", 0);
                 invitePeople.setText("" + numberInvited + " people invited");
+                userIds = data.getStringExtra("userIds");
+            }
+        }else if (requestCode == 2) {
+            if(data != null) {
+                radius = data.getIntExtra("radius", 0);
+                center = data.getStringExtra("center");
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -373,12 +421,15 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         //System.out.println("min "+minutes);
 
         if(days > 0){
+            suggestionTtl = days * 60;
             return 1;
         }else{
             if(hours > 0){
+                suggestionTtl = 30*hours/24+30;
                 return 1;
             }else{
                 if(minutes > 0){
+                    suggestionTtl = 30*minutes/60 + 1;
                     return 1;
                 }else if(minutes == 0){
                     return 0;
@@ -387,6 +438,35 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                 }
             }
         }
+    }
+
+    // Date and time format: yyyy-mm-dd hh:mm:ss
+    public String formatDatetime(Calendar calendar){
+        String tmp1 = "";
+        String tmp2 = "";
+        int m = calendar.get(Calendar.MONTH)+1;
+        int d = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if(m < 10) tmp1 = "0"+m;
+        else tmp1 = ""+m;
+
+        if(d < 10) tmp2 = "0"+d;
+        else tmp2 = ""+d;
+
+        String date = calendar.get(Calendar.YEAR) + "-" + tmp1 + "-" + tmp2;
+
+        m = calendar.get(Calendar.MINUTE);
+        d = calendar.get(Calendar.SECOND);
+
+        if(m < 10) tmp1 = "0"+m;
+        else tmp1 = ""+m;
+
+        if(d < 10) tmp2 = "0"+d;
+        else tmp2 = ""+d;
+
+        String time = calendar.get(Calendar.HOUR_OF_DAY) + ":" + tmp1 + ":" + tmp2;
+
+        return date+" "+time;
     }
 
 }

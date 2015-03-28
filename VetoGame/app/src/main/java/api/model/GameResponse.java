@@ -10,8 +10,8 @@ import java.util.Date;
  * Created by eunkikim on 3/7/15.
  */
 public class GameResponse {
-    @SerializedName("id")
-    private String userId;
+    @SerializedName("game_id")
+    private String gameId;
 
     @SerializedName("eventType")
     private String eventType;
@@ -26,7 +26,7 @@ public class GameResponse {
     private int suggestionTtl;
 
     @SerializedName("center")
-    private String center;
+    private String center;  // originally Location type, currently DB type is String
 
     @SerializedName("radius")
     private int radius;
@@ -35,8 +35,8 @@ public class GameResponse {
         return radius;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getGameId() {
+        return gameId;
     }
 
     public String getEventType() {

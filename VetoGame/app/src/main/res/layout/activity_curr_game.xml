@@ -127,5 +127,12 @@
             android:layout_toRightOf="@+id/btn_veto" />
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/btn_past_suggestions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right|bottom"
+        android:text="past suggestions"
+        style="?android:attr/borderlessButtonStyle"/>
 
 </LinearLayout>
