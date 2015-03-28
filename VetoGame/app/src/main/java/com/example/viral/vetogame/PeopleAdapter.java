@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,9 +18,9 @@ import java.util.HashMap;
  */
 public class PeopleAdapter extends ArrayAdapter <Person> {
     ArrayList<Person> personItems;  // all people
+    ArrayList<Person> filteredList;
     ArrayList<Person> personInvited;    // selected people in a list
     HashMap<Integer, Integer> map;  // relationship between all people and invited people
-
     Context context;
     boolean toggle = false; // check "show invited people" button is on/off
 
@@ -64,7 +65,8 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
                 {
                     // if unchecked, remove from both original list and invited people list
                     if(!((CheckBox) view).isChecked()){
-                        personItems.get(map.get(position)).setChecked(false);
+                        //personItems.get(map.get(position)).setChecked(false);
+                        personItems.get(map.get(personInvited.get(position).getId())).setChecked(false);
                         personInvited.remove(position);
                         notifyDataSetChanged();
                     }
@@ -106,5 +108,43 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
 
     public void setMap(HashMap map) {
         this.map = map;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+
+            /* (non-Javadoc)
+             * @see android.widget.Filter#performFiltering(java.lang.CharSequence)
+             */
+            @Override
+            protected Filter.FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults oReturn = new FilterResults();
+                final ArrayList<Person> results = new ArrayList<Person>();
+                filteredList = personItems;
+                if (constraint != null) {
+                    if (filteredList != null && filteredList.size() > 0) {
+                        for (final Person person : filteredList) {
+                            if (person.getName().toLowerCase()
+                                    .contains(constraint.toString()))
+                                results.add(person);
+                        }
+                    }
+                    oReturn.values = results;
+                }
+                return oReturn;
+            }
+
+            /* (non-Javadoc)
+             * @see android.widget.Filter#publishResults(java.lang.CharSequence, android.widget.Filter.FilterResults)
+             */
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filteredList = (ArrayList<Person>) results.values;
+                //personItems = (ArrayList<Person>) results.values;
+                notifyDataSetChanged();
+            }
+
+        };
     }
 }
