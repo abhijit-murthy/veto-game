@@ -100,8 +100,12 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
 
         if (on) {
             adapter.setToggle(true);
+            searchView.setQuery("", false);
+            searchView.clearFocus();
         } else {
             adapter.setToggle(false);
+            searchView.setQuery("", false);
+            searchView.clearFocus();
         }
     }
 
