@@ -5,7 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +13,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ToggleButton;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class InvitePeople extends Activity implements SearchView.OnQueryTextListener{
@@ -22,10 +20,7 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
     private SearchView searchView;
 
     private ArrayList<Person> personItems;
-    private ArrayList<Person> filteredList;
-
-    private PeopleAdapter adapter;
-    private int numberInvited = 0;
+    private testAdapter adapter;
     private String userIds = "";
 
     @Override
@@ -51,7 +46,8 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
         personItems.add(new Person("Leo Yang", false));
         personItems.add(new Person("Sally Watson", false));
         personItems.add(new Person("Adair Liu", false));*/
-        adapter = new PeopleAdapter(this, personItems);
+        System.out.println("test size: "+personItems.size());
+        adapter = new testAdapter(this, personItems);
         listPeople.setAdapter(adapter);
     }
 
@@ -59,7 +55,7 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-       // getMenuInflater().inflate(R.menu.menu_invite_people, menu);
+        // getMenuInflater().inflate(R.menu.menu_invite_people, menu);
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_invite_people, menu);
@@ -84,15 +80,7 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
         if (id == R.id.action_save_people) {
             Intent intent = new Intent(InvitePeople.this,
                     NewGame.class);
-
-            numberInvited = 0;
-            for(int i=0;i<personItems.size();i++){
-                if(personItems.get(i).getChecked()){
-                    numberInvited++;
-                    userIds = userIds + personItems.get(i).getUserId()+" ";
-                }
-            }
-            intent.putExtra("numberInvited",numberInvited);
+            intent.putExtra("numberInvited",adapter.getNumberInvited());
             intent.putExtra("userIds",userIds);
             //startActivity(intent);
             setResult(RESULT_OK, intent);
@@ -111,25 +99,9 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
         boolean on = ((ToggleButton) view).isChecked();
 
         if (on) {
-            ArrayList<Person> personInvited = new ArrayList<Person>();
-            //int j = 0;
-            HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-            personInvited.clear();
-            for(int i=0; i<personItems.size(); i++){
-                if(personItems.get(i).getChecked()){
-                    personInvited.add(personItems.get(i));
-                    //map.put(j, i);
-                    //j++;
-                    map.put(personItems.get(i).getId(),i);
-                }
-            }
-
-            PeopleAdapter adapter = new PeopleAdapter(this, personItems, personInvited);
-            adapter.setMap(map);
-            listPeople.setAdapter(adapter);
+            adapter.setToggle(true);
         } else {
-            PeopleAdapter adapter = new PeopleAdapter(this, personItems);
-            listPeople.setAdapter(adapter);
+            adapter.setToggle(false);
         }
     }
 
