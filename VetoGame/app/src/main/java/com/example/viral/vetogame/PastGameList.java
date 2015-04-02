@@ -1,6 +1,8 @@
 package com.example.viral.vetogame;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,25 +11,47 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 
-public class PastGameList extends Activity {
+
+public class PastGameList extends Activity implements SearchView.OnQueryTextListener{
 
     private PastGameAdapter adapter;
+    private ArrayList<Game> games = new ArrayList<Game>();
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_game_list);
 
+        /*ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>();
+        suggestions.add(new Suggestion("Muffin Shop","2.2",5,1.5));
+        suggestions.add(new Suggestion("The Swamp","2.2",4,10));
+        suggestions.add(new Suggestion("Good Burger","2.2",3,15));
+        suggestions.add(new Suggestion("The Shore Shack","2.2",4,45));
+        suggestions.add(new Suggestion("Krusty Krab","2.2",1,50));
+
+        games.add(new Game("monday lunch", suggestions.get(0), 5,"viral"));
+        games.add(new Game("feast", suggestions.get(1), 5,"Shrek"));
+        games.add(new Game("dinner", suggestions.get(4), 5,"Patrick"));
+        games.add(new Game("snacktime", suggestions.get(3), 5,"Squid"));
+        games.add(new Game("monday lunch2", suggestions.get(2), 5,"Kel"));*/
+
         // Configure device list.
-        adapter = new PastGameAdapter(this);
+        adapter = new PastGameAdapter(this,games);
         ListView list = (ListView) findViewById(R.id.past_game_list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(createOnItemClickListener());
         TextView emptyText = (TextView)findViewById(R.id.emptyPastGamesView);
+        if(games.size()>0){
+            emptyText.setText(R.string.no_results);
+        }
         list.setEmptyView(emptyText);
 
         Button button = (Button) findViewById(R.id.btn_back);
@@ -43,6 +67,11 @@ public class PastGameList extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_past_game_list, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.search_past_game).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -86,5 +115,18 @@ public class PastGameList extends Activity {
                 System.out.println("Need to go to game info screen");
             }
         };
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText)
+    {
+        adapter.getFilter().filter(newText);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+        return false;
     }
 }

@@ -44,5 +44,6 @@
     <string name="search_for_suggestion">Search for a Suggestion</string>
     <string name="search_for_game">Search for a Game</string>
     <string name="search">Search</string>
+    <string name="no_results">No Results Found</string>
 
 </resources>
