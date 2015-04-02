@@ -41,6 +41,8 @@
 
     <string name="title_activity_new_suggestion">Suggestion</string>
     <string name="search_for_friend">Search for a Friend</string>
+    <string name="search_for_suggestion">Search for a Suggestion</string>
+    <string name="search_for_game">Search for a Game</string>
     <string name="search">Search</string>
 
 </resources>

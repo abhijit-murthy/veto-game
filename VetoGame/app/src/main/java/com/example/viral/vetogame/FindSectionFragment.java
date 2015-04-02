@@ -1,5 +1,7 @@
 package com.example.viral.vetogame;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Created by Viral on 3/5/2015.
  */
-public class FindSectionFragment extends Fragment {
+public class FindSectionFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>();
     private SuggestionAdapter adapter;
@@ -27,6 +30,7 @@ public class FindSectionFragment extends Fragment {
     private int radius;
     private String centerText;
     private LocationSectionFragment locationFragment;
+    private SearchView searchView;
 
 
     @Override
@@ -36,8 +40,8 @@ public class FindSectionFragment extends Fragment {
 
         String tabLocation = ((NewSuggestion)getActivity()).getTabFragmentL();
         locationFragment = (LocationSectionFragment) getActivity().getSupportFragmentManager().findFragmentByTag(tabLocation);
-        radius = Integer.valueOf(locationFragment.getRadiusText().getText().toString());
-        centerText = locationFragment.getRadiusText().getText().toString();
+        //radius = Integer.valueOf(locationFragment.getRadiusText().getText().toString());
+        //centerText = locationFragment.getRadiusText().getText().toString();
 
         //Bundle args = getArguments();
         //((TextView) rootView.findViewById(android.R.id.text1)).setText(
@@ -68,6 +72,13 @@ public class FindSectionFragment extends Fragment {
         // Do something that differs the Activity's menu here
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_new_suggestion, menu);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        //searchView = (SearchView) findViewById(R.id.search_invite_people);
+        searchView = (SearchView) menu.findItem(R.id.search_suggestion).getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setIconifiedByDefault(false);
+        searchView.setOnQueryTextListener(this);
     }
 
     @Override
@@ -87,5 +98,18 @@ public class FindSectionFragment extends Fragment {
             getActivity().finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText)
+    {
+        adapter.getFilter().filter(newText);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query)
+    {
+        return false;
     }
 }

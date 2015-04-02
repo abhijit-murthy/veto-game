@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Filter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -20,8 +21,8 @@ import java.util.HashMap;
  */
 public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
     private Context context;
-    private HashMap<String,Suggestion> users = new HashMap<String,Suggestion>();
-    private ArrayList<Suggestion> currentList;
+    private HashMap<String,Suggestion> suggestionsMap = new HashMap<String,Suggestion>();
+    private ArrayList<Suggestion> displayList;
     private String selected;
 
     // when it needs to show all people
@@ -31,9 +32,9 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
         this.context = context;
         //System.out.println("test2 size: "+resource.size());
         for(Suggestion suggestion:resource){
-            users.put(suggestion.getName(),suggestion);
+            suggestionsMap.put(suggestion.getName(),suggestion);
         }
-        currentList = resource;
+        displayList = resource;
     }
 
     @Override
@@ -44,17 +45,17 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
     }
 
     public Suggestion getSelected() {
-        return users.get(selected);
+        return suggestionsMap.get(selected);
     }
 
     @Override
     public int getCount() {
-        return currentList.size();
+        return displayList.size();
     }
 
     @Override
     public Suggestion getItem(int position) {
-        return currentList.get(position);
+        return displayList.get(position);
     }
 
     @Override
@@ -84,14 +85,14 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
                     //System.out.println("First selection");
                     selected = suggestion.getName();
                     suggestion.setChecked(true);
-                    users.put(suggestion.getName(), suggestion);
+                    suggestionsMap.put(suggestion.getName(), suggestion);
                     System.out.println("selected: "+selected);
                 }else{
                     //System.out.println("another selection");
-                    users.get(selected).setChecked(false);
+                    suggestionsMap.get(selected).setChecked(false);
                     selected = suggestion.getName();
                     suggestion.setChecked(true);
-                    users.put(suggestion.getName(), suggestion);
+                    suggestionsMap.put(suggestion.getName(), suggestion);
                 }
                 notifyDataSetChanged();
                 //System.out.println("button value2 "+((RadioButton) view).isChecked());
@@ -131,6 +132,42 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
             suggested_name = (TextView) view.findViewById(R.id.suggested_name);
             rb = (RadioButton) view.findViewById(R.id.suggestion_radio_button);
         }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+
+            /* (non-Javadoc)
+             * @see android.widget.Filter#performFiltering(java.lang.CharSequence)
+             */
+            @Override
+            protected Filter.FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults oReturn = new FilterResults();
+                final ArrayList<Suggestion> results = new ArrayList<Suggestion>();
+                if (constraint != null) {
+                    if(suggestionsMap.size()>0){
+                        for(Suggestion suggestion : suggestionsMap.values()){
+                            if (suggestion.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                                results.add(suggestion);
+                            }
+                        }
+                    }
+                    oReturn.values = results;
+                }
+                return oReturn;
+            }
+
+            /* (non-Javadoc)
+             * @see android.widget.Filter#publishResults(java.lang.CharSequence, android.widget.Filter.FilterResults)
+             */
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                displayList = (ArrayList<Suggestion>) results.values;
+                notifyDataSetChanged();
+            }
+
+        };
     }
 
 }
