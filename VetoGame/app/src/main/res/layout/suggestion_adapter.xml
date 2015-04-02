@@ -16,11 +16,18 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="15"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="60"
+        android:layout_weight="85"
+        android:orientation="horizontal">
+
+    <LinearLayout
+        android:id = "@+id/suggestion_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/suggestion_name"
             android:layout_width="wrap_content"
@@ -60,11 +67,26 @@
 
     </LinearLayout>
 
-    <CheckBox android:id="@+id/suggestion_chk"
+    <!--<CheckBox android:id="@+id/suggestion_chk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:layout_weight="15"
+        android:button="@drawable/checkbox" />-->
+
+    <RadioButton
+        android:id="@+id/suggestion_radio_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
         android:layout_weight="15"
-        android:button="@drawable/checkbox" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
 
 </LinearLayout>

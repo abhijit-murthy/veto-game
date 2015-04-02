@@ -36,6 +36,8 @@ public class FindSectionFragment extends Fragment {
 
         String tabLocation = ((NewSuggestion)getActivity()).getTabFragmentL();
         locationFragment = (LocationSectionFragment) getActivity().getSupportFragmentManager().findFragmentByTag(tabLocation);
+        radius = Integer.valueOf(locationFragment.getRadiusText().getText().toString());
+        centerText = locationFragment.getRadiusText().getText().toString();
 
         //Bundle args = getArguments();
         //((TextView) rootView.findViewById(android.R.id.text1)).setText(
@@ -73,12 +75,14 @@ public class FindSectionFragment extends Fragment {
         int id = item.getItemId();
         System.out.println("pushed");
         if (id == R.id.action_save_suggestion) {
-            radius = locationFragment.getRadius();
-            centerText = locationFragment.getCenterText().getText().toString();
+            Toast.makeText(getActivity(), "clicked",Toast.LENGTH_SHORT).show();
+            //radius = locationFragment.getRadius();
+            //centerText = locationFragment.getCenterText().getText().toString();
             Intent intent = new Intent(getActivity(),
                     NewGame.class);
-            intent.putExtra("radius", radius);
-            intent.putExtra("center", centerText);
+            //intent.putExtra("radius", radius);
+            //intent.putExtra("center", centerText);
+            intent.putExtra("suggestion",adapter.getSelected());
             getActivity().setResult(getActivity().RESULT_OK, intent);
             getActivity().finish();
         }

@@ -334,8 +334,10 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             }
         }else if (requestCode == 2) {
             if(data != null) {
-                radius = data.getIntExtra("radius", 0);
-                center = data.getStringExtra("center");
+                suggestion = (Suggestion)data.getSerializableExtra("suggestion");
+                Button suggestionButton = (Button) findViewById(R.id.btn_init_suggestion);
+                suggestionButton.setText(suggestion.getName());
+
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
