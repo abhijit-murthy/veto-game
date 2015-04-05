@@ -70,6 +70,59 @@ function createSuggestion(req,res,next){
 exports.createSuggestion = createSuggestion;
 exports.createSuggestionEndpoint = exports.endpointBase + '/create';
 
+
+
+/**
+	@api {post} /suggestion_data/upvote Upvote a game's current suggestion
+	@apiDescription Upvotes a game's current suggestion (provided it matches the suggestion parameter)
+	@apiName Upvote
+	@apiGroup Suggestion
+
+	@apiParam {String} game_id	Game ID
+	@apiParam {String} suggestion_id	Current Suggestion ID
+
+	@apiSuccess (200) {Boolean} result True if upvote succeeded
+
+	@apiError InvalidArgumentError 	Bad Game ID
+	@apiError InvalidArgumentError 	Bad Suggestion ID
+	@apiError Boolean						False if upvote failed
+*/
+function upvote(req,res,next){
+	var game, suggestion;
+	db.getGame(req.params.game_id)
+	.then(
+		function(result){
+			if(result == null){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game ID"));
+			}else {
+				game = result;
+				return db.getSuggestion(req.params.suggestion_id);
+			}
+		}
+	).then(
+		function(result){
+			if(result == null){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Suggestion ID"));
+			}else {
+				suggestion = result;
+				return db.upvote(game, suggestion);
+			}
+		}
+	).then(
+		function(result){
+			res.send({result: result});
+		}
+	).error(
+		function(error){
+			res.send(error);
+		}
+	);
+}
+exports.upvote = upvote;
+exports.upvoteEndpoint = exports.endpointBase + '/upvote';
+
+
+
 /**
 	@api {get} /suggestion_data/game_history/:id Get Suggestion history
 	@apiDescription Gets the Suggestion history for an ongoing Game

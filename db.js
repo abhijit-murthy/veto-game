@@ -18,12 +18,15 @@ exports.createUser = createUser;
 exports.getUser = getUser;
 exports.createGame = createGame;
 exports.getGame = getGame;
+exports.getSuggestion = getSuggestion;
 exports.addSuggestion = addSuggestion;
 exports.addUserToGame = addUserToGame;
 exports.getGameSuggestionHistory = getGameSuggestionHistory;
 exports.getUserGames = getUserGames;
 exports.getCurrentSuggestion = getCurrentSuggestion;
 exports.isGameFinished = isGameFinished;
+exports.upvote = upvote;
+exports.vetoAndSuggest = vetoAndSuggest;
 
 function initDB ()
 {
@@ -250,6 +253,11 @@ function getGame (id)
 	return Game.find(id);
 }
 
+function getSuggestion (id)
+{
+	return Suggestion.find(id);
+}
+
 function addSuggestion (name, location, user, game)
 {
 	return Suggestion.build({name: name, location: location, votes: 0})
@@ -389,12 +397,20 @@ function vetoAndSuggest (game, user, suggestionToVeto, newSuggestionName, newSug
 
 function upvote (game, suggestionToUpvote)
 {
+	return new sequelize.Promise (function(fulfill, reject){
+	
 	getCurrentSuggestion(game).then(function(suggestion) {
 		if (suggestionToUpvote.id == suggestion.id)
 		{
 			suggestion.votes++;
-			suggestion.save().then(function() { } );
+			suggestion.save().then(function() { fulfill(true); } );
 		}
+		else
+		{
+			reject(false);
+		}
+	});
+	
 	});
 }
 
