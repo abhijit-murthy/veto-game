@@ -81,11 +81,11 @@ exports.createSuggestionEndpoint = exports.endpointBase + '/create';
 	@apiParam {String} game_id	Game ID
 	@apiParam {String} suggestion_id	Current Suggestion ID
 
-	@apiSuccess (200) {Boolean} result True if upvote succeeded
+	@apiSuccess (200) {Integer} count Current number of upvotes
 
 	@apiError InvalidArgumentError 	Bad Game ID
 	@apiError InvalidArgumentError 	Bad Suggestion ID
-	@apiError Boolean						False if upvote failed
+	@apiError Integer						-1 if upvote failed
 */
 function upvote(req,res,next){
 	var game, suggestion;
@@ -110,11 +110,11 @@ function upvote(req,res,next){
 		}
 	).then(
 		function(result){
-			res.send({result: result});
+			res.send({count: result});
 		}
 	).error(
 		function(error){
-			res.send(error);
+			res.send({count: error});
 		}
 	);
 }

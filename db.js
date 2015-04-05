@@ -403,11 +403,11 @@ function upvote (game, suggestionToUpvote)
 		if (suggestionToUpvote.id == suggestion.id)
 		{
 			suggestion.votes++;
-			suggestion.save().then(function() { fulfill(true); } );
+			suggestion.save().then(function() { fulfill(suggestion.votes); } );
 		}
 		else
 		{
-			reject(false);
+			reject(-1);
 		}
 	});
 	
