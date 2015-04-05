@@ -189,7 +189,8 @@ function initDB ()
 				console.log('********CURRENT*********');
 				console.log(currentSuggestion);
 				//upvote(game, currentSuggestion);
-				vetoAndSuggest(game, user, currentSuggestion, "The Varsity", "Atlanta");
+				//vetoAndSuggest(game, user, currentSuggestion, "The Varsity", "Atlanta");
+				vetoAndSuggest(game, user, currentSuggestion, "The Varsity", "Atlanta").then(function(result) {console.log("****************VETO/SUGGEST******************"); console.log(result); } );
 				} );
 			
 
@@ -390,9 +391,21 @@ function getUsers ()
 
 function vetoAndSuggest (game, user, suggestionToVeto, newSuggestionName, newSuggestionLocation)
 {
+	return new sequelize.Promise (function(fulfill, reject){
+	
 	getCurrentSuggestion(game).then(function(suggestion) { 
-		if (suggestionToVeto.id == suggestion.id) addSuggestion(newSuggestionName, newSuggestionLocation, user, game);
-			});
+		if (suggestionToVeto.id == suggestion.id) 
+		{
+			addSuggestion(newSuggestionName, newSuggestionLocation, user, game).then(function(suggestion) { fulfill(suggestion.values.id); } );
+		}
+		else
+		{
+			reject(-1);
+		}
+		
+		});
+		
+	});
 }
 
 function upvote (game, suggestionToUpvote)
