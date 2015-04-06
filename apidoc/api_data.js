@@ -517,6 +517,139 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/suggestion_data/upvote",
+    "title": "Upvote",
+    "description": "<p>Upvotes a game&#39;s current suggestion (provided it matches the suggestion parameter)</p> ",
+    "name": "Upvote",
+    "group": "Suggestion",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "game_id",
+            "description": "<p>Game ID</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "suggestion_id",
+            "description": "<p>Current Suggestion ID</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Integer",
+            "optional": false,
+            "field": "count",
+            "description": "<p>Current number of upvotes</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad Game ID</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/suggestion_data.js",
+    "groupTitle": "Suggestion"
+  },
+  {
+    "type": "post",
+    "url": "/suggestion_data/veto",
+    "title": "Veto",
+    "description": "<p>Veto a game&#39;s current suggestion and make a new suggestion</p> ",
+    "name": "Veto___Suggest_New",
+    "group": "Suggestion",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "game_id",
+            "description": "<p>Game ID</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user_id",
+            "description": "<p>User ID</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "curr_suggestion_id",
+            "description": "<p>Current Suggestion ID</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_suggestion_name",
+            "description": "<p>New Suggestion Name</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_suggestion_loc",
+            "description": "<p>New Suggestion Location</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Integer",
+            "optional": false,
+            "field": "id",
+            "description": "<p>ID of new suggestion</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad Game ID</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/suggestion_data.js",
+    "groupTitle": "Suggestion"
+  },
+  {
+    "type": "post",
     "url": "/user_data/create",
     "title": "Create a new User",
     "name": "CreateUser",
