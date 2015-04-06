@@ -2,11 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.viral.vetogame" >
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- The following two permissions are not required to use
+         Google Maps Android API v2, but are recommended. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <uses-library android:name="com.google.android.maps" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -42,14 +50,14 @@
             android:name=".InvitePeople"
             android:label="Invite"
             android:parentActivityName=".NewGame" >
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.viral.vetogame.NewGame" />
             <meta-data
                 android:name="android.app.searchable_people"
                 android:resource="@xml/searchable_people">
             </meta-data>
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.viral.vetogame.NewGame" />
         </activity>
 
         <activity
@@ -66,14 +74,14 @@
             android:name=".PastGameList"
             android:label="@string/title_activity_past_game_list"
             android:parentActivityName=".GameList" >
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.viral.vetogame.GameList" />
             <meta-data
                 android:name="android.app.searchable_past_game"
                 android:resource="@xml/searchable_game">
             </meta-data>
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.viral.vetogame.GameList" />
         </activity>
 
         <activity
@@ -96,15 +104,23 @@
                <action android:name="android.intent.action.MAIN" />
                <category android:name="android.intent.category.LAUNCHER" />
            </intent-filter>
-           <!-- Parent activity meta-data to support 4.0 and lower -->
-           <meta-data
-               android:name="android.support.PARENT_ACTIVITY"
-               android:value="com.example.viral.vetogame.NewGame" />
            <meta-data
                android:name="android.app.searchable_suggestion"
                android:resource="@xml/searchable_suggestion">
            </meta-data>
+           <meta-data
+               android:name="com.google.android.gms.version"
+               android:value="@integer/google_play_services_version" />
+           <!-- Parent activity meta-data to support 4.0 and lower -->
+           <meta-data
+               android:name="android.support.PARENT_ACTIVITY"
+               android:value="com.example.viral.vetogame.NewGame" />
         </activity>
+
+        <!-- key to use maps api -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDz0EDduSuqxGYW_L57sCy7QPsG4GMfqAU"/>
     </application>
 
 </manifest>

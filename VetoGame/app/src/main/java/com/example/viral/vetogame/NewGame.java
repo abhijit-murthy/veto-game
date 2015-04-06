@@ -47,8 +47,8 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private SimpleDateFormat timeFormat;
     private int id = -1;
     private Calendar calendar;
-    private Calendar startTime; // event calendar (event date, event time)
-    private Calendar endTime;   // limit calendar (limit date, limit time)
+    private Calendar startTime; // event time
+    private Calendar endTime;   // game end time
 
     private boolean startTimeChanged = false;
     private boolean endTimeChanged = false;
