@@ -104,14 +104,24 @@ exports.createGameEndpoint = exports.endpointBase + '/create'
 */
 function getGameData(req,res,next){
 	var gameId = req.params.id;
+	var game;
 	db.getGame(gameId)
 	.then(
-		function(game){
-			if(game != null){
-				res.send(game.values);
+		function(result){
+			if(result != null){
+				game = result;
+				return db.isGameFinished(result);
 			}
 			else{
 				res.send(new restify.InvalidArgumentError("Bad game ID"));
+			}
+		}
+	).then(
+		function(isFinished){
+			if(isFinished){
+				res.send({code: "GameFinished",message: "Game has ended"});
+			}else {
+				res.send(game.values);
 			}
 		}
 	);
