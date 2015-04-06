@@ -26,7 +26,7 @@ exports.getUserGames = getUserGames;
 exports.getCurrentSuggestion = getCurrentSuggestion;
 exports.isGameFinished = isGameFinished;
 exports.upvote = upvote;
-exports.vetoAndSuggest = vetoAndSuggest;
+exports.veto = veto;
 
 function initDB ()
 {
@@ -190,7 +190,7 @@ function initDB ()
 				console.log(currentSuggestion);
 				//upvote(game, currentSuggestion);
 				//vetoAndSuggest(game, user, currentSuggestion, "The Varsity", "Atlanta");
-				vetoAndSuggest(game, user, currentSuggestion, "The Varsity", "Atlanta").then(function(result) {console.log("****************VETO/SUGGEST******************"); console.log(result); } );
+				veto(game, user, currentSuggestion, "The Varsity", "Atlanta").then(function(result) {console.log("****************VETO/SUGGEST******************"); console.log(result); } );
 				} );
 			
 
@@ -389,7 +389,7 @@ function getUsers ()
 	return User.findAll();
 }
 
-function vetoAndSuggest (game, user, suggestionToVeto, newSuggestionName, newSuggestionLocation)
+function veto (game, user, suggestionToVeto, newSuggestionName, newSuggestionLocation)
 {
 	return new sequelize.Promise (function(fulfill, reject){
 	

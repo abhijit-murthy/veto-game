@@ -73,7 +73,7 @@ exports.createSuggestionEndpoint = exports.endpointBase + '/create';
 
 
 /**
-	@api {post} /suggestion_data/upvote Upvote a game's current suggestion
+	@api {post} /suggestion_data/upvote Upvote
 	@apiDescription Upvotes a game's current suggestion (provided it matches the suggestion parameter)
 	@apiName Upvote
 	@apiGroup Suggestion
@@ -85,7 +85,7 @@ exports.createSuggestionEndpoint = exports.endpointBase + '/create';
 
 	@apiError InvalidArgumentError 	Bad Game ID
 	@apiError InvalidArgumentError 	Bad Suggestion ID
-	@apiError Integer						-1 if upvote failed
+	@apiError InvalidArgumentError	Mismatch
 */
 function upvote(req,res,next){
 	var game, suggestion;
@@ -114,12 +114,94 @@ function upvote(req,res,next){
 		}
 	).error(
 		function(error){
-			res.send({count: error});
+			//res.send({count: error});
+			res.send(new restify.InvalidArgumentError("Mismatch"));
 		}
 	);
 }
 exports.upvote = upvote;
 exports.upvoteEndpoint = exports.endpointBase + '/upvote';
+
+
+
+
+/**
+	@api {post} /suggestion_data/veto Veto
+	@apiDescription Veto a game's current suggestion and make a new suggestion
+	@apiName Veto & Suggest New
+	@apiGroup Suggestion
+
+	@apiParam {String} game_id	Game ID
+	@apiParam {String} user_id	User ID
+	@apiParam {String} curr_suggestion_id	Current Suggestion ID
+	@apiParam {String} new_suggestion_name	New Suggestion Name
+	@apiParam {String} new_suggestion_loc	New Suggestion Location
+
+	@apiSuccess (200) {Integer} id ID of new suggestion
+
+	@apiError InvalidArgumentError 	Bad Game ID
+	@apiError InvalidArgumentError 	Bad Suggestion ID
+	@apiError InvalidArgumentError 	Bad User ID
+	@apiError InvalidArgumentError 	No new suggestion name
+	@apiError InvalidArgumentError 	No new suggestion location
+	@apiError InvalidArgumentError	Mismatch
+*/
+function veto(req,res,next){
+	var game, user, suggestionToVeto;
+	db.getGame(req.params.game_id)
+	.then(
+		function(result){
+			if(result == null){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game ID"));
+			}else {
+				game = result;
+				return db.getSuggestion(req.params.curr_suggestion_id);
+			}
+		}
+	).then(
+		function(result){
+			if(result == null){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Suggestion ID"));
+			}else {
+				suggestionToVeto = result;
+				//return db.upvote(game, suggestion);
+				return db.getUser(req.params.user_id);
+			}
+		}
+	).then(
+		function(result){
+			if(result == null){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad User ID"));
+			}else {
+				user = result;
+				//return db.upvote(game, suggestion);
+				//return db.getUser(req.params.user_id
+				
+				if(!req.params.new_suggestion_name){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("No new suggestion name"));
+				}
+				if(!req.params.new_suggestion_loc){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("No new suggestion location"));
+				}
+				
+				return db.veto(game, user, suggestionToVeto, req.params.new_suggestion_name, req.params.new_suggestion_loc);				
+				
+			}
+		}
+	).then(
+		function(result){
+			res.send({id: result});
+		}
+	).error(
+		function(error){
+			//res.send({id: error});
+			res.send(new restify.InvalidArgumentError("Mismatch"));
+		}
+	);
+}
+exports.veto = veto;
+exports.vetoEndpoint = exports.endpointBase + '/veto';
+
 
 
 
