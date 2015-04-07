@@ -92,7 +92,7 @@ public class FindSectionFragment extends Fragment implements SearchView.OnQueryT
             Intent intent = new Intent(getActivity(),
                     NewGame.class);
             radius = locationFragment.getRadius();
-            centerText = locationFragment.getCenterText().toString();
+            centerText = locationFragment.getCenterText().getText().toString();
             intent.putExtra("radius", radius);
             intent.putExtra("center", centerText);
             intent.putExtra("suggestion",adapter.getSelected());
