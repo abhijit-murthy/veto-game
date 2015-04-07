@@ -11,6 +11,7 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -114,6 +115,10 @@ public class PeopleAdapter extends ArrayAdapter <Person> {
 
     public int getNumberInvited() {
         return numberInvited;
+    }
+
+    public Collection<Person> getPeople(){
+        return users.values();
     }
 
     @Override

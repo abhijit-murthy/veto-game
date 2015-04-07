@@ -121,4 +121,14 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
     {
         return false;
     }
+
+    public String getInvitedUsers(){
+        userIds = "";
+        for(Person person:adapter.getPeople()){
+            if(person.getChecked()) {
+                userIds = userIds + "," + person.getUserId();
+            }
+        }
+        return userIds;
+    }
 }
