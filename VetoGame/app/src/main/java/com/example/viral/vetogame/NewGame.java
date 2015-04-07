@@ -335,6 +335,8 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         }else if (requestCode == 2) {
             if(data != null) {
                 suggestion = (Suggestion)data.getSerializableExtra("suggestion");
+                radius = data.getIntExtra("radius",1);
+                center = data.getStringExtra("center");
                 Button suggestionButton = (Button) findViewById(R.id.btn_init_suggestion);
                 suggestionButton.setText(suggestion.getName());
 

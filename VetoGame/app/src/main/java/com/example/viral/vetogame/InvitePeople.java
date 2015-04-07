@@ -20,7 +20,7 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
     private SearchView searchView;
 
     private ArrayList<Person> personItems;
-    private testAdapter adapter;
+    private PeopleAdapter adapter;
     private String userIds = "";
 
     @Override
@@ -47,7 +47,7 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
         personItems.add(new Person("Sally Watson", false));
         personItems.add(new Person("Adair Liu", false));*/
         System.out.println("test size: "+personItems.size());
-        adapter = new testAdapter(this, personItems);
+        adapter = new PeopleAdapter(this, personItems);
         listPeople.setAdapter(adapter);
     }
 
