@@ -36,53 +36,6 @@ public class Game implements Serializable {//implements Parcelable {
     // need for past game?
     private String winner;
 
-    /*// 99.9% of the time you can just ignore this
-    public int describeContents() {
-        return 0;
-    }
-
-    // write your object's data to the passed-in Parcel
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeString(gameName);
-        out.writeValue(currentSuggestion);
-        out.writeValue(eventTime);
-        out.writeValue(timeEnding);
-        out.writeInt(numberOfMembers);
-        out.writeString(eventType);
-        out.writeInt(gameId);
-        out.writeInt(eventTime);
-        out.writeValue(pastSuggestions);
-        out.writeValue(center);
-        out.writeInt(radius);
-    }
-
-    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
-    public static final Parcelable.Creator<Game> CREATOR = new Parcelable.Creator<Game>() {
-        public Game createFromParcel(Parcel in) {
-            return new Game(in);
-        }
-
-        public Game[] newArray(int size) {
-            return new Game[size];
-        }
-    };
-
-    // example constructor that takes a Parcel and gives you an object populated with it's values
-    private MyParcelable(Parcel in) {
-        mData = in.readInt();
-        gameName = in.readString();
-        currentSuggestion = (Suggestion)in.readValue(Suggestion.class.getClassLoader());
-        eventTime = (Calendar)in.readValue(Calendar.class.getClassLoader());
-        timeEnding = (Calendar)in.readValue(Calendar.class.getClassLoader());
-        numberOfMembers = in.readInt();
-        eventType = in.readString();
-        gameId = in.readInt();
-        eventTime = in.readInt();
-        pastSuggestions = (ArrayAdapter<Suggestion>)in.readValue(ArrayList<Suggestion>.class.getClassLoader());
-        center = (Location)in.readValue(Location.class.getClassLoader());
-        radius = in.readInt();
-    }*/
-
     // temporary constructor for matching DB
     public Game(String userId, String eventType,
                 int suggestionTTL, String center, int radius){
@@ -114,6 +67,14 @@ public class Game implements Serializable {//implements Parcelable {
         this.numberOfMembers = numberOfMembers;
         this.eventType = eventType;
         pastSuggestions = new ArrayList<Suggestion>();
+    }
+
+    //Temporary constructor to test searching
+    public Game(String gameName, Suggestion currentSuggestion, int numberOfMembers, String winner){
+        this.gameName = gameName;
+        this.currentSuggestion = currentSuggestion;
+        this.numberOfMembers = numberOfMembers;
+        this.winner = winner;
     }
 
 

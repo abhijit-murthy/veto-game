@@ -7,15 +7,15 @@
     android:orientation="vertical"
     tools:context="com.example.viral.vetogame.InvitePeople">
 
-    <SearchView
-        android:id="@+id/search_name"
+    <!--<SearchView
+        android:id="@+id/search_people"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:iconifiedByDefault="false"
         android:focusable="false">
-    </SearchView>
+    </SearchView>-->
 
     <ListView
         android:id="@+id/people"
@@ -23,9 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:layout_marginBottom="16dp"
-        android:layout_below="@+id/search_name"
+        android:layout_alignParentTop="true"
         android:layout_above="@+id/tbtn_show_people" >
     </ListView>
+    <!--android:layout_below="@+id/search_people"-->
 
     <ToggleButton
         android:id="@+id/tbtn_show_people"

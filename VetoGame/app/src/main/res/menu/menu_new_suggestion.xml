@@ -6,4 +6,9 @@
         android:icon="@drawable/ic_action_accept"
         android:orderInCategory="100"
         android:showAsAction="always" />
+    <item android:id="@+id/search_suggestion"
+        android:title="@string/search"
+        android:icon="@drawable/search_bar"
+        android:showAsAction="collapseActionView|ifRoom"
+        android:actionViewClass="android.widget.SearchView" />
 </menu>

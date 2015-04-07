@@ -10,47 +10,83 @@
 
     <ImageView
         android:id="@+id/suggestion_image"
-        android:layout_alignParentLeft="true"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/image"
+        android:src="@drawable/tag"
         android:layout_gravity="center_vertical"
         android:layout_weight="15"/>
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="70"
+        android:layout_weight="85"
+        android:orientation="horizontal">
+
+    <LinearLayout
+        android:id = "@+id/suggestion_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/suggestion_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Suggestion"
-            android:textSize="18dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:layout_weight=".8" />
+            android:textSize="18sp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
 
         <TextView
             android:id="@+id/suggested_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Suggested by name"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_marginTop="5dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:layout_weight=".8" />
-        </LinearLayout>
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
 
+        <TextView android:id="@+id/suggestion_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
+            android:text="Distance: "
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
 
-    <TextView android:id="@+id/supporters"
-        android:layout_alignParentRight="true"
-        android:layout_width="0dp"
+        <TextView android:id="@+id/suggestion_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
+            android:text="Rating: "
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+    </LinearLayout>
+
+    <!--<CheckBox android:id="@+id/suggestion_chk"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="15"
         android:layout_gravity="center_vertical"
-        android:text="4/10"/>
+        android:layout_alignParentRight="true"
+        android:layout_weight="15"
+        android:button="@drawable/checkbox" />-->
+
+    <RadioButton
+        android:id="@+id/suggestion_radio_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_weight="15"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
 
 </LinearLayout>

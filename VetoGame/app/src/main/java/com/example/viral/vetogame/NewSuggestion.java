@@ -49,6 +49,7 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
 
         actionBar.setHomeButtonEnabled(true);
 
+
         // Specify that we will be displaying tabs in the action bar.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -106,7 +107,7 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Toast.makeText(getApplicationContext(), "clicked",Toast.LENGTH_SHORT);
+        //Toast.makeText(getApplicationContext(), "clicked",Toast.LENGTH_SHORT).show();
         if (id == R.id.action_save_suggestion) {
             /*gameType = spinner.getSelectedItem().toString();
             String gameName = textGameName.getText().toString();

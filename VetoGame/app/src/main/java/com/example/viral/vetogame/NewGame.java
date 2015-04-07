@@ -47,8 +47,8 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private SimpleDateFormat timeFormat;
     private int id = -1;
     private Calendar calendar;
-    private Calendar startTime; // event calendar (event date, event time)
-    private Calendar endTime;   // limit calendar (limit date, limit time)
+    private Calendar startTime; // event time
+    private Calendar endTime;   // game end time
 
     private boolean startTimeChanged = false;
     private boolean endTimeChanged = false;
@@ -260,7 +260,8 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             String gameName = textGameName.getText().toString();
             Suggestion tempSuggestion = new Suggestion("The Muffin Bakery");
             Game game = new Game(gameName, tempSuggestion, startTime, endTime, (numberInvited+1), gameType);
-
+            center = "30303";
+            radius = 15;
             restClient = new RestClient();
 
             restClient.getGameInfo().createGame("TESTID", gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
@@ -268,7 +269,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                 public void success(GameResponse gameResponse, Response response) {
                     gameId = gameResponse.getGameId();
 
-                    String[] users = userIds.split(" ");
+                 /*   String[] users = userIds.split(" ");
                     for(int i=0; i<users.length; i++) {
                         restClient.getGameInfo().addUsers(users[i], gameId, new Callback<GameResponse>() {
                             @Override
@@ -281,7 +282,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                                 Log.i("Error ", error.getMessage());
                             }
                         });
-                    }
+                    }*/
                 }
 
                 @Override
@@ -334,8 +335,10 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             }
         }else if (requestCode == 2) {
             if(data != null) {
-                radius = data.getIntExtra("radius", 0);
-                center = data.getStringExtra("center");
+                suggestion = (Suggestion)data.getSerializableExtra("suggestion");
+                Button suggestionButton = (Button) findViewById(R.id.btn_init_suggestion);
+                suggestionButton.setText(suggestion.getName());
+
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
