@@ -242,9 +242,22 @@ define({ "api": [
             "optional": false,
             "field": "InvalidArgumentError",
             "description": "<p>Bad Game ID</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "GameFinished",
+            "description": "<p>Game is finished</p> "
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "GameFinished:",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"code\": \"GameFinished\",\n\t\"message\": \"Game has ended\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "controllers/game_data.js",
@@ -410,9 +423,22 @@ define({ "api": [
             "optional": false,
             "field": "InvalidArgumentError",
             "description": "<p>Bad Game Id</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "GameFinished",
+            "description": "<p>Game is finished</p> "
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "GameFinished:",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"code\": \"GameFinished\",\n\t\"message\": \"Game has ended\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "controllers/suggestion_data.js",
@@ -459,9 +485,22 @@ define({ "api": [
             "optional": false,
             "field": "InvalidArgumentError",
             "description": "<p>Bad Game Id</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "GameFinished",
+            "description": "<p>Game is finished</p> "
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "GameFinished:",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"code\": \"GameFinished\",\n\t\"message\": \"Game has ended\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "controllers/suggestion_data.js",
@@ -563,9 +602,22 @@ define({ "api": [
             "optional": false,
             "field": "InvalidArgumentError",
             "description": "<p>Bad Game ID</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "GameFinished",
+            "description": "<p>Game is finished</p> "
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "GameFinished:",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"code\": \"GameFinished\",\n\t\"message\": \"Game has ended\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "controllers/suggestion_data.js",
@@ -640,9 +692,22 @@ define({ "api": [
             "optional": false,
             "field": "InvalidArgumentError",
             "description": "<p>Bad Game ID</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "GameFinished",
+            "description": "<p>Game is finished</p> "
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "GameFinished:",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"code\": \"GameFinished\",\n\t\"message\": \"Game has ended\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "controllers/suggestion_data.js",

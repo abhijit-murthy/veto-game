@@ -86,6 +86,8 @@ exports.createSuggestionEndpoint = exports.endpointBase + '/create';
 	@apiError InvalidArgumentError 	Bad Game ID
 	@apiError InvalidArgumentError 	Bad Suggestion ID
 	@apiError InvalidArgumentError	Mismatch
+
+	@apiUse GameFinished
 */
 function upvote(req,res,next){
 	var game, suggestion;
@@ -96,8 +98,15 @@ function upvote(req,res,next){
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game ID"));
 			}else {
 				game = result;
-				return db.getSuggestion(req.params.suggestion_id);
+				return db.isGameFinished(game);
 			}
+		}
+	).then(
+		function(isGameFinished){
+			if(isGameFinished)
+				return sequelize.Promise.reject({code: "GameFinished",message: "Game has ended"});
+			else
+				return db.getSuggestion(req.params.suggestion_id);
 		}
 	).then(
 		function(result){
@@ -115,7 +124,10 @@ function upvote(req,res,next){
 	).error(
 		function(error){
 			//res.send({count: error});
-			res.send(new restify.InvalidArgumentError("Mismatch"));
+			if(error == -1)
+				res.send(new restify.InvalidArgumentError("Mismatch"));
+			else
+				res.send(error);
 		}
 	);
 }
@@ -145,6 +157,8 @@ exports.upvoteEndpoint = exports.endpointBase + '/upvote';
 	@apiError InvalidArgumentError 	No new suggestion name
 	@apiError InvalidArgumentError 	No new suggestion location
 	@apiError InvalidArgumentError	Mismatch
+
+	@apiUse GameFinished
 */
 function veto(req,res,next){
 	var game, user, suggestionToVeto;
@@ -155,7 +169,15 @@ function veto(req,res,next){
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game ID"));
 			}else {
 				game = result;
-				return db.getSuggestion(req.params.curr_suggestion_id);
+				return db.isGameFinished(game);
+			}
+		}
+	).then(
+		function(isGameFinished){
+			if(isGameFinished){
+				return sequelize.Promise.reject({code: "GameFinished",message: "Game has ended"});
+			}else {
+				return db.getSuggestion(req.params.suggestion_id);
 			}
 		}
 	).then(
@@ -195,7 +217,10 @@ function veto(req,res,next){
 	).error(
 		function(error){
 			//res.send({id: error});
-			res.send(new restify.InvalidArgumentError("Mismatch"));
+			if(error == -1)
+				res.send(new restify.InvalidArgumentError("Mismatch"));
+			else
+				res.send(error);
 		}
 	);
 }
@@ -216,19 +241,29 @@ exports.vetoEndpoint = exports.endpointBase + '/veto';
 	@apiSuccess (200) {Array} Unamed An array of Suggestions
 
 	@apiError InvalidArgumentError Bad Game Id
+	@apiUse GameFinished
 */
 function getGameSuggestionHistory(req,res,next){
+	var game;
 	db.getGame(req.params.id)
 
 	.then(
-		function(game){
-			if(game == null)
+		function(result){
+			if(result == null)
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game ID"));
+			else{
+				game = result;
+				return db.isGameFinished(game);
+			}
+		}
+	).then(
+		function(isGameFinished){
+			if(isGameFinished)
+				return sequelize.Promise.reject({code: "GameFinished",message: "Game has ended"});
 			else
 				return db.getGameSuggestionHistory(game);
 		}
-	)
-	.then(
+	).then(
 		function(suggestions){
 			if(suggestions != null)
 				res.send(suggestions);
@@ -255,19 +290,29 @@ exports.getGameSuggestionHistoryEndpoint = exports.endpointBase + '/game_history
 	@apiSuccess (200) {Suggestion} Unamed The current Suggestion
 
 	@apiError InvalidArgumentError Bad Game Id
+	@apiUse GameFinished
 */
 function getCurrentSuggestion(req,res,next){
+	var game;
 	db.getGame(req.params.id)
 
 	.then(
-		function(game){
-			if(game == null)
+		function(result){
+			if(result == null)
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game Id"));
+			else{
+				game = result;
+				return db.getCurrentSuggestion(game);
+			}
+		}
+	).then(
+		function(isGameFinished){
+			if(isGameFinished)
+				return sequelize.Promise.reject({code: "GameFinished",message: "Game has ended"});
 			else
 				return db.getCurrentSuggestion(game);
 		}
-	)
-	.then(
+	).then(
 		function(suggestion){
 			if(suggestion != null)
 				res.send(suggestion);

@@ -8,6 +8,17 @@ var restify = require('restify')
 
 exports.endpointBase = '/game_data';
 /**
+	@apiDefine GameFinished
+	@apiError GameFinished Game is finished
+	@apiErrorExample {json} GameFinished:
+		HTTP/1.1 200 OK
+		{
+			"code": "GameFinished",
+			"message": "Game has ended"
+		}
+*/
+
+/**
 	@api {post} /game_data/create Create a new Game
 	@apiDescription Creates a new Game and adds the creating User to it.
 	@apiName CreateGame
@@ -101,6 +112,8 @@ exports.createGameEndpoint = exports.endpointBase + '/create'
 	@apiSuccess {Integer} radius 	Radius of the circle in which we are filtering suggestions
 
 	@apiError InvalidArgumentError Bad Game ID 
+
+	@apiUse GameFinished
 */
 function getGameData(req,res,next){
 	var gameId = req.params.id;
