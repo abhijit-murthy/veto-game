@@ -54,6 +54,8 @@ function createServer (logger) {
   server.post(gameDataController.createGameEndpoint,gameDataController.createGame);
   server.post(gameDataController.addUserToGameEndpoint,gameDataController.addUserToGame);
   server.get(gameDataController.getUserGamesEndpoint,gameDataController.getUserGames);
+  server.get(gameDataController.getCurrentGamesEndpoint,gameDataController.getCurrentGames);
+  server.get(gameDataController.getPastGamesEndpoint,gameDataController.getPastGames);
 
   //Suggestion data endpoints
   server.post(suggestionDataController.createSuggestionEndpoint,suggestionDataController.createSuggestion);

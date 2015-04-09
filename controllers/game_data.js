@@ -235,3 +235,86 @@ function getUserGames(req,res,next){
 exports.getUserGames = getUserGames;
 exports.getUserGamesEndpoint = exports.endpointBase + '/get_user_games/:id';
 
+
+/**
+	@api {get} /game_data/get_current_games/:id Get User's Current Games
+	@apiDescription Get all the current Games that a given User is associated with
+	@apiName GetCurrentGames
+	@apiGroup Game
+
+	@apiParam {String} id The requesting User's ID
+
+	@apiSuccess {Array} Current Games that the User is a part of
+
+	@apiError InvalidArgumentError Bad User ID/Could not retrieve list of games
+*/
+function getCurrentGames(req,res,next){
+	db.getUser(req.params.id)
+
+	.then(
+		function(user){
+			if(user == null)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad User ID"));
+			else
+				return db.getCurrentGames(user);
+		}
+	)
+	.then(
+		function(games){
+			if(games == null)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Could not retrieve Games"));
+			else
+				res.send(games);
+		}
+	)
+	.error(
+		function(err){
+			res.send(err);
+		}
+	);
+	next();
+}
+exports.getCurrentGames = getCurrentGames;
+exports.getCurrentGamesEndpoint = exports.endpointBase + '/get_current_games/:id';
+
+
+/**
+	@api {get} /game_data/get_past_games/:id Get User's Past Games
+	@apiDescription Get all the past Games that a given User is associated with
+	@apiName GetPastGames
+	@apiGroup Game
+
+	@apiParam {String} id The requesting User's ID
+
+	@apiSuccess {Array} Past Games that the User is a part of
+
+	@apiError InvalidArgumentError Bad User ID/Could not retrieve list of games
+*/
+function getPastGames(req,res,next){
+	db.getUser(req.params.id)
+
+	.then(
+		function(user){
+			if(user == null)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad User ID"));
+			else
+				return db.getPastGames(user);
+		}
+	)
+	.then(
+		function(games){
+			if(games == null)
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("Could not retrieve Games"));
+			else
+				res.send(games);
+		}
+	)
+	.error(
+		function(err){
+			res.send(err);
+		}
+	);
+	next();
+}
+exports.getPastGames = getPastGames;
+exports.getPastGamesEndpoint = exports.endpointBase + '/get_past_games/:id';

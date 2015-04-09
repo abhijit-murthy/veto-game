@@ -27,6 +27,8 @@ exports.getCurrentSuggestion = getCurrentSuggestion;
 exports.isGameFinished = isGameFinished;
 exports.upvote = upvote;
 exports.veto = veto;
+exports.getCurrentGames = getCurrentGames;
+exports.getPastGames = getPastGames;
 
 function initDB ()
 {
