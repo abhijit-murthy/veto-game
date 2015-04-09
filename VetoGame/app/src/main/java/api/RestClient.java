@@ -1,6 +1,7 @@
 package api;
 
 import api.group.GameInfo;
+import api.group.SuggestionInfo;
 import api.group.UserInfo;
 
 import retrofit.RestAdapter;
@@ -17,6 +18,7 @@ public class RestClient {
 
     private static final String BASE_URL = "http://173.236.253.103:28080";
     private static GameInfo gameInfo;
+    private static SuggestionInfo suggestionInfo;
     private static UserInfo userInfo;
 
     public RestClient()
@@ -32,12 +34,18 @@ public class RestClient {
                 .build();
 
         gameInfo = restAdapter.create(GameInfo.class);
+        suggestionInfo = restAdapter.create(SuggestionInfo.class);
         userInfo = restAdapter.create(UserInfo.class);
     }
 
     public static GameInfo getGameInfo()
     {
         return gameInfo;
+    }
+
+    public static SuggestionInfo getSuggestionInfo()
+    {
+        return suggestionInfo;
     }
 
     public static UserInfo getUserInfo()

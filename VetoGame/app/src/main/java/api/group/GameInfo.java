@@ -40,5 +40,11 @@ public interface GameInfo {
     public void getGame(@Path("id") String gameId, Callback<GameResponse> callback);
 
     @GET("/game_data/get_user_games/{id}")
-    public void getUserGame(@Path("id") String userId, Callback<List<GameResponse>> callback);
+    public void getUserGames(@Path("id") String userId, Callback<List<GameResponse>> callback);
+
+    @GET("/game_data/get_current_games/{id}")
+    public void getCurrentGames(@Path("id") String userId, Callback<List<GameResponse>> callback);
+
+    @GET("/game_data/get_past_games/{id}")
+    public void getPastGames(@Path("id") String userId, Callback<List<GameResponse>> callback);
 }

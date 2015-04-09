@@ -33,6 +33,21 @@ public class CurrGame extends Activity {
                         startActivity(intent);
                     }
                 });
+        findViewById(R.id.btn_veto).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(CurrGame.this,
+                                NewSuggestion.class);
+                        startActivity(intent);
+                    }
+                });
+        findViewById(R.id.btn_upvote).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                });
 
         currGame = (Game) getIntent().getSerializableExtra("currGame");
 
@@ -65,7 +80,6 @@ public class CurrGame extends Activity {
         }.start();
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
