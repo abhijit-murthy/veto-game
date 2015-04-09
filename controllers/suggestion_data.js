@@ -329,7 +329,7 @@ exports.getCurrentSuggestion = getCurrentSuggestion;
 exports.getCurrentSuggestionEndpoint = exports.endpointBase + '/current_suggestion/:id';
 
 /**
-	@api {get} Get Suggestions from Yelp Api
+	@api {get} /suggestion_data/yelp_suggestions/:id Get Suggestions from Yelp Api
 	@apiDescription Gets Suggestions from the Yelp API using information about the Game.
 	@apiName GetYelpSuggestions
 	@apiGroup Suggestion
@@ -353,6 +353,8 @@ function getYelpSuggestions(req, res, next) {
 		}
 	).then(
 		function(game){
+			
+			console.log(game.radius);
 			var location = 'location='+game.center+'&'
 			  , radius_filter = 'radius_filter='+game.radius+'&'
 			  , category_filter = 'term='+game.eventType+'&' //need to check supported categories or use term
@@ -393,3 +395,53 @@ function getYelpSuggestions(req, res, next) {
 exports.getYelpSuggestions = getYelpSuggestions;
 exports.getYelpSuggestionsEndpoint = exports.endpointBase + '/yelp_suggestions/:game_id';
 
+
+/**
+	@api {get} /suggestion_data/yelp_suggestions_initial?center=:center&event_type=:event_type&radius=:radius Get Suggestions from Yelp Api (for initial suggestion)
+	@apiDescription Gets Suggestions from the Yelp API using URL parameters
+	@apiName GetYelpSuggestionsInitial
+	@apiGroup Suggestion
+
+	@apiParam {String} center	Center location
+	@apiParam {String} radius	Radius to search
+	@apiParam {String} event_type	Category
+
+	@apiSuccess (200) Suggestions from Yelp
+
+*/
+function getYelpSuggestionsInitial(req, res, next) {
+
+			var location = 'location='+req.params.center+'&'
+			  , radius_filter = 'radius_filter='+req.params.radius+'&'
+			  , category_filter = 'term='+req.params.event_type+'&' //need to check supported categories or use term
+			  , sort = 'sort=1'; //sort by distance
+
+			var search = 'https://api.yelp.com/v2/search?'+location+radius_filter+category_filter+sort;
+			var yelp = OAuth({
+			    consumer: {
+			        public: 'pI2SJJxe5YBSJ6OjLrWUOQ',
+			        secret: 'PfUhZKeyTza3VpMfrgn8CuBDynQ'
+			    }
+			});
+
+			yelp.setToken({
+			    public: 'vcn_ks3F6lDaGJsG4MApdxkk1XDqOT5x', 
+			    secret: '86r0tTOvF978mE7QKnE2-5Mlp5Q'
+			});
+
+			yelp.get({
+			    url: search,
+			    qs: {
+			        count: 5
+			    },
+			    json: true
+			}, function(err, response, feed) {
+			    //console.log(feed);
+			    console.log("Amount returned" + feed.businesses.length);
+			    res.send(feed);
+			    //TODO: do whatever needs to be done with information (json)
+				});
+
+}
+exports.getYelpSuggestionsInitial = getYelpSuggestionsInitial;
+exports.getYelpSuggestionsInitialEndpoint = exports.endpointBase + '/yelp_suggestions_initial';

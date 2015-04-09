@@ -63,6 +63,7 @@ function createServer (logger) {
   server.get(suggestionDataController.getGameSuggestionHistoryEndpoint,suggestionDataController.getGameSuggestionHistory);
   server.get(suggestionDataController.getCurrentSuggestionEndpoint,suggestionDataController.getCurrentSuggestion);
   server.get(suggestionDataController.getYelpSuggestionsEndpoint, suggestionDataController.getYelpSuggestions);
+  server.get(suggestionDataController.getYelpSuggestionsInitialEndpoint, suggestionDataController.getYelpSuggestionsInitial);
   server.post(suggestionDataController.upvoteEndpoint, suggestionDataController.upvote);
   server.post(suggestionDataController.vetoEndpoint, suggestionDataController.veto);
   server.get(/\/?.*/, restify.serveStatic({

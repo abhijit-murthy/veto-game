@@ -606,8 +606,8 @@
   },
   {
     "type": "get",
-    "url": "Get",
-    "title": "Suggestions from Yelp Api",
+    "url": "/suggestion_data/yelp_suggestions/:id",
+    "title": "Get Suggestions from Yelp Api",
     "description": "<p>Gets Suggestions from the Yelp API using information about the Game.</p> ",
     "name": "GetYelpSuggestions",
     "group": "Suggestion",
@@ -644,6 +644,56 @@
             "optional": false,
             "field": "InvalidArgumentError",
             "description": "<p>Bad Game Id</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/suggestion_data.js",
+    "groupTitle": "Suggestion"
+  },
+  {
+    "type": "get",
+    "url": "/suggestion_data/yelp_suggestions_initial?center=:center&event_type=:event_type&radius=:radius",
+    "title": "Get Suggestions from Yelp Api (for initial suggestion)",
+    "description": "<p>Gets Suggestions from the Yelp API using URL parameters</p> ",
+    "name": "GetYelpSuggestionsInitial",
+    "group": "Suggestion",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "center",
+            "description": "<p>Center location</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "radius",
+            "description": "<p>Radius to search</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "event_type",
+            "description": "<p>Category</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "Suggestions",
+            "description": "<p>from Yelp</p> "
           }
         ]
       }
