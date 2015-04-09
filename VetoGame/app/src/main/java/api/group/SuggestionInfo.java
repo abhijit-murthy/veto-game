@@ -37,10 +37,10 @@ public interface SuggestionInfo {
 
 
     @GET("/suggestion_data/game_history/{id}")
-    public void getSuggestionHistory(@Path("id") String gameId, Callback<SuggestionResponse> callback);
+    public void getSuggestionHistory(@Path("id") String gameId, Callback<List<SuggestionResponse>> callback);
 
     @GET("/suggestion_data/current_suggestion/{id}")
-    public void getCurrSuggestion(@Path("id") String gameId, Callback<List<SuggestionResponse>> callback);
+    public void getCurrSuggestion(@Path("id") String gameId, Callback<SuggestionResponse> callback);
 
     @GET("/suggestion_data/yelp_suggestions/{id}")
     public void getYelpSuggestion(@Path("id") String gameId, Callback<List<SuggestionResponse>> callback);

@@ -11,18 +11,40 @@ import android.os.CountDownTimer;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import api.RestClient;
+import api.model.SuggestionResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class CurrGame extends Activity {
     private Game currGame;
     private TextView timeWin;
     private static final String FORMAT = "%02dd %02dh %02dm %02ds";
+    private RestClient restClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curr_game);
+        restClient = new RestClient();
+        restClient.getSuggestionInfo().getCurrSuggestion("1", new Callback<SuggestionResponse>() {
+            @Override
+            public void success(SuggestionResponse suggestionResponses, Response response) {
+                int count =  suggestionResponses.getCount();
+                TextView tv = (TextView) findViewById(R.id.num_supporters);
+                tv.setText(Integer.toString(count)+"/3");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
 
         findViewById(R.id.btn_past_suggestions).setOnClickListener(
                 new View.OnClickListener() {
@@ -46,6 +68,21 @@ public class CurrGame extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        restClient.getSuggestionInfo().getCurrSuggestion("1", new Callback<SuggestionResponse>() {
+                            @Override
+                            public void success(SuggestionResponse suggestionResponses, Response response) {
+                                int count =  suggestionResponses.getCount();
+                                if(count < 3){
+                                    TextView tv = (TextView) findViewById(R.id.num_supporters);
+                                    tv.setText(Integer.toString(count+1)+"/3");
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
                     }
                 });
 
