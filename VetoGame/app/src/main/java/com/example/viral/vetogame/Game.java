@@ -37,6 +37,21 @@ public class Game implements Serializable {//implements Parcelable {
     private String winner;
 
     // temporary constructor for matching DB
+    public Game(String gameId, String gameName, Calendar eventTime, String eventType, Calendar timeEnding,
+                int suggestionTTL, String center, int radius, Suggestion currentSuggestion, int numberOfMembers){
+        this.gameId = gameId;
+        this.gameName = gameName;
+        this.eventType = eventType;
+        this.eventTime = eventTime;
+        this.timeEnding = timeEnding;
+        this.suggestionTTL = suggestionTTL;
+        this.center = center;
+        this.radius = radius;
+        this.currentSuggestion = currentSuggestion;
+        this.numberOfMembers = numberOfMembers;
+    }
+
+    /*
     public Game(String userId, String eventType,
                 int suggestionTTL, String center, int radius){
         this.userId = userId;
@@ -44,19 +59,7 @@ public class Game implements Serializable {//implements Parcelable {
         this.suggestionTTL = suggestionTTL;
         this.center = center;
         this.radius = radius;
-    }
-
-    // temporary constructor for matching DB
-    public Game(Calendar eventTime, String eventType, Calendar timeEnding,
-                int suggestionTTL, String center, int radius){
-        this.eventType = eventType;
-        this.eventTime = eventTime;
-        this.timeEnding = timeEnding;
-        this.suggestionTTL = suggestionTTL;
-        this.center = center;
-        this.radius = radius;
-    }
-
+    }*/
 
     public Game(String gameName, Suggestion currentSuggestion, Calendar eventTime, Calendar timeEnding,
                 int numberOfMembers, String eventType){

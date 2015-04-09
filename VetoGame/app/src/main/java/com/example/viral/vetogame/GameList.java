@@ -26,6 +26,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class GameList extends Activity implements SearchView.OnQueryTextListener{
@@ -33,6 +34,7 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
     private GameAdapter adapter;
     private ArrayList<Game> games = new ArrayList<Game>();
     private SearchView searchView;
+    private RestClient restClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +61,7 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
         list.setAdapter(adapter);
         list.setOnItemClickListener(createOnItemClickListener());
         TextView emptyText = (TextView)findViewById(R.id.emptyGamesView);
-        if(games.size()>0){
-            emptyText.setText(R.string.no_results);
-        }
-        list.setEmptyView(emptyText);
+        initGame(list, emptyText);
 
         Button button = (Button) findViewById(R.id.btn_new_game);
         button.setOnClickListener(new View.OnClickListener() {
@@ -129,20 +128,15 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("Need to go to game info screen");
+                Game item = adapter.getItem(position);
+
+                Intent intent = new Intent(GameList.this, CurrGame.class);
+                intent.putExtra("currGame", item);
+                //based on item add info to intent
+                startActivity(intent);
             }
         };
     }
-
-   /* public void onItemClick(View v, int position){
-
-        Game item = adapter.getItem(position);
-
-        Intent intent = new Intent(GameList.this, CurrGame.class);
-        //based on item add info to intent
-        startActivity(intent);
-
-    }*/
 
     @Override
     public boolean onQueryTextChange(String newText)
@@ -155,5 +149,37 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
     public boolean onQueryTextSubmit(String query)
     {
         return false;
+    }
+
+    public void initGame(ListView list, TextView emptyText){
+        restClient = new RestClient();
+        restClient.getGameInfo().getUserGame("TESTID", new Callback<List<GameResponse>>() {
+            @Override
+            public void success(List<GameResponse> gameResponses, Response response) {
+                for(int i=0; i < gameResponses.size(); i++){
+                    Calendar eventTime = Calendar.getInstance();
+                    eventTime.setTime(gameResponses.get(i).getEventTime());
+                    Calendar endingTime = Calendar.getInstance();
+                    endingTime.setTime(gameResponses.get(i).getEventTime());
+
+                    Game game = new Game(gameResponses.get(i).getGameId(), gameResponses.get(i).getGameName(),
+                            eventTime, gameResponses.get(i).getEventType(), endingTime,
+                            gameResponses.get(i).getSuggestionTtl(), gameResponses.get(i).getCenter(), gameResponses.get(i).getRadius(),
+                            new Suggestion("The Muffin Bakery"),  3);
+
+                    adapter.addGame(game);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Error ", error.getMessage());
+            }
+        });
+
+        if(games.size()>0){
+            emptyText.setText(R.string.no_results);
+        }
+        list.setEmptyView(emptyText);
     }
 }

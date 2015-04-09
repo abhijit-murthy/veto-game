@@ -4,6 +4,10 @@ import api.group.GameInfo;
 import api.group.UserInfo;
 
 import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 
 /**
@@ -17,9 +21,14 @@ public class RestClient {
 
     public RestClient()
     {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
+                .create();
+
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(BASE_URL)
+                .setConverter(new GsonConverter(gson))
                 .build();
 
         gameInfo = restAdapter.create(GameInfo.class);

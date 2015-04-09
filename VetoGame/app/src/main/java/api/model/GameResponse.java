@@ -2,8 +2,10 @@ package api.model;
 
 import android.location.Location;
 
+import com.example.viral.vetogame.Game;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -12,6 +14,9 @@ import java.util.Date;
 public class GameResponse {
     @SerializedName("game_id")
     private String gameId;
+
+    @SerializedName("name")
+    private String gameName;
 
     @SerializedName("eventType")
     private String eventType;
@@ -39,6 +44,10 @@ public class GameResponse {
         return gameId;
     }
 
+    public String getGameName() {
+        return gameName;
+    }
+
     public String getEventType() {
         return eventType;
     }
@@ -58,4 +67,5 @@ public class GameResponse {
     public String getCenter() {
         return center;
     }
+
 }

@@ -2,6 +2,9 @@ package api.group;
 
 import com.example.viral.vetogame.Game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import api.model.GameResponse;
 
 import api.model.UserResponse;
@@ -35,4 +38,7 @@ public interface GameInfo {
 
     @GET("/game_data/{id}")
     public void getGame(@Path("id") String gameId, Callback<GameResponse> callback);
+
+    @GET("/game_data/get_user_games/{id}")
+    public void getUserGame(@Path("id") String userId, Callback<List<GameResponse>> callback);
 }

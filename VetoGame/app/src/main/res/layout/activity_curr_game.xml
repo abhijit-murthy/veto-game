@@ -8,58 +8,51 @@
     android:weightSum="100"
     android:orientation="vertical">
 
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_curr_suggestion"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_weight="20"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:text="Current Suggestion"
+        android:textColor="#0000B7"
+        android:gravity="center_horizontal|bottom"
+        android:paddingBottom="10dp"
+        android:background="@drawable/btn_background" />
 
-        <Button
-            android:id="@+id/btn_curr_suggestion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Current Suggestion"
-            android:textColor="#0000B7"
-            android:gravity="center_horizontal|bottom"
-            android:paddingBottom="10dp"
-            android:background="@drawable/btn_background" />
-
-        <TextView
-            android:text="Suggested by name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:gravity="center_horizontal"/>
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:text="Suggested by name"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_weight="37"
-        android:weightSum="1"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:gravity="center_horizontal"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <View android:id="@+id/strut"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"/>
 
         <ImageView
             android:id="@+id/curr_suggestion_image"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
+            android:layout_height="200dp"
+            android:layout_alignRight="@id/strut"
+            android:layout_alignParentLeft="true"
             android:src="@drawable/image"/>
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"/>
-
-    </LinearLayout>
+            android:layout_height="150dp"
+            android:layout_alignLeft="@id/strut"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="20"
-        android:weightSum="1"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="10dp">
 
@@ -107,7 +100,7 @@
                 android:id="@+id/num_supporters"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="4/10"
+                android:text="1/10"
                 android:gravity="center"/>
         </LinearLayout>
 
@@ -115,9 +108,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_weight="15"
         android:layout_margin="10dp"
         android:weightSum="1"
         android:orientation="horizontal">
@@ -139,8 +131,7 @@
     <Button
         android:id="@+id/btn_past_suggestions"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="8"
+        android:layout_height="wrap_content"
         android:gravity="right|bottom"
         android:text="past suggestions"
         style="?android:attr/borderlessButtonStyle"

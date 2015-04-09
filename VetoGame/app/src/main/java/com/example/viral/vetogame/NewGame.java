@@ -39,6 +39,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
 
     private RestClient restClient;
     private EditText textGameName;
+    private String gameName;
     private Button btnEventDate;
     private Button btnEventTime;
     private Button btnLimitDate;
@@ -49,6 +50,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private Calendar calendar;
     private Calendar startTime; // event time
     private Calendar endTime;   // game end time
+    private Suggestion tempSuggestion;
 
     private boolean startTimeChanged = false;
     private boolean endTimeChanged = false;
@@ -257,11 +259,8 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
 
         if (id == R.id.action_save) {
             gameType = spinner.getSelectedItem().toString();
-            String gameName = textGameName.getText().toString();
-            Suggestion tempSuggestion = new Suggestion("The Muffin Bakery");
-            Game game = new Game(gameName, tempSuggestion, startTime, endTime, (numberInvited+1), gameType);
-            center = "30303";
-            radius = 15;
+            gameName = textGameName.getText().toString();
+            tempSuggestion = new Suggestion("The Muffin Bakery");
             restClient = new RestClient();
 
             restClient.getGameInfo().createGame("TESTID", gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
@@ -283,6 +282,14 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                             }
                         });
                     }*/
+                    Game game = new Game(gameId, gameName, startTime, gameType, endTime, suggestionTtl, center, radius, tempSuggestion,  (numberInvited+1));
+
+                    Intent intent = new Intent(NewGame.this,GameList.class);
+                    System.out.println("put game in intent");
+                    intent.putExtra("gameInfo",game);
+                    //startActivity(intent);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
 
                 @Override
@@ -290,13 +297,6 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                     Log.i("Error ", error.getMessage());
                 }
             });
-
-            Intent intent = new Intent(NewGame.this,GameList.class);
-            System.out.println("put game in intent");
-            intent.putExtra("gameInfo",game);
-            //startActivity(intent);
-            setResult(RESULT_OK, intent);
-            finish();
         }else if(id == android.R.id.home){
             finish();
             return true;

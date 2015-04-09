@@ -6,9 +6,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.os.CountDownTimer;
+import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 
 public class CurrGame extends Activity {
+    private Game currGame;
+    private TextView timeWin;
+    private static final String FORMAT = "%02dd %02dh %02dm %02ds";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +33,37 @@ public class CurrGame extends Activity {
                         startActivity(intent);
                     }
                 });
+
+        currGame = (Game) getIntent().getSerializableExtra("currGame");
+
+        Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
+        btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
+
+        timeWin = (TextView) findViewById(R.id.remaining_time_win);
+
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        long endTime = currGame.getTimeEnding().getTimeInMillis();
+        long diffTime = endTime - startTime;
+
+        new CountDownTimer(diffTime, 1000) { // adjust the milli seconds here
+
+            public void onTick(long millisUntilFinished) {
+
+                timeWin.setText(""+String.format(FORMAT,
+                        TimeUnit.MILLISECONDS.toDays(millisUntilFinished),
+                        TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.HOURS.toHours(
+                                TimeUnit.MILLISECONDS.toDays(millisUntilFinished)),
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
+                                TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+            }
+
+            public void onFinish() {
+                timeWin.setText("done!");
+            }
+        }.start();
+
     }
 
 
