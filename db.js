@@ -312,6 +312,11 @@ function isGameFinished (game)
 			.then(
 				function(suggestion){	
 				
+						if (suggestion == null)
+						{
+							return sequelize.Promise.reject("Current suggestion is null");
+						}
+				
 						var suggestionExpiration = new Date(suggestion.createdAt);
 						suggestionExpiration.setMinutes(suggestionExpiration.getMinutes() + ttl);
 						var now = new Date();
@@ -360,7 +365,8 @@ function isGameFinished (game)
 							
 								});					
 					
-					});
+					})
+					.error(function(err) { console.log(err); fulfill(false); });
 		}
 		
 		});
