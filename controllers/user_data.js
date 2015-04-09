@@ -82,3 +82,60 @@ function getUserData(req,res,next){
 }
 exports.getUserData = getUserData;
 exports.getUserDataEndpoint = exports.endpointBase + '/:id';
+
+/**
+	@api {get} /user_data/get_game_users/:game_id Get Users in a Game
+	@apiName GetGameUsers
+	@apiGroup User
+
+	@apiParam {String} game_id ID of the Game
+
+	@apiSuccess {Array} users List of Users in the Game
+
+	@apiError InvalidArgumentError Bad Game ID
+
+	@apiUse GameFinished
+*/
+function getGameUsers(req,res,next){
+	var game;
+	var gameFinished;
+	db.getGame(req.params.game_id)
+	.then(function(result){
+		if(result == null){
+			return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game ID"));
+		}else {
+			game = result;
+			return db.isGameFinished(game);
+		}
+	})
+	.then(
+		function(isGameFinished){
+			gameFinished = isGameFinished;
+			return db.getGameUsers(game);
+		}
+	)
+	.then(
+		function(users){
+			var ret = {};
+			ret.users = users;
+			if(gameFinished){
+				ret.code = "GameFinished";
+				ret.message = "Game is Finished";
+			}
+			return ret;
+		}
+	)
+	.then(
+		function(result){
+			res.send(result);
+		}
+	)
+	.error(
+		function(err){
+			res.send(err);
+		}
+	);
+	next();
+}
+exports.getGameUsers = getGameUsers;
+exports.getGameUsersEndpoint = exports.endpointBase + '/get_game_users/:game_id';

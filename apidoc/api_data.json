@@ -867,6 +867,67 @@
   },
   {
     "type": "get",
+    "url": "/user_data/get_game_users/:game_id",
+    "title": "Get Users in a Game",
+    "name": "GetGameUsers",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "game_id",
+            "description": "<p>ID of the Game</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "users",
+            "description": "<p>List of Users in the Game</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad Game ID</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "GameFinished",
+            "description": "<p>Game is finished</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "GameFinished:",
+          "content": "HTTP/1.1 200 OK\n{\n\t\"code\": \"GameFinished\",\n\t\"message\": \"Game has ended\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/user_data.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "get",
     "url": "/user_data/:id",
     "title": "Get User information",
     "name": "GetUserData",

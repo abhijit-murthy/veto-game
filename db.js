@@ -29,6 +29,7 @@ exports.upvote = upvote;
 exports.veto = veto;
 exports.getCurrentGames = getCurrentGames;
 exports.getPastGames = getPastGames;
+exports.getGameUsers = getGameUsers;
 
 function initDB ()
 {
@@ -458,5 +459,8 @@ function getCurrentGames (user)
 	},[]);
 }
 
+function getGameUsers(game){
+	return game.getUsers();
+}
 
 

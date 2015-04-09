@@ -48,6 +48,7 @@ function createServer (logger) {
   //User data endpoints
   server.post(userDataController.createUserEndpoint, userDataController.createUser);
   server.get(userDataController.getUserDataEndpoint, userDataController.getUserData);
+  server.get(userDataController.getGameUsersEndpoint,userDataController.getGameUsers);
 
   //Game data endpoints
   server.get(gameDataController.getGameDataEndpoint,gameDataController.getGameData);
