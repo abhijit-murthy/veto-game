@@ -432,12 +432,30 @@ function upvote (game, suggestionToUpvote)
 function getPastGames (user)
 {
 	//return Game.findAll({ where: {finished: true, } });
-	return user.getGames({where: {finished:true}});
+	// return user.getGames({where: {finished:true}});
+
+	return user.getGames().reduce(function(total,game){
+		return isGameFinished(game)
+				.then(
+					function(isGameFinished){
+						if(isGameFinished)
+							total.push(game);
+						return total;
+					});
+	},[]);
 }
 
 function getCurrentGames (user)
 {
-	return user.getGames({where: {finished:false}});
+	return user.getGames().reduce(function(total,game){
+		return isGameFinished(game)
+				.then(
+					function(isGameFinished){
+						if(!isGameFinished)
+							total.push(game);
+						return total;
+					});
+	},[]);
 }
 
 
