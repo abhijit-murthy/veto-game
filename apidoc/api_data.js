@@ -161,6 +161,55 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/game_data/get_current_games/:id",
+    "title": "Get User's Current Games",
+    "description": "<p>Get all the current Games that a given User is associated with</p> ",
+    "name": "GetCurrentGames",
+    "group": "Game",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The requesting User&#39;s ID</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "Current",
+            "description": "<p>Games that the User is a part of</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad User ID/Could not retrieve list of games</p> "
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/game_data.js",
+    "groupTitle": "Game"
+  },
+  {
+    "type": "get",
     "url": "/game_data/:id",
     "title": "Get Game information",
     "description": "<p>Get detailed Game information</p> ",
@@ -258,6 +307,55 @@ define({ "api": [
           "type": "json"
         }
       ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/game_data.js",
+    "groupTitle": "Game"
+  },
+  {
+    "type": "get",
+    "url": "/game_data/get_past_games/:id",
+    "title": "Get User's Past Games",
+    "description": "<p>Get all the past Games that a given User is associated with</p> ",
+    "name": "GetPastGames",
+    "group": "Game",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>The requesting User&#39;s ID</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "Past",
+            "description": "<p>Games that the User is a part of</p> "
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidArgumentError",
+            "description": "<p>Bad User ID/Could not retrieve list of games</p> "
+          }
+        ]
+      }
     },
     "version": "0.0.0",
     "filename": "controllers/game_data.js",
