@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,13 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import api.RestClient;
+import api.model.GameResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class PastGameList extends Activity implements SearchView.OnQueryTextListener{
@@ -24,6 +32,7 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
     private PastGameAdapter adapter;
     private ArrayList<Game> games = new ArrayList<Game>();
     private SearchView searchView;
+    private RestClient restClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +57,8 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
         ListView list = (ListView) findViewById(R.id.past_game_list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(createOnItemClickListener());
-        TextView emptyText = (TextView)findViewById(R.id.emptyPastGamesView);
-        if(games.size()>0){
-            emptyText.setText(R.string.no_results);
-        }
-        list.setEmptyView(emptyText);
+        TextView emptyText = (TextView)findViewById(R.id.emptyGamesView);
+        initGame(list, emptyText);
 
         /*Button button = (Button) findViewById(R.id.btn_back);
         button.setOnClickListener(new View.OnClickListener() {
@@ -128,5 +134,37 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
     public boolean onQueryTextSubmit(String query)
     {
         return false;
+    }
+
+    public void initGame(ListView list, TextView emptyText){
+        restClient = new RestClient();
+        restClient.getGameInfo().getPastGames("TESTID", new Callback<List<GameResponse>>() {
+            @Override
+            public void success(List<GameResponse> gameResponses, Response response) {
+                for(int i=0; i < gameResponses.size(); i++){
+                    Calendar eventTime = Calendar.getInstance();
+                    eventTime.setTime(gameResponses.get(i).getEventTime());
+                    Calendar endingTime = Calendar.getInstance();
+                    endingTime.setTime(gameResponses.get(i).getEventTime());
+
+                    Game game = new Game(gameResponses.get(i).getGameId(), gameResponses.get(i).getGameName(),
+                            eventTime, gameResponses.get(i).getEventType(), endingTime,
+                            gameResponses.get(i).getSuggestionTtl(), gameResponses.get(i).getCenter(), gameResponses.get(i).getRadius(),
+                            new Suggestion("The Muffin Bakery"),  3);
+
+                    adapter.addGame(game);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Error ", error.getMessage());
+            }
+        });
+
+        if(games.size()>0){
+            emptyText.setText(R.string.no_results);
+        }
+        list.setEmptyView(emptyText);
     }
 }

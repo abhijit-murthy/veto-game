@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import api.RestClient;
 import api.model.GameResponse;
-import api.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -156,7 +154,7 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
 
     public void initGame(ListView list, TextView emptyText){
         restClient = new RestClient();
-        restClient.getGameInfo().getUserGame("TESTID", new Callback<List<GameResponse>>() {
+        restClient.getGameInfo().getCurrentGames("TESTID", new Callback<List<GameResponse>>() {
             @Override
             public void success(List<GameResponse> gameResponses, Response response) {
                 for(int i=0; i < gameResponses.size(); i++){
