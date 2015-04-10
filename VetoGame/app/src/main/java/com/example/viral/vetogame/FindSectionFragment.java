@@ -86,13 +86,13 @@ public class FindSectionFragment extends Fragment implements SearchView.OnQueryT
         int id = item.getItemId();
         System.out.println("pushed");
         if (id == R.id.action_save_suggestion) {
-            Toast.makeText(getActivity(), "clicked",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "clicked",Toast.LENGTH_SHORT).show();
             //radius = locationFragment.getRadius();
             //centerText = locationFragment.getCenterText().getText().toString();
             Intent intent = new Intent(getActivity(),
                     NewGame.class);
             radius = locationFragment.getRadius();
-            centerText = locationFragment.getCenterText().getText().toString();
+            centerText = locationFragment.getEventZipCode();
             intent.putExtra("radius", radius);
             intent.putExtra("center", centerText);
             intent.putExtra("suggestion",adapter.getSelected());

@@ -60,12 +60,12 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
         TextView emptyText = (TextView)findViewById(R.id.emptyGamesView);
         initGame(list, emptyText);
 
-        Button button = (Button) findViewById(R.id.btn_back);
+        /*Button button = (Button) findViewById(R.id.btn_back);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
     }
 
 

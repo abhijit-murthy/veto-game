@@ -48,6 +48,14 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
         return suggestionsMap.get(selected);
     }
 
+    public HashMap<String, Suggestion> getSuggestionsMap() {
+        return suggestionsMap;
+    }
+
+    public void setSuggestionsMap(HashMap<String, Suggestion> suggestionsMap) {
+        this.suggestionsMap = suggestionsMap;
+    }
+
     @Override
     public int getCount() {
         return displayList.size();
@@ -63,11 +71,17 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
         return position;
     }
 
+    public void addSuggestion(Suggestion suggestion){
+        suggestionsMap.put(suggestion.getName(),suggestion);
+        displayList.add(suggestion);
+        notifyDataSetChanged();
+    }
+
     private void bind(final Suggestion suggestion, View view) {
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.suggestion_name.setText(suggestion.getName());
-        holder.suggestion_rating.setText("Distance: "+suggestion.getRating()+"/5");
-        holder.suggestion_distance.setText("Rating: "+suggestion.getDistance()+" miles");
+        holder.suggestion_rating.setText("Rating: ");//+suggestion.getRating()+"/5");
+        holder.suggestion_distance.setText("Distance: "+suggestion.getDistance()+" miles");
         if(suggestion.getSuggestedBy() == null){
             holder.suggested_name.setVisibility(View.GONE);
         }else {
