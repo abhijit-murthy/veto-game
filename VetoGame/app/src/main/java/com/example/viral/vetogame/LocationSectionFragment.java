@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,12 +25,16 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-//import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-//import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Viral on 3/5/2015.
@@ -40,8 +46,7 @@ public class LocationSectionFragment extends Fragment {
 
     private int radius = 1;
     private EditText centerText;
-    private int currentZipCode = 0;
-    private int eventZipCode = 0;
+    private String eventZipCode = "";
 
     private GoogleMap map;
     private Circle circle;
@@ -49,6 +54,10 @@ public class LocationSectionFragment extends Fragment {
     private LatLng currentLoc;
     private int zoom = 11;
     private boolean zipCodeEntered = false;
+
+    private Geocoder geocoder;
+    private MarkerOptions eventMark;
+    private Marker eventMarker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,7 +84,7 @@ public class LocationSectionFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 radiusText.setText(""+(progress+1));
                 setZoom(radius);
-                setCircle(currentLoc,radius);
+                setCircle(eventLoc,radius);
             }
         });
 
@@ -95,35 +104,36 @@ public class LocationSectionFragment extends Fragment {
                 setRadius(r);
                 if(r<=50 && r>0) {
                     seekBar.setProgress((r-1));
-                    setCircle(currentLoc,radius);
+                    setCircle(eventLoc,radius);
                 }else{
                     Toast.makeText(getActivity(),"Enter a radius between 1 and 50",Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        //TODO: uncomment after getting zipcode is implemented
-        /*centerText.addTextChangedListener(new TextWatcher(){
-            int loc;
+        centerText.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after){
             }
             public void onTextChanged(CharSequence s, int start, int before, int count){
                 if(s.length()==5) {
-                    zipCodeEntered = true;
-                    loc = Integer.parseInt(s.toString());
+                    eventZipCode = s.toString();
+                    eventLoc = getLatLngFromZipCode(s.toString());
                 }else{
-                    loc = 0;//TODO: change to current location zipcode
-                    //eventLoc = lat and log of event zipcode
+                    eventLoc = currentLoc;
                     zipCodeEntered = false;
                 }
-                if(loc == 0){
-                    eventZipCode = currentZipCode;
+                if(map!=null){
+                    eventMarker.remove();
+                    eventMark = new MarkerOptions().position(eventLoc).title("Event Location");
+                    eventMark.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    eventMarker = map.addMarker(eventMark);
+                    zipCodeEntered = true;
                 }
-                setCircle(currentLoc,radius);
+                setCircle(eventLoc,radius);
             }
-        });*/
+        });
 
         ((NewSuggestion)getActivity()).setTabFragmentL(getTag());
 
@@ -139,19 +149,19 @@ public class LocationSectionFragment extends Fragment {
 
             map.setMyLocationEnabled(true);
 
+            geocoder = new Geocoder(getActivity());
+
             map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
                 @Override
                 public void onMyLocationChange(Location arg0) {
                     currentLoc = new LatLng(arg0.getLatitude(), arg0.getLongitude());
-                    MarkerOptions mark = new MarkerOptions().position(currentLoc).title("You");
-                    map.addMarker(mark);
-                    //TODO: add an if statement to change location if zipcode is entered
-                    CameraUpdate cameraUpdate;
-                    if(!zipCodeEntered) {
-                        cameraUpdate = CameraUpdateFactory.newLatLng(currentLoc);
-                    }else{
-                        cameraUpdate = CameraUpdateFactory.newLatLng(eventLoc);
+                    if(!zipCodeEntered){
+                        eventLoc = currentLoc;
                     }
+                    eventMark = new MarkerOptions().position(eventLoc).title("Event Location");
+                    eventMark.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    eventMarker = map.addMarker(eventMark);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(eventLoc);
                     map.animateCamera(cameraUpdate);
                 }
             });
@@ -174,14 +184,6 @@ public class LocationSectionFragment extends Fragment {
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(newLoc, zoom);
             map.animateCamera(cameraUpdate);
         }
-    }
-
-    public EditText getRadiusText() {
-        return radiusText;
-    }
-
-    public EditText getCenterText() {
-        return centerText;
     }
 
     public double milesToMeters(int miles){
@@ -212,6 +214,14 @@ public class LocationSectionFragment extends Fragment {
         this.radius = radius;
     }
 
+    public String getEventZipCode(){
+        if(zipCodeEntered){
+            return eventZipCode;
+        }else{
+            return getZipCodeFromLatLng(currentLoc);
+        }
+    }
+
     /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -239,4 +249,49 @@ public class LocationSectionFragment extends Fragment {
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
+    public LatLng getLatLngFromZipCode(String zipCode){
+        LatLng latlng = currentLoc;
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(zipCode, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                // Use the address as needed
+                String message = String.format("Latitude: %f, Longitude: %f",
+                        address.getLatitude(), address.getLongitude());
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                latlng = new LatLng(address.getLatitude(),address.getLongitude());
+            } else {
+                // Display appropriate message when Geocoder services are not available
+                Toast.makeText(getActivity(), "Unable to geocode lat and long", Toast.LENGTH_LONG).show();
+            }
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), "bad zip", Toast.LENGTH_SHORT).show();
+            System.out.println("blag");// handle exception
+        }
+
+        return latlng;
+    }
+
+
+    public String getZipCodeFromLatLng(LatLng latlng){
+        String zipCode = "";
+        geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latlng.latitude, latlng.longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                // Use the address as needed
+                zipCode = address.getPostalCode();
+            } else {
+                // Display appropriate message when Geocoder services are not available
+                Toast.makeText(getActivity(), "Unable to geocode zipcode", Toast.LENGTH_LONG).show();
+            }
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), "bad zip", Toast.LENGTH_SHORT).show();
+        }
+
+        return zipCode;
+    }
+
 }

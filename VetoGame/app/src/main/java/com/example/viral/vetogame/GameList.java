@@ -66,8 +66,9 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
         Button button = (Button) findViewById(R.id.btn_new_game);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(GameList.this,
-                        NewGame.class);
+                searchView.setIconified(true);
+                searchView.setIconified(true);
+                Intent intent = new Intent(GameList.this,NewGame.class);
                 startActivityForResult(intent, 1);
             }
         });
@@ -75,6 +76,8 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
         Button past_games_button = (Button) findViewById(R.id.btn_past_games);
         past_games_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                searchView.setIconified(true);
+                searchView.setIconified(true);
                 Intent intent = new Intent(GameList.this, PastGameList.class);
                 startActivity(intent);
             }
@@ -89,7 +92,7 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.search_game_list).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
+        searchView.setIconifiedByDefault(true);//false);
         searchView.setOnQueryTextListener(this);
         return true;
     }
