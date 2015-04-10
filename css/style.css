@@ -22,7 +22,7 @@ p.small {
 a,
 a:focus,
 a:active {
-	color: #fff;
+	color: #000066;
 }
 
 a:hover {
@@ -243,4 +243,8 @@ footer .footer-below {
 
 .scroll-top .btn:focus {
     outline: 0;
+}
+
+.email {
+	color: #0000FF; 
 }
