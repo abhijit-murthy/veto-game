@@ -263,12 +263,12 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             tempSuggestion = new Suggestion("The Muffin Bakery");
             restClient = new RestClient();
 
-            restClient.getGameInfo().createGame("TESTID", gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
+            restClient.getGameInfo().createGame("ABMURTHY", gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
                 @Override
                 public void success(GameResponse gameResponse, Response response) {
                     gameId = gameResponse.getGameId();
 
-                 /*   String[] users = userIds.split(" ");
+                 String[] users = userIds.split(",");
                     for(int i=0; i<users.length; i++) {
                         restClient.getGameInfo().addUsers(users[i], gameId, new Callback<GameResponse>() {
                             @Override
@@ -281,7 +281,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                                 Log.i("Error ", error.getMessage());
                             }
                         });
-                    }*/
+                    }
                     Game game = new Game(gameId, gameName, startTime, gameType, endTime, suggestionTtl, center, radius, tempSuggestion,  (numberInvited+1));
 
                     Intent intent = new Intent(NewGame.this,GameList.class);

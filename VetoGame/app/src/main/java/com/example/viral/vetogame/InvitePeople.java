@@ -21,7 +21,6 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
 
     private ArrayList<Person> personItems;
     private PeopleAdapter adapter;
-    private String userIds = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,21 +30,11 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
         listPeople = (ListView) findViewById(R.id.people);
 
         personItems = new ArrayList<Person>();
-        personItems.add(new Person("John Smith", "ABC", false));
-        personItems.add(new Person("Sally Johnson", "DEF", false));
-        personItems.add(new Person("Marco Rodriguez", "GHI", false));
-        personItems.add(new Person("Carl Rogers", "JKL", false));
-        /*personItems.add(new Person("Sherry Liu", false));
-        personItems.add(new Person("Jack Kim", false));
-        personItems.add(new Person("Erica Lee", false));
-        personItems.add(new Person("Michelle Davis", false));
-        personItems.add(new Person("Terry Min", false));
-        personItems.add(new Person("Jessica Denton", false));
-        personItems.add(new Person("John Mishkin", false));
-        personItems.add(new Person("Seth Orr", false));
-        personItems.add(new Person("Leo Yang", false));
-        personItems.add(new Person("Sally Watson", false));
-        personItems.add(new Person("Adair Liu", false));*/
+        //personItems.add(new Person("Abhijit Murthy", "ABMURTHY", false));
+        personItems.add(new Person("Cristina Chu", "CHUCRISTINA", false));
+        personItems.add(new Person("Eunki Kim", "EKIM305", false));
+        personItems.add(new Person("Ian Stainbrook", "IAN1639", false));
+        personItems.add(new Person("Viral Patel", "viral9793", false));
         System.out.println("test size: "+personItems.size());
         adapter = new PeopleAdapter(this, personItems);
         listPeople.setAdapter(adapter);
@@ -81,7 +70,7 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
             Intent intent = new Intent(InvitePeople.this,
                     NewGame.class);
             intent.putExtra("numberInvited",adapter.getNumberInvited());
-            intent.putExtra("userIds",userIds);
+            intent.putExtra("userIds",getInvitedUsers());
             //startActivity(intent);
             setResult(RESULT_OK, intent);
             finish();
@@ -123,7 +112,7 @@ public class InvitePeople extends Activity implements SearchView.OnQueryTextList
     }
 
     public String getInvitedUsers(){
-        userIds = "";
+        String userIds = "";
         for(Person person:adapter.getPeople()){
             if(person.getChecked()) {
                 userIds = userIds + "," + person.getUserId();
