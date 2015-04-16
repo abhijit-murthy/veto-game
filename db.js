@@ -369,7 +369,7 @@ function isGameFinished (game)
 								});					
 					
 					})
-					.error(function(err) { console.log(err); fulfill(false); });
+					.error(function(err) { console.log(err); fulfill(true); });
 		}
 		
 		});
