@@ -117,7 +117,7 @@ function initDB ()
 			
 
 				
-			sequelize.sync({ force: true }).complete(function(err) { callback(null); } );
+			sequelize.sync({ force: false }).complete(function(err) { callback(null); } );
 	
 		},
 		
@@ -314,6 +314,9 @@ function isGameFinished (game)
 				
 						if (suggestion == null)
 						{
+							game.finished = true;
+							game.save().then(function() { } );
+							
 							return sequelize.Promise.reject("Current suggestion is null");
 						}
 				
@@ -366,7 +369,7 @@ function isGameFinished (game)
 								});					
 					
 					})
-					.error(function(err) { console.log(err); fulfill(false); });
+					.error(function(err) { console.log(err); fulfill(true); });
 		}
 		
 		});
