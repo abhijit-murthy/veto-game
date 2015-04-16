@@ -84,7 +84,7 @@ function createGame(req,res,next){
 	)
 	.then(
 		function(game){
-			res.send({game_id: game.values.id});
+			res.send({id: game.values.id});
 		},
 		function(error){
 			res.send(error);
