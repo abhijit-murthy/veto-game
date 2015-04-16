@@ -314,6 +314,9 @@ function isGameFinished (game)
 				
 						if (suggestion == null)
 						{
+							game.finished = true;
+							game.save().then(function() { } );
+							
 							return sequelize.Promise.reject("Current suggestion is null");
 						}
 				
