@@ -287,7 +287,12 @@ exports.getGameSuggestionHistoryEndpoint = exports.endpointBase + '/game_history
 
 	@apiParam {String} id The Game ID
 
-	@apiSuccess (200) {Suggestion} Unamed The current Suggestion
+	@apiSuccess (200) {String}	id 	The suggestion ID
+	@apiSuccess (200) {String}	name The name of the suggestion
+	@apiSuccess (200) {String}  location The location of the suggestion
+	@apiSuccess (200) {String}	votes The current votes of the suggestion
+	@apiSuccess (200) {String}  gameId The game the suggestion is attached to
+	@apiSuccess (200) {String} 	UserId The user that suggested the game
 
 	@apiError InvalidArgumentError Bad Game Id
 	@apiUse GameFinished

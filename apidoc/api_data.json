@@ -505,10 +505,45 @@
         "200": [
           {
             "group": "200",
-            "type": "Suggestion",
+            "type": "String",
             "optional": false,
-            "field": "Unamed",
-            "description": "<p>The current Suggestion</p> "
+            "field": "id",
+            "description": "<p>The suggestion ID</p> "
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The name of the suggestion</p> "
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "location",
+            "description": "<p>The location of the suggestion</p> "
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "votes",
+            "description": "<p>The current votes of the suggestion</p> "
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "gameId",
+            "description": "<p>The game the suggestion is attached to</p> "
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "UserId",
+            "description": "<p>The user that suggested the game</p> "
           }
         ]
       }
