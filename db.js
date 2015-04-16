@@ -117,7 +117,7 @@ function initDB ()
 			
 
 				
-			sequelize.sync({ force: true }).complete(function(err) { callback(null); } );
+			sequelize.sync({ force: false }).complete(function(err) { callback(null); } );
 	
 		},
 		
