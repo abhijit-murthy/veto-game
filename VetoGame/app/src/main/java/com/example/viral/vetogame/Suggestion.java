@@ -2,6 +2,8 @@ package com.example.viral.vetogame;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 
 /**
@@ -11,16 +13,27 @@ public class Suggestion implements Serializable{
 
     private String name;
     private int votes;
-    private Location location;
     private String location_string;
-    private int rating;
-    private double distance;
+    //private int rating;
+    //private double distance;
     private boolean checked;
     private String suggestedBy;
+    private LatLng latLng;
+    private String ratingImg;
+    private String image;
+    private String mobileURL;
+    private int numReviews;
 
-    public Suggestion(String name, Location location){
+    public Suggestion(String name, String location_string){
         this.name = name;
-        this.location = location;
+        this.location_string = location_string;
+        votes = 1;
+    }
+
+    public Suggestion(String name, String location_string, double distance){
+        this.name = name;
+        this.location_string = location_string;
+        //this.distance = distance;
         votes = 1;
     }
 
@@ -28,8 +41,8 @@ public class Suggestion implements Serializable{
     public Suggestion(String name, String location_string, int rating, double distance){
         this.name = name;
         this.location_string = location_string;
-        this.rating = rating;
-        this.distance = distance;
+        //this.rating = rating;
+        //this.distance = distance;
         votes = 1;
         checked = false;
     }
@@ -37,6 +50,7 @@ public class Suggestion implements Serializable{
     public Suggestion(String name){
         this.name = name;
         votes = 1;
+        checked = false;
     }
 
     @Override
@@ -60,14 +74,6 @@ public class Suggestion implements Serializable{
         this.votes = votes;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public String getLocation_string() {
         return location_string;
     }
@@ -76,7 +82,11 @@ public class Suggestion implements Serializable{
         this.location_string = location_string;
     }
 
-    public int getRating() {
+    public void setLocation_string(String address, String city, String state) {
+        this.location_string = address+", "+city+", "+state;
+    }
+
+    /*public int getRating() {
         return rating;
     }
 
@@ -90,7 +100,7 @@ public class Suggestion implements Serializable{
 
     public void setDistance(double distance) {
         this.distance = distance;
-    }
+    }*/
 
     public boolean getChecked() {
         return checked;
@@ -106,5 +116,45 @@ public class Suggestion implements Serializable{
 
     public void setSuggestedBy(String suggestedBy) {
         this.suggestedBy = suggestedBy;
+    }
+
+    public void setLatLng(double lat, double lng){
+        this.latLng = new LatLng(lat, lng);
+    }
+
+    public LatLng getLatLng(){
+        return this.latLng;
+    }
+
+    public String getRatingImg() {
+        return ratingImg;
+    }
+
+    public void setRatingImg(String ratingImg) {
+        this.ratingImg = ratingImg;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getMobileURL() {
+        return mobileURL;
+    }
+
+    public void setMobileURL(String mobileURL) {
+        this.mobileURL = mobileURL;
+    }
+
+    public int getNumReviews() {
+        return numReviews;
+    }
+
+    public void setNumReviews(int numReviews) {
+        this.numReviews = numReviews;
     }
 }

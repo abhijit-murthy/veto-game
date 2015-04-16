@@ -47,7 +47,24 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"/>
 
-        <TextView android:id="@+id/suggestion_distance"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/reviewsImage"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+        <TextView android:id="@+id/suggestion_reviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
+            android:text="Reviews: "
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+        <!--<TextView android:id="@+id/suggestion_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -63,7 +80,7 @@
             android:layout_marginTop="5dp"
             android:text="Rating: "
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
+            android:paddingRight="10dp"/>-->
 
     </LinearLayout>
 

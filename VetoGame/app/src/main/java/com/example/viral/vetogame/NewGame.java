@@ -260,7 +260,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         if (id == R.id.action_save) {
             gameType = spinner.getSelectedItem().toString();
             gameName = textGameName.getText().toString();
-            tempSuggestion = new Suggestion("The Muffin Bakery");
+            tempSuggestion = suggestion;//new Suggestion("The Muffin Bakery");
             restClient = new RestClient();
 
             restClient.getGameInfo().createGame("ABMURTHY", gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {

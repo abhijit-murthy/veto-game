@@ -3,12 +3,14 @@ package api.group;
 import java.util.List;
 
 import api.model.SuggestionResponse;
+import api.model.YelpResponse;
 import retrofit.Callback;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 /**
  * Created by eunkikim on 3/7/15.
@@ -44,5 +46,11 @@ public interface SuggestionInfo {
 
     @GET("/suggestion_data/yelp_suggestions/{id}")
     public void getYelpSuggestion(@Path("id") String gameId, Callback<List<SuggestionResponse>> callback);
+
+    //@GET("/suggestion_data/yelp_suggestions_initial/{id}")
+    @GET("/suggestion_data/yelp_suggestions_initial")
+    public void getYelpSuggestionInitial(@Query("center")String center, @Query("radius")String radius,
+                                         @Query("event_type")String event_type,
+                                         Callback<YelpResponse> callback);
 
 }

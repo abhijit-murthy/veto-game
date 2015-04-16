@@ -2,17 +2,22 @@ package com.example.viral.vetogame;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.apache.http.client.protocol.RequestAddCookies;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -42,6 +47,10 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
         convertView = inflateIfRequired(convertView, position, parent);
         bind(getItem(position), convertView);
         return convertView;
+    }
+
+    public void clearDisplayList(){
+        this.displayList = new ArrayList<Suggestion>();
     }
 
     public Suggestion getSelected() {
@@ -80,8 +89,10 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
     private void bind(final Suggestion suggestion, View view) {
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.suggestion_name.setText(suggestion.getName());
-        holder.suggestion_rating.setText("Rating: ");//+suggestion.getRating()+"/5");
-        holder.suggestion_distance.setText("Distance: "+suggestion.getDistance()+" miles");
+        new GetImageFromURL(holder.ratingsImage).execute(suggestion.getRatingImg());
+        holder.suggestion_reviews.setText(""+suggestion.getNumReviews()+" Reviews");
+        //holder.suggestion_rating.setText("Rating: ");//+suggestion.getRating()+"/5");
+        //holder.suggestion_distance.setText("Distance: ");//+suggestion.getDistance()+" miles");
         if(suggestion.getSuggestedBy() == null){
             holder.suggested_name.setVisibility(View.GONE);
         }else {
@@ -134,15 +145,19 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
 
     static class ViewHolder {
         final TextView suggestion_name;
-        final TextView suggestion_rating;
-        final TextView suggestion_distance;
+        final TextView suggestion_reviews;
+        final ImageView ratingsImage;
+        //final TextView suggestion_rating;
+        //final TextView suggestion_distance;
         final TextView suggested_name;
         final RadioButton rb;
 
         ViewHolder(View view) {
             suggestion_name = (TextView) view.findViewById(R.id.suggestion_name);
-            suggestion_rating = (TextView) view.findViewById(R.id.suggestion_rating);
-            suggestion_distance = (TextView) view.findViewById(R.id.suggestion_distance);
+            suggestion_reviews = (TextView) view.findViewById(R.id.suggestion_reviews);
+            ratingsImage = (ImageView) view.findViewById(R.id.reviewsImage);
+            //suggestion_rating = (TextView) view.findViewById(R.id.suggestion_rating);
+            //suggestion_distance = (TextView) view.findViewById(R.id.suggestion_distance);
             suggested_name = (TextView) view.findViewById(R.id.suggested_name);
             rb = (RadioButton) view.findViewById(R.id.suggestion_radio_button);
         }
@@ -184,4 +199,48 @@ public class SuggestionAdapter extends ArrayAdapter<Suggestion> {
         };
     }
 
+    public static Drawable LoadImageFromWeb(String url) {
+
+        //System.out.println("YELP URL: "+url);
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            //System.out.println("YELP returning");
+            return d;
+        } catch (Exception e) {
+            //System.out.println("YELP error");
+            System.out.println(e);
+            return null;
+        }
+    }
+
+}
+
+class GetImageFromURL extends AsyncTask<String, Void, Drawable> {
+
+    ImageView imageView;
+
+    public GetImageFromURL(ImageView imageView){
+        this.imageView = imageView;
+    }
+
+    protected Drawable doInBackground(String...url) {
+        //System.out.println("YELP URL: "+url[0]);
+        try {
+            InputStream is = (InputStream) new URL(url[0]).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            //System.out.println("YELP returning");
+            return d;
+        } catch (Exception e) {
+            System.out.println("YELP error");
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    protected void onPostExecute(Drawable drawable) {
+        imageView.setImageDrawable(drawable);
+        // TODO: check this.exception
+        // TODO: do something with the feed
+    }
 }

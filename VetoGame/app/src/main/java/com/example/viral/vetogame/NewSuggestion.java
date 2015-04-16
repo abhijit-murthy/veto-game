@@ -34,7 +34,9 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
-    String TabFragmentL;
+    String TabFragmentLocate;
+    String TabFragmentFind;
+    boolean locationFound = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +88,12 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
+        if(locationFound) {
+            mViewPager.setCurrentItem(tab.getPosition());
+        }else{
+            Toast.makeText(this,"Trying to get your location.",Toast.LENGTH_LONG).show();
+        }
+        //Toast.makeText(this,"R"+TabFragmentLocate+" F"+TabFragmentFind,Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -131,11 +138,27 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
         //return super.onOptionsItemSelected(item);
     }
 
-    public String getTabFragmentL() {
-        return TabFragmentL;
+    public String getTabFragmentLocate() {
+        return TabFragmentLocate;
     }
 
-    public void setTabFragmentL(String tabFragmentL) {
-        TabFragmentL = tabFragmentL;
+    public void setTabFragmentLocate(String tabFragmentLocate) {
+        this.TabFragmentLocate = tabFragmentLocate;
+    }
+
+    public String getTabFragmentFind() {
+        return TabFragmentFind;
+    }
+
+    public void setTabFragmentFind(String tabFragmentFind) {
+        this.TabFragmentFind = tabFragmentFind;
+    }
+
+    public void setLocationFound(boolean locationFound){
+        this.locationFound = locationFound;
+    }
+
+    public ActionBar.Tab getTab(int index){
+        return getActionBar().getTabAt(index);
     }
 }

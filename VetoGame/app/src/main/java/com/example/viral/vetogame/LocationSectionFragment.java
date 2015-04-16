@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.security.Provider;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,6 +61,10 @@ public class LocationSectionFragment extends Fragment {
     private Geocoder geocoder;
     private MarkerOptions eventMark;
     private Marker eventMarker;
+    private FindSectionFragment findFragment;
+
+    private boolean foundLocation = false;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,10 +99,6 @@ public class LocationSectionFragment extends Fragment {
             int r;
             public void afterTextChanged(Editable s) {
                 //Toast.makeText(getActivity(),"after "+s.toString(),Toast.LENGTH_SHORT).show();
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after){
-            }
-            public void onTextChanged(CharSequence s, int start, int before, int count){
                 if(s.length()>0) {
                     r = Integer.parseInt(s.toString());
                 }else{
@@ -105,9 +108,15 @@ public class LocationSectionFragment extends Fragment {
                 if(r<=50 && r>0) {
                     seekBar.setProgress((r-1));
                     setCircle(eventLoc,radius);
+                    updateSuggestions();
                 }else{
                     Toast.makeText(getActivity(),"Enter a radius between 1 and 50",Toast.LENGTH_SHORT).show();
                 }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count){
+
             }
         });
 
@@ -120,22 +129,23 @@ public class LocationSectionFragment extends Fragment {
                 if(s.length()==5) {
                     eventZipCode = s.toString();
                     eventLoc = getLatLngFromZipCode(s.toString());
+                    if(map!=null){
+                        eventMarker.remove();
+                        eventMark = new MarkerOptions().position(eventLoc).title("Event Location");
+                        eventMark.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                        eventMarker = map.addMarker(eventMark);
+                        zipCodeEntered = true;
+                    }
+                    updateSuggestions();
                 }else{
                     eventLoc = currentLoc;
                     zipCodeEntered = false;
-                }
-                if(map!=null){
-                    eventMarker.remove();
-                    eventMark = new MarkerOptions().position(eventLoc).title("Event Location");
-                    eventMark.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    eventMarker = map.addMarker(eventMark);
-                    zipCodeEntered = true;
                 }
                 setCircle(eventLoc,radius);
             }
         });
 
-        ((NewSuggestion)getActivity()).setTabFragmentL(getTag());
+        ((NewSuggestion)getActivity()).setTabFragmentLocate(getTag());
 
         final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -163,11 +173,20 @@ public class LocationSectionFragment extends Fragment {
                     eventMarker = map.addMarker(eventMark);
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(eventLoc);
                     map.animateCamera(cameraUpdate);
+                    if(!foundLocation) {
+                        String tabFind= ((NewSuggestion)getActivity()).getTabFragmentFind();
+                        findFragment = (FindSectionFragment) getActivity().getSupportFragmentManager().findFragmentByTag(tabFind);
+                        updateSuggestions();
+                    }
                 }
             });
         }
 
         return rootView;
+    }
+
+    public GoogleMap getMap() {
+        return map;
     }
 
     public void setCircle(LatLng newLoc, int rad){
@@ -189,6 +208,8 @@ public class LocationSectionFragment extends Fragment {
     public double milesToMeters(int miles){
         return (miles * 1609.34);
     }
+
+    public LatLng getCurrentLoc(){ return currentLoc;}
 
     public void setZoom(int rad){
         if(rad<3){
@@ -257,17 +278,16 @@ public class LocationSectionFragment extends Fragment {
             if (addresses != null && !addresses.isEmpty()) {
                 Address address = addresses.get(0);
                 // Use the address as needed
-                String message = String.format("Latitude: %f, Longitude: %f",
+                /*String message = String.format("Latitude: %f, Longitude: %f",
                         address.getLatitude(), address.getLongitude());
-                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();*/
                 latlng = new LatLng(address.getLatitude(),address.getLongitude());
             } else {
                 // Display appropriate message when Geocoder services are not available
                 Toast.makeText(getActivity(), "Unable to geocode lat and long", Toast.LENGTH_LONG).show();
             }
         } catch (IOException e) {
-            Toast.makeText(getActivity(), "bad zip", Toast.LENGTH_SHORT).show();
-            System.out.println("blag");// handle exception
+            Toast.makeText(getActivity(), "Zip Code Invalid", Toast.LENGTH_SHORT).show();
         }
 
         return latlng;
@@ -294,4 +314,20 @@ public class LocationSectionFragment extends Fragment {
         return zipCode;
     }
 
+    public String getLocation(){
+        return ""+eventLoc.latitude+","+eventLoc.longitude;
+    }
+
+    private void updateSuggestions(){
+        if(eventLoc!=null){
+            if(findFragment!=null) {
+                foundLocation = true;
+                ((NewSuggestion)getActivity()).setLocationFound(foundLocation);
+                findFragment.getAdapter().setSuggestionsMap(new HashMap<String, Suggestion>());
+                findFragment.getAdapter().clearDisplayList();
+                findFragment.findSuggestions();
+                //setCircle(eventLoc,radius);
+            }
+        }
+    }
 }

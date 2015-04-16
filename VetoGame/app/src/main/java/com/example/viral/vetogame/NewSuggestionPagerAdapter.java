@@ -10,10 +10,8 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class NewSuggestionPagerAdapter extends FragmentPagerAdapter {
 
-    private int radius;
-    private int zipCode;
-    private String address;
-    private Location location;
+    private Fragment fragmentLoc = new LocationSectionFragment();
+    private Fragment fragmentFind = new FindSectionFragment();
 
     public NewSuggestionPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -21,15 +19,12 @@ public class NewSuggestionPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment;
         switch (i) {
             case 0:
-               fragment = new LocationSectionFragment();
-               return fragment;
+               return fragmentLoc;
             default:
-               fragment = new FindSectionFragment();
+                return fragmentFind;
         }
-        return fragment;
     }
 
     @Override
