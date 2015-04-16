@@ -771,7 +771,7 @@ define({ "api": [
             "group": "200",
             "type": "Integer",
             "optional": false,
-            "field": "count",
+            "field": "votes",
             "description": "<p>Current number of upvotes</p> "
           }
         ]
