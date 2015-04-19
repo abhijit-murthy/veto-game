@@ -388,7 +388,25 @@ function getGameSuggestionHistory (game)
 
 function getUserGames (user)
 {
-	return user.getGames();
+	//return user.getGames();
+	
+	return user.getGames().reduce(function(total,game){
+		return isGameFinished(game)
+				.then(
+					function(isGameFinished){
+						if(isGameFinished)
+						{
+							game.finished = true;
+							total.push(game);
+						}
+						else
+						{
+							game.finished = false;
+							total.push(game);
+						}
+						return total;
+					});
+	},[]);
 }
 
 function getCurrentSuggestion (game)
@@ -449,7 +467,10 @@ function getPastGames (user)
 				.then(
 					function(isGameFinished){
 						if(isGameFinished)
+						{
+							game.finished = true;
 							total.push(game);
+						}
 						return total;
 					});
 	},[]);
@@ -462,7 +483,10 @@ function getCurrentGames (user)
 				.then(
 					function(isGameFinished){
 						if(!isGameFinished)
+						{
+							game.finished = false;
 							total.push(game);
+						}
 						return total;
 					});
 	},[]);
