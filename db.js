@@ -394,17 +394,16 @@ function getUserGames (user)
 		return isGameFinished(game)
 				.then(
 					function(isGameFinished){
-						if(isGameFinished)
-						{
-							game.finished = true;
-							total.push(game);
-						}
-						else
-						{
-							game.finished = false;
-							total.push(game);
-						}
-						return total;
+
+						return getCurrentSuggestion(game)
+							.then(
+								function(suggestion){
+									game.dataValues.currentSuggestion = suggestion;
+									total.push(game);
+									return total;
+								});				
+						
+						
 					});
 	},[]);
 }
@@ -457,6 +456,7 @@ function upvote (game, suggestionToUpvote)
 	});
 }
 
+/*
 function getPastGames (user)
 {
 	//return Game.findAll({ where: {finished: true, } });
@@ -475,6 +475,7 @@ function getPastGames (user)
 					});
 	},[]);
 }
+*/
 
 function getCurrentGames (user)
 {
@@ -484,10 +485,50 @@ function getCurrentGames (user)
 					function(isGameFinished){
 						if(!isGameFinished)
 						{
-							game.finished = false;
-							total.push(game);
+							return getCurrentSuggestion(game)
+								.then(
+									function(suggestion) {
+										game.dataValues.currentSuggestion = suggestion;
+										total.push(game);
+										return total;
+										});					
+							
 						}
-						return total;
+						else
+						{
+							return total;
+						}
+						//return total;
+						
+						
+					});
+	},[]);
+}
+
+function getPastGames (user)
+{
+	return user.getGames().reduce(function(total,game){
+		return isGameFinished(game)
+				.then(
+					function(isGameFinished){
+						if(isGameFinished)
+						{
+							return getCurrentSuggestion(game)
+								.then(
+									function(suggestion) {
+										game.dataValues.currentSuggestion = suggestion;
+										total.push(game);
+										return total;
+										});					
+							
+						}
+						else
+						{
+							return total;
+						}
+						//return total;
+						
+						
 					});
 	},[]);
 }
