@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -74,6 +76,7 @@ public class FindSectionFragment extends Fragment implements SearchView.OnQueryT
         suggestionList = (ListView) rootView.findViewById(R.id.suggestion_list);
         TextView emptyText = (TextView)rootView.findViewById(R.id.emptySuggestionsView);
         suggestionList.setEmptyView(emptyText);
+        suggestionList.setOnItemClickListener(createOnItemClickListener());
 
         /*suggestions.add(new Suggestion("The Muffin Bakery","2.2",5,0.5));
         suggestions.add(new Suggestion("The Swamp","2.2",4,4.5));
@@ -189,6 +192,18 @@ public class FindSectionFragment extends Fragment implements SearchView.OnQueryT
 
     public float milesToMeters(float miles){
         return (miles*1609.34f);
+    }
+
+    private AdapterView.OnItemClickListener createOnItemClickListener() {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("YELP CLICKED");
+                Uri uri = Uri.parse(adapter.getItem(position).getMobileURL());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        };
     }
 
     /*public float distanceBetweenLatLong(String location1, String location2){
