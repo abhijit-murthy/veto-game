@@ -21,11 +21,12 @@ public class SuggestionResponse {
     @SerializedName("name")
     private String suggestionName;
 
-    @SerializedName("count")
-    private int count;
+    @SerializedName("location")
+    private String location;
 
-    @SerializedName("Unamed")
-    private Suggestion currSuggestion;
+    @SerializedName("votes")
+    private int currVotes;
+
 
     public String getSuggestionId() {
         return suggestionId;
@@ -43,11 +44,11 @@ public class SuggestionResponse {
         return suggestionName;
     }
 
-    public int getCount() {
-        return count;
+    public String getLocation() {
+        return location;
     }
 
-    public Suggestion getCurrSuggestion() {
-        return currSuggestion;
+    public int getCurrVotes() {
+        return currVotes;
     }
 }

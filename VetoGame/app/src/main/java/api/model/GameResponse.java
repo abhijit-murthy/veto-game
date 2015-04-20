@@ -12,7 +12,7 @@ import java.util.Date;
  * Created by eunkikim on 3/7/15.
  */
 public class GameResponse {
-    @SerializedName("game_id")
+    @SerializedName("id")
     private String gameId;
 
     @SerializedName("name")
@@ -35,6 +35,9 @@ public class GameResponse {
 
     @SerializedName("radius")
     private int radius;
+
+    @SerializedName("currentSuggestion")
+    private SuggestionResponse suggestionResponse;
 
     public int getRadius() {
         return radius;
@@ -68,4 +71,7 @@ public class GameResponse {
         return center;
     }
 
+    public SuggestionResponse getSuggestionResponse() {
+        return suggestionResponse;
+    }
 }

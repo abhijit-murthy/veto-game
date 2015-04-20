@@ -22,6 +22,7 @@ import java.util.List;
 
 import api.RestClient;
 import api.model.GameResponse;
+import api.model.SuggestionResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -33,6 +34,16 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
     private ArrayList<Game> games = new ArrayList<Game>();
     private SearchView searchView;
     private RestClient restClient;
+    private Suggestion currSuggestion;
+    private String gameId;
+    private String gameName;
+    private Calendar eventTime;
+    private Calendar endingTime;
+    private String eventType;
+    private int suggestionTTL;
+    private String center;
+    private int radius;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,20 +149,25 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
 
     public void initGame(ListView list, TextView emptyText){
         restClient = new RestClient();
-        restClient.getGameInfo().getPastGames("TESTID", new Callback<List<GameResponse>>() {
+        restClient.getGameInfo().getPastGames("ABMURTHY", new Callback<List<GameResponse>>() {
             @Override
             public void success(List<GameResponse> gameResponses, Response response) {
                 for(int i=0; i < gameResponses.size(); i++){
-                    Calendar eventTime = Calendar.getInstance();
+                    eventTime = Calendar.getInstance();
                     eventTime.setTime(gameResponses.get(i).getEventTime());
-                    Calendar endingTime = Calendar.getInstance();
+                    endingTime = Calendar.getInstance();
                     endingTime.setTime(gameResponses.get(i).getEventTime());
 
-                    Game game = new Game(gameResponses.get(i).getGameId(), gameResponses.get(i).getGameName(),
-                            eventTime, gameResponses.get(i).getEventType(), endingTime,
-                            gameResponses.get(i).getSuggestionTtl(), gameResponses.get(i).getCenter(), gameResponses.get(i).getRadius(),
-                            new Suggestion("The Muffin Bakery"),  3);
+                    gameId = gameResponses.get(i).getGameId();
+                    gameName = gameResponses.get(i).getGameName();
+                    eventType = gameResponses.get(i).getEventType();
+                    suggestionTTL = gameResponses.get(i).getSuggestionTtl();
+                    center = gameResponses.get(i).getCenter();
+                    radius = gameResponses.get(i).getRadius();
 
+                    currSuggestion = new Suggestion(gameResponses.get(i).getSuggestionResponse().getSuggestionName(), gameResponses.get(i).getSuggestionResponse().getLocation());
+                    Game game = new Game(gameId, gameName, eventTime, eventType, endingTime,
+                            suggestionTTL, center, radius, currSuggestion, 3);
                     adapter.addGame(game);
                 }
             }

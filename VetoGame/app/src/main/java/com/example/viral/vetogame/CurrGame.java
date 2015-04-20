@@ -35,7 +35,7 @@ public class CurrGame extends Activity {
         restClient.getSuggestionInfo().getCurrSuggestion("1", new Callback<SuggestionResponse>() {
             @Override
             public void success(SuggestionResponse suggestionResponses, Response response) {
-                int count =  suggestionResponses.getCount();
+                int count =  suggestionResponses.getCurrVotes();
                 TextView tv = (TextView) findViewById(R.id.num_supporters);
                 tv.setText(Integer.toString(count)+"/3");
             }
@@ -68,10 +68,10 @@ public class CurrGame extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        restClient.getSuggestionInfo().getCurrSuggestion("1", new Callback<SuggestionResponse>() {
+                        restClient.getSuggestionInfo().getCurrSuggestion(currGame.getGameId(), new Callback<SuggestionResponse>() {
                             @Override
                             public void success(SuggestionResponse suggestionResponses, Response response) {
-                                int count =  suggestionResponses.getCount();
+                                int count =  suggestionResponses.getCurrVotes();
                                 if(count < 3){
                                     TextView tv = (TextView) findViewById(R.id.num_supporters);
                                     tv.setText(Integer.toString(count+1)+"/3");
