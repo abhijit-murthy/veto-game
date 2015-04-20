@@ -46,7 +46,8 @@ class facebookLoginViewController : UIViewController, FBLoginViewDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == "afterLogin"){
+        //this segue should be afterLogin
+        if (segue.identifier == "mainPage"){
             var navigationController : UINavigationController = segue.destinationViewController as! UINavigationController
         
             var destViewController : ViewController = navigationController.topViewController as! ViewController

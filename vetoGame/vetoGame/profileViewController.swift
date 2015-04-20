@@ -16,7 +16,6 @@ class profileViewController : UIViewController {
     
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var numberWins: UILabel!
-    @IBOutlet weak var numberExtras: UILabel!
     @IBOutlet weak var numberPoints: UILabel!
     
     override func viewDidLoad() {
@@ -43,7 +42,6 @@ class profileViewController : UIViewController {
             if (jsonResult != nil) {
                 // process jsonResult - assigning values to labels
                 self.userName.text = (jsonResult.objectForKey("name") as! String)
-                self.numberExtras.text = toString(jsonResult.objectForKey("extras") as! NSNumber)
                 self.numberWins.text = toString(jsonResult.objectForKey("wins") as! NSNumber)
                 self.numberPoints.text = toString(jsonResult.objectForKey("points") as! NSNumber)
                 

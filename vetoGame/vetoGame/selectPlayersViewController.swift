@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class inviteFriendsViewController : UITableViewController {
+class selectPlayersViewController : UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()

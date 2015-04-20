@@ -1,70 +1,54 @@
 //
-//  ViewController.swift
+//  pastGamesTableViewController.swift
 //  vetoGame
 //
-//  Created by Cristina on 3/23/15.
+//  Created by Cristina on 4/19/15.
 //  Copyright (c) 2015 CristinaChu. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
-class ViewController: UIViewController {
-    
-    @IBOutlet weak var logout: UIButton!
-    @IBOutlet weak var tableView: UITableView!
-    
+class pastGamesTableViewController : UITableViewController {
+
     var userID : String!
-    var fbSession : FBSession!
-    var total : Int = 0
+    var candies = [String]()
     var games = [NSArray]()
+        //game = [name, id, eventType, suggestionTTL, radius, center, currentSuggestionName, eventTime, timeEnding]
+    var total : Int = 0
     
     override func viewDidLoad() {
+        //getPastGames()
+        
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
-        getCurrentGames()
+        //getPastGames()
     }
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.total
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! gameCell
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        var game : NSArray
+        game = games[indexPath.row]
+        
+        //cell.gameName.text = game[0] as! String
+        //cell.currentSuggestion.text = game[6] as! String
+        
+        cell.gameName.text = "Hi"
+        cell.currentSuggestion.text = "This"
+        
+        println("Cell stuff")
+        
+        return cell
     }
     
-    @IBAction func logginOut(sender: AnyObject) {
-        fbSession.closeAndClearTokenInformation()
-        self.performSegueWithIdentifier("logout", sender: self)
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == "showProfile") {
-            var destViewController : profileViewController = segue.destinationViewController as! profileViewController
-            
-            destViewController.fbSession = FBSession.activeSession()
-            destViewController.userID = self.userID
-        }
-        
-        if (segue.identifier == "createGame") {
-            var destViewController : createGameViewController = segue.destinationViewController as! createGameViewController
-            
-            destViewController.userID = self.userID
-        }
-        
-        if (segue.identifier == "pastGames"){
-            var destViewController : pastGamesTableViewController = segue.destinationViewController as! pastGamesTableViewController
-            
-            destViewController.userID = self.userID
-        }
-        
-        if (segue.identifier == "logout"){
-            //var destViewController : facebookLoginViewController = segue.destinationViewController as facebookLoginViewController
-            
-            //TODO Restart App
-        }
-    }
-    
-    func getCurrentGames() {
-        //var url : String = "http://173.236.253.103:28080/game_data/get_current_games/"+self.userID
-        var url : String = "http://173.236.253.103:28080/game_data/get_current_games/ABC"
+    func getPastGames() {
+        //var url : String = "http://173.236.253.103:28080/game_data/get_past_games/"+self.userID
+        var url : String = "http://173.236.253.103:28080/game_data/get_past_games/ABC"
         var request : NSMutableURLRequest = NSMutableURLRequest()
         
         request.URL = NSURL(string: url)
@@ -112,11 +96,10 @@ class ViewController: UIViewController {
                 
             } else {
                 // no current games!
-                println("No current games")
+                println("No past games")
             }
+            println(self.games)
         })
     }
-
-
+    
 }
-
