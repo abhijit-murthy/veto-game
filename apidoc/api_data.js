@@ -447,6 +447,27 @@ define({ "api": [
             "optional": false,
             "field": "location",
             "description": "<p>Location of the suggestion</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "mobile_url",
+            "description": "<p>Mobile URL of the Suggestion</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "image_url",
+            "description": "<p>Image URL of the suggestion</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "rating_url",
+            "description": "<p>Rating URL of the suggestion</p> "
           }
         ]
       }
@@ -850,6 +871,27 @@ define({ "api": [
             "optional": false,
             "field": "new_suggestion_loc",
             "description": "<p>New Suggestion Location</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_suggestion_mobile_url",
+            "description": "<p>New Suggestion Mobile URL</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_suggestion_image_url",
+            "description": "<p>New Suggestion Image URL</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "new_suggestion_rating_url",
+            "description": "<p>New Suggestion Rating URL</p> "
           }
         ]
       }
