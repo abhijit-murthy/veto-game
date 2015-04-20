@@ -399,8 +399,21 @@ function getUserGames (user)
 							.then(
 								function(suggestion){
 									game.dataValues.currentSuggestion = suggestion;
-									total.push(game);
-									return total;
+									
+									return getGameUsers(game)
+										.then(
+											function (users){
+												if (users != null)
+												{
+													game.dataValues.userCount = users.length;
+													
+												}
+												total.push(game);
+												return total;
+												
+											});
+									
+									
 								});				
 						
 						
@@ -489,8 +502,18 @@ function getCurrentGames (user)
 								.then(
 									function(suggestion) {
 										game.dataValues.currentSuggestion = suggestion;
-										total.push(game);
-										return total;
+
+										return getGameUsers(game)
+											.then(
+												function(users) {
+													if (users != null)
+														game.dataValues.userCount = users.length;
+													total.push(game);
+													return total;
+													
+													});								
+										
+										
 										});					
 							
 						}
@@ -517,8 +540,18 @@ function getPastGames (user)
 								.then(
 									function(suggestion) {
 										game.dataValues.currentSuggestion = suggestion;
-										total.push(game);
-										return total;
+
+										return getGameUsers(game)
+											.then(
+												function(users) {
+													if (users != null)
+														game.dataValues.userCount = users.length;
+													total.push(game);
+													return total;
+													
+													});								
+										
+										
 										});					
 							
 						}
