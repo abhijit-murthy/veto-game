@@ -19,6 +19,9 @@ exports.endpointBase = '/suggestion_data';
 	@apiParam {String} game_id	Game to add to
 	@apiParam {String} name Name of the location
 	@apiParam {String} location 	Location of the suggestion
+	@apiParam {String} mobile_url Mobile URL of the Suggestion
+	@apiParam {String} image_url Image URL of the suggestion
+	@apiParam {String} rating_url Rating URL of the suggestion
 
 	@apiSuccess (200) {Integer} id The ID of the newly created suggestion
 
@@ -55,7 +58,17 @@ function createSuggestion(req,res,next){
 			if(!req.params.location){
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("No location supplied"));
 			}
-			return db.addSuggestion(req.params.name,req.params.location,user,game);
+			if(!req.params.mobile_url){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("No mobile url supplied"));
+			}
+			if(!req.params.image_url){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("No image url supplied"));
+			}
+			if(!req.params.rating_url){
+				return sequelize.Promise.reject(new restify.InvalidArgumentError("No rating url supplied"));
+			}
+
+			return db.addSuggestion(req.params.name,req.params.location,req.params.mobile_url,req.params.image_url,req.params.rating_url,user,game);
 		}
 	).then(
 		function(suggestion){
@@ -148,6 +161,9 @@ exports.upvoteEndpoint = exports.endpointBase + '/upvote';
 	@apiParam {String} curr_suggestion_id	Current Suggestion ID
 	@apiParam {String} new_suggestion_name	New Suggestion Name
 	@apiParam {String} new_suggestion_loc	New Suggestion Location
+	@apiParam {String} new_suggestion_mobile_url New Suggestion Mobile URL
+	@apiParam {String} new_suggestion_image_url New Suggestion Image URL
+	@apiParam {String} new_suggestion_rating_url New Suggestion Rating URL
 
 	@apiSuccess (200) {Integer} id ID of new suggestion
 
@@ -205,8 +221,16 @@ function veto(req,res,next){
 				if(!req.params.new_suggestion_loc){
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("No new suggestion location"));
 				}
-				
-				return db.veto(game, user, suggestionToVeto, req.params.new_suggestion_name, req.params.new_suggestion_loc);				
+				if(!req.params.new_suggestion_mobile_url){
+					return sequelize.Promise.reject(new restify.InvalidArgumentError("No new suggestion mobile url"));
+				}
+				if(!req.params.new_suggestion_image_url){
+					return sequelize.Promise.reject(new restify.InvalidArgumentError("No new suggestion image url"));
+				}
+				if(!req.params.new_suggestion_rating_url){
+					return sequelize.Promise.reject(new restify.InvalidArgumentError("No new suggestion rating url"));
+				}
+				return db.veto(game, user, suggestionToVeto, req.params.new_suggestion_name, req.params.new_suggestion_loc,req.params.new_suggestion_mobile_url,req.params.new_suggestion_image_url,req.params.new_suggestion_rating_url);				
 				
 			}
 		}

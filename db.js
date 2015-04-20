@@ -91,7 +91,10 @@ function initDB ()
 			Suggestion = sequelize.define('Suggestion', {
 				name: Sequelize.STRING,
 				location: Sequelize.STRING,
-				votes: Sequelize.INTEGER.UNSIGNED
+				votes: Sequelize.INTEGER.UNSIGNED,
+				mobile_url: Sequelize.STRING,
+				image_url: Sequelize.STRING,
+				rating_url: Sequelize.STRING
 				});
 				
 			Game = sequelize.define('Game', {
@@ -117,7 +120,7 @@ function initDB ()
 			
 
 				
-			sequelize.sync({ force: false }).complete(function(err) { callback(null); } );
+			sequelize.sync({ force: true }).complete(function(err) { callback(null); } );
 	
 		},
 		
@@ -262,9 +265,16 @@ function getSuggestion (id)
 	return Suggestion.find(id);
 }
 
-function addSuggestion (name, location, user, game)
+function addSuggestion (name, location, mobile_url, image_url, rating_url, user, game)
 {
-	return Suggestion.build({name: name, location: location, votes: 0})
+	return Suggestion.build({
+		name: name, 
+		location: location, 
+		votes: 0, 
+		mobile_url: mobile_url,
+		image_url: image_url,
+		rating_url: rating_url
+	})
 
 	.save()
 
@@ -431,14 +441,14 @@ function getUsers ()
 	return User.findAll();
 }
 
-function veto (game, user, suggestionToVeto, newSuggestionName, newSuggestionLocation)
+function veto (game, user, suggestionToVeto, newSuggestionName, newSuggestionLocation,newSuggestionMobileUrl,newSuggestionImageUrl,newSuggestionRatingUrl)
 {
 	return new sequelize.Promise (function(fulfill, reject){
 	
 	getCurrentSuggestion(game).then(function(suggestion) { 
 		if (suggestionToVeto.id == suggestion.id) 
 		{
-			addSuggestion(newSuggestionName, newSuggestionLocation, user, game).then(function(suggestion) { fulfill(suggestion.values.id); } );
+			addSuggestion(newSuggestionName, newSuggestionLocation, newSuggestionMobileUrl,newSuggestionImageUrl,newSuggestionRatingUrl,user, game).then(function(suggestion) { fulfill(suggestion.values.id); } );
 		}
 		else
 		{
