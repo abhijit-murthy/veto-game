@@ -11,6 +11,8 @@ import java.io.Serializable;
  */
 public class Suggestion implements Serializable{
 
+
+    private String suggestionId;
     private String name;
     private int votes;
     private String location_string;
@@ -24,9 +26,10 @@ public class Suggestion implements Serializable{
     private String mobileURL;
     private int numReviews;
 
-    public Suggestion(String name, String location_string){
+    public Suggestion(String name, String location_string, String suggestionId){
         this.name = name;
         this.location_string = location_string;
+        this.suggestionId = suggestionId;
         votes = 1;
     }
 
@@ -56,6 +59,14 @@ public class Suggestion implements Serializable{
     @Override
     public String toString(){
         return name;
+    }
+
+    public String getSuggestionId() {
+        return suggestionId;
+    }
+
+    public void setSuggestionId(String suggestionId) {
+        this.suggestionId = suggestionId;
     }
 
     public String getName() {

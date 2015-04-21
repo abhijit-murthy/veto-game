@@ -39,6 +39,9 @@ public class GameResponse {
     @SerializedName("currentSuggestion")
     private SuggestionResponse suggestionResponse;
 
+    @SerializedName("userCount")
+    private int userCount;
+
     public int getRadius() {
         return radius;
     }
@@ -73,5 +76,9 @@ public class GameResponse {
 
     public SuggestionResponse getSuggestionResponse() {
         return suggestionResponse;
+    }
+
+    public int getUserCount() {
+        return userCount;
     }
 }

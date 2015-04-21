@@ -26,25 +26,22 @@ public class CurrGame extends Activity {
     private TextView timeWin;
     private static final String FORMAT = "%02dd %02dh %02dm %02ds";
     private RestClient restClient;
+    private int votes;
+    private int num_players;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curr_game);
+
+        currGame = (Game) getIntent().getSerializableExtra("currGame");
+
         restClient = new RestClient();
-        restClient.getSuggestionInfo().getCurrSuggestion("1", new Callback<SuggestionResponse>() {
-            @Override
-            public void success(SuggestionResponse suggestionResponses, Response response) {
-                int count =  suggestionResponses.getCurrVotes();
-                TextView tv = (TextView) findViewById(R.id.num_supporters);
-                tv.setText(Integer.toString(count)+"/3");
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+        votes =  currGame.getCurrentSuggestion().getVotes();
+        num_players = currGame.getNumberOfMembers();
+        TextView tv = (TextView) findViewById(R.id.num_supporters);
+        tv.setText(Integer.toString(votes)+"/"+Integer.toString(num_players));
 
         findViewById(R.id.btn_past_suggestions).setOnClickListener(
                 new View.OnClickListener() {
@@ -68,25 +65,24 @@ public class CurrGame extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        restClient.getSuggestionInfo().getCurrSuggestion(currGame.getGameId(), new Callback<SuggestionResponse>() {
-                            @Override
-                            public void success(SuggestionResponse suggestionResponses, Response response) {
-                                int count =  suggestionResponses.getCurrVotes();
-                                if(count < 3){
+                        if(votes < num_players){
+
+                            restClient.getSuggestionInfo().upvote(currGame.getGameId(), currGame.getCurrentSuggestion().getSuggestionId(), new Callback<SuggestionResponse>() {
+                                @Override
+                                public void success(SuggestionResponse suggestionResponses, Response response) {
+                                    votes = suggestionResponses.getCurrVotes();
                                     TextView tv = (TextView) findViewById(R.id.num_supporters);
-                                    tv.setText(Integer.toString(count+1)+"/3");
+                                    tv.setText(Integer.toString(votes)+"/"+Integer.toString(num_players));
                                 }
-                            }
 
-                            @Override
-                            public void failure(RetrofitError error) {
+                                @Override
+                                public void failure(RetrofitError error) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 });
-
-        currGame = (Game) getIntent().getSerializableExtra("currGame");
 
         Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
         btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
