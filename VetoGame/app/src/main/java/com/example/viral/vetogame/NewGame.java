@@ -51,7 +51,6 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
     private Calendar calendar;
     private Calendar startTime; // event time
     private Calendar endTime;   // game end time
-    private Suggestion tempSuggestion;
 
     private boolean startTimeChanged = false;
     private boolean endTimeChanged = false;
@@ -261,7 +260,6 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         if (id == R.id.action_save) {
             gameType = spinner.getSelectedItem().toString();
             gameName = textGameName.getText().toString();
-            tempSuggestion = suggestion;//new Suggestion("The Muffin Bakery");
             restClient = new RestClient();
 
             restClient.getGameInfo().createGame(Login.getUser(), gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
@@ -283,7 +281,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                             }
                         });
                     }
-                    Game game = new Game(gameId, gameName, startTime, gameType, endTime, suggestionTtl, center, radius, tempSuggestion,  (numberInvited+1));
+                    Game game = new Game(gameId, gameName, startTime, gameType, endTime, suggestionTtl, center, radius, suggestion,  (numberInvited+1));
 
                     restClient.getSuggestionInfo().createSuggestion(Login.getUser(),gameId,suggestion.getName(),
                             suggestion.getLocation_string(), suggestion.getMobileURL(), suggestion.getImage(),

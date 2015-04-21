@@ -116,4 +116,5 @@ public class GameResponse {
     public void setRadius(int radius) {
         this.radius = radius;
     }
+
 }

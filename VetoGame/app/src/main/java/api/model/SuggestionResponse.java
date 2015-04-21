@@ -24,9 +24,6 @@ public class SuggestionResponse {
     @SerializedName("votes")
     private int votes;
 
-    @SerializedName("Unamed")
-    private Suggestion currSuggestion;
-
     @SerializedName("location")
     private String location;
 
@@ -53,10 +50,6 @@ public class SuggestionResponse {
 
     public String getSuggestionName() {
         return suggestionName;
-    }
-
-    public Suggestion getCurrSuggestion() {
-        return currSuggestion;
     }
 
     public String getLocation() {
@@ -103,10 +96,6 @@ public class SuggestionResponse {
 
     public void setVotes(int votes) {
         this.votes = votes;
-    }
-
-    public void setCurrSuggestion(Suggestion currSuggestion) {
-        this.currSuggestion = currSuggestion;
     }
 
     public void setMobile_url(String mobile_url) {

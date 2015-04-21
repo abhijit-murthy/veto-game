@@ -12,6 +12,11 @@ public class Person {
     private int id;
     private String userId;
 
+    Person(String name, String userId){
+        this.name = name;
+        this.userId = userId;
+    }
+
     Person(String name, String userId, Boolean checked){
         this.name = name;
         this.userId = userId;

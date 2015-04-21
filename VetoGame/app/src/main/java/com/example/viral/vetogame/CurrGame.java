@@ -27,7 +27,8 @@ public class CurrGame extends Activity {
     private TextView timeWin;
     private static final String FORMAT = "%02dd %02dh %02dm %02ds";
     private RestClient restClient;
-    int counter = 1;
+    private int votes;
+    private int num_players;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,38 +36,16 @@ public class CurrGame extends Activity {
         setContentView(R.layout.activity_curr_game);
 
         currGame = (Game) getIntent().getSerializableExtra("currGame");
+        
         Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
         btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
-
+        
         restClient = new RestClient();
-        restClient.getSuggestionInfo().getCurrSuggestion(currGame.getGameId(), new Callback<SuggestionResponse>() {
-            @Override
-            public void success(SuggestionResponse suggestionResponses, Response response) {
-                System.out.println("CURRGAME game rep: "+suggestionResponses);
-                int votes =  suggestionResponses.getVotes();
-                System.out.println("CURRGAME game id: "+currGame.getGameId());
-                System.out.println("CURRGAME sug id: "+suggestionResponses.getId());
-                System.out.println("CURRGAME gameId: "+suggestionResponses.getGameId());
-                System.out.println("CURRGAME userId: "+suggestionResponses.getUserId());
 
-                TextView numSupportsView = (TextView) findViewById(R.id.num_supporters);
-                System.out.println("CURRGAME votes: "+suggestionResponses.getVotes());
-                numSupportsView.setText(Integer.toString(votes+1) + "/" + currGame.getNumberOfMembers());
-
-                TextView addressView = (TextView) findViewById(R.id.curr_suggestion_address);
-                System.out.println("CURRGAME location: "+suggestionResponses.getLocation());
-                addressView.setText(suggestionResponses.getLocation());
-
-                ImageView imageView = (ImageView) findViewById(R.id.curr_suggestion_image);
-                //imageView.setText(Integer.toString(votes)+"/"+currGame.getNumberOfMembers());
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                System.out.println("CURRGAME FINISHED");
-            }
-        });
+        votes =  currGame.getCurrentSuggestion().getVotes();
+        num_players = currGame.getNumberOfMembers();
+        TextView tv = (TextView) findViewById(R.id.num_supporters);
+        tv.setText(Integer.toString(votes)+"/"+Integer.toString(num_players));
 
         findViewById(R.id.btn_past_suggestions).setOnClickListener(
                 new View.OnClickListener() {
@@ -90,29 +69,24 @@ public class CurrGame extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        restClient.getSuggestionInfo().getCurrSuggestion(currGame.getGameId(), new Callback<SuggestionResponse>() {
-                            @Override
-                            public void success(SuggestionResponse suggestionResponses, Response response) {
-                                int count =  suggestionResponses.getVotes();
-                                System.out.println("count "+count);
-                                System.out.println("counter "+counter);
-                                if(counter < currGame.getNumberOfMembers()){
-                                    System.out.println("count");
-                                    System.out.println("counter2 "+counter);
-                                    counter++;
-                                    TextView tv = (TextView) findViewById(R.id.num_supporters);
-                                    tv.setText(Integer.toString(counter)+"/"+currGame.getNumberOfMembers());
-                                }
-                            }
+                        if (votes < num_players) {
 
-                            @Override
-                            public void failure(RetrofitError error) {
-                                System.out.println("CURRGAME FINISHED");
-                            }
-                        });
+                            restClient.getSuggestionInfo().upvote(currGame.getGameId(), currGame.getCurrentSuggestion().getSuggestionId(), new Callback<SuggestionResponse>() {
+                                @Override
+                                public void success(SuggestionResponse suggestionResponses, Response response) {
+                                    votes = suggestionResponses.getVotes();
+                                    TextView tv = (TextView) findViewById(R.id.num_supporters);
+                                    tv.setText(Integer.toString(votes) + "/" + Integer.toString(num_players));
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    System.out.println("CURRGAME FINISHED");
+                                }
+                            });
+                        }
                     }
                 });
-
 
         timeWin = (TextView) findViewById(R.id.remaining_time_win);
 

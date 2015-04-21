@@ -22,6 +22,7 @@ import java.util.List;
 
 import api.RestClient;
 import api.model.GameResponse;
+import api.model.SuggestionResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -138,7 +139,7 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
 
     public void initGame(ListView list, TextView emptyText){
         restClient = new RestClient();
-        restClient.getGameInfo().getPastGames("TESTID", new Callback<List<GameResponse>>() {
+        restClient.getGameInfo().getPastGames("ABMURTHY", new Callback<List<GameResponse>>() {
             @Override
             public void success(List<GameResponse> gameResponses, Response response) {
                 for(int i=0; i < gameResponses.size(); i++){
@@ -147,10 +148,11 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
                     Calendar endingTime = Calendar.getInstance();
                     endingTime.setTime(gameResponses.get(i).getEventTime());
 
+                    Suggestion finalSuggestion = new Suggestion(gameResponses.get(i).getSuggestionResponse().getSuggestionName(),
+                            gameResponses.get(i).getSuggestionResponse().getLocation(), gameResponses.get(i).getSuggestionResponse().getId());
                     Game game = new Game(gameResponses.get(i).getGameId(), gameResponses.get(i).getGameName(),
-                            eventTime, gameResponses.get(i).getEventType(), endingTime,
-                            gameResponses.get(i).getSuggestionTtl(), gameResponses.get(i).getCenter(), gameResponses.get(i).getRadius(),
-                            new Suggestion("The Muffin Bakery"),  3);
+                            eventTime, gameResponses.get(i).getEventType(), endingTime, gameResponses.get(i).getSuggestionTtl(),
+                            gameResponses.get(i).getCenter(), gameResponses.get(i).getRadius(), finalSuggestion, gameResponses.get(i).getUserCount());
 
                     adapter.addGame(game);
                 }
