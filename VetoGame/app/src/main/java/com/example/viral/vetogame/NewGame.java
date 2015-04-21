@@ -28,6 +28,7 @@ import java.util.Locale;
 
 import api.RestClient;
 import api.model.GameResponse;
+import api.model.SuggestionResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -263,7 +264,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
             tempSuggestion = suggestion;//new Suggestion("The Muffin Bakery");
             restClient = new RestClient();
 
-            restClient.getGameInfo().createGame("ABMURTHY", gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
+            restClient.getGameInfo().createGame(Login.getUser(), gameType, suggestionTtl, center, radius, gameName, formatDatetime(startTime), formatDatetime(endTime), new Callback<GameResponse>() {
                 @Override
                 public void success(GameResponse gameResponse, Response response) {
                     gameId = gameResponse.getGameId();
@@ -283,6 +284,22 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
                         });
                     }
                     Game game = new Game(gameId, gameName, startTime, gameType, endTime, suggestionTtl, center, radius, tempSuggestion,  (numberInvited+1));
+
+                    restClient.getSuggestionInfo().createSuggestion(Login.getUser(),gameId,suggestion.getName(),
+                            suggestion.getLocation_string(), suggestion.getMobileURL(), suggestion.getImage(),
+                            suggestion.getRatingImg(), new Callback<SuggestionResponse>(){
+                        @Override
+                        public void success(SuggestionResponse suggestionResponse, Response response) {
+                            int check = 0;
+                            System.out.println("RETRO SUCCESS");
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            System.out.println("RETRO ERROR");
+                            Log.i("Error ", error.getMessage());
+                        }
+                    });
 
                     Intent intent = new Intent(NewGame.this,GameList.class);
                     System.out.println("put game in intent");

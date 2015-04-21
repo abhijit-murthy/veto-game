@@ -44,6 +44,7 @@ public class PastGameAdapter extends ArrayAdapter<Game> {
 
     public void addGame(Game game){
         games.add(game);
+        displayList.add(game);
         System.out.println("game added\nsize is: "+games.size());
         notifyDataSetChanged();
     }

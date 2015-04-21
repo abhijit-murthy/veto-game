@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.os.CountDownTimer;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -26,23 +27,44 @@ public class CurrGame extends Activity {
     private TextView timeWin;
     private static final String FORMAT = "%02dd %02dh %02dm %02ds";
     private RestClient restClient;
+    int counter = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curr_game);
+
+        currGame = (Game) getIntent().getSerializableExtra("currGame");
+        Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
+        btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
+
         restClient = new RestClient();
-        restClient.getSuggestionInfo().getCurrSuggestion("1", new Callback<SuggestionResponse>() {
+        restClient.getSuggestionInfo().getCurrSuggestion(currGame.getGameId(), new Callback<SuggestionResponse>() {
             @Override
             public void success(SuggestionResponse suggestionResponses, Response response) {
-                int count =  suggestionResponses.getCount();
-                TextView tv = (TextView) findViewById(R.id.num_supporters);
-                tv.setText(Integer.toString(count)+"/3");
+                System.out.println("CURRGAME game rep: "+suggestionResponses);
+                int votes =  suggestionResponses.getVotes();
+                System.out.println("CURRGAME game id: "+currGame.getGameId());
+                System.out.println("CURRGAME sug id: "+suggestionResponses.getId());
+                System.out.println("CURRGAME gameId: "+suggestionResponses.getGameId());
+                System.out.println("CURRGAME userId: "+suggestionResponses.getUserId());
+
+                TextView numSupportsView = (TextView) findViewById(R.id.num_supporters);
+                System.out.println("CURRGAME votes: "+suggestionResponses.getVotes());
+                numSupportsView.setText(Integer.toString(votes+1) + "/" + currGame.getNumberOfMembers());
+
+                TextView addressView = (TextView) findViewById(R.id.curr_suggestion_address);
+                System.out.println("CURRGAME location: "+suggestionResponses.getLocation());
+                addressView.setText(suggestionResponses.getLocation());
+
+                ImageView imageView = (ImageView) findViewById(R.id.curr_suggestion_image);
+                //imageView.setText(Integer.toString(votes)+"/"+currGame.getNumberOfMembers());
+
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                System.out.println("CURRGAME FINISHED");
             }
         });
 
@@ -68,28 +90,29 @@ public class CurrGame extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        restClient.getSuggestionInfo().getCurrSuggestion("1", new Callback<SuggestionResponse>() {
+                        restClient.getSuggestionInfo().getCurrSuggestion(currGame.getGameId(), new Callback<SuggestionResponse>() {
                             @Override
                             public void success(SuggestionResponse suggestionResponses, Response response) {
-                                int count =  suggestionResponses.getCount();
-                                if(count < 3){
+                                int count =  suggestionResponses.getVotes();
+                                System.out.println("count "+count);
+                                System.out.println("counter "+counter);
+                                if(counter < currGame.getNumberOfMembers()){
+                                    System.out.println("count");
+                                    System.out.println("counter2 "+counter);
+                                    counter++;
                                     TextView tv = (TextView) findViewById(R.id.num_supporters);
-                                    tv.setText(Integer.toString(count+1)+"/3");
+                                    tv.setText(Integer.toString(counter)+"/"+currGame.getNumberOfMembers());
                                 }
                             }
 
                             @Override
                             public void failure(RetrofitError error) {
-
+                                System.out.println("CURRGAME FINISHED");
                             }
                         });
                     }
                 });
 
-        currGame = (Game) getIntent().getSerializableExtra("currGame");
-
-        Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
-        btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
 
         timeWin = (TextView) findViewById(R.id.remaining_time_win);
 
