@@ -331,7 +331,7 @@ function getCurrentSuggestion(req,res,next){
 				return sequelize.Promise.reject(new restify.InvalidArgumentError("Bad Game Id"));
 			else{
 				game = result;
-				return db.getCurrentSuggestion(game);
+				return db.isGameFinished(game);
 			}
 		}
 	).then(
