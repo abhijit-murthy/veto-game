@@ -1,6 +1,9 @@
 package api.model;
 
+import com.example.viral.vetogame.Person;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 /**
  * Created by eunkikim on 3/7/15.
@@ -21,6 +24,9 @@ public class UserResponse {
     @SerializedName("extras")
     private int extras;
 
+    @SerializedName("users")
+    private List<UserResponse> players;
+
     public int getExtras() {
         return extras;
     }
@@ -39,5 +45,9 @@ public class UserResponse {
 
     public int getPoints() {
         return points;
+    }
+
+    public List<UserResponse> getPlayers() {
+        return players;
     }
 }

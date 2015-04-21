@@ -9,6 +9,7 @@ import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.FormUrlEncoded;
+import java.util.List;
 
 /**
  * Created by eunkikim on 3/7/15.
@@ -21,4 +22,7 @@ public interface UserInfo {
 
     @GET("/user_data/{id}")
     public void getUser(@Path("id") String userId, Callback<UserResponse> callback);
+
+    @GET("/user_data/get_game_users/{game_id}")
+    public void getUsers(@Path("game_id") String gameId, Callback<UserResponse> callback);
 }

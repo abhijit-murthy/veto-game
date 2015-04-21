@@ -3,6 +3,7 @@ package com.example.viral.vetogame;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,21 +14,28 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
 import api.RestClient;
 import api.model.SuggestionResponse;
+import api.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.view.View.OnClickListener;
 
 
-public class CurrGame extends Activity {
+public class CurrGame extends Activity implements OnClickListener{
     private Game currGame;
     private TextView timeWin;
     private static final String FORMAT = "%02dd %02dh %02dm %02ds";
     private RestClient restClient;
     private int votes;
     private int num_players;
+    private Button btnPlayers;
+    private AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +43,27 @@ public class CurrGame extends Activity {
         setContentView(R.layout.activity_curr_game);
 
         currGame = (Game) getIntent().getSerializableExtra("currGame");
+        num_players = currGame.getNumberOfMembers();
 
         restClient = new RestClient();
+        builder = new AlertDialog.Builder(this);
 
-        votes =  currGame.getCurrentSuggestion().getVotes();
-        num_players = currGame.getNumberOfMembers();
-        TextView tv = (TextView) findViewById(R.id.num_supporters);
-        tv.setText(Integer.toString(votes)+"/"+Integer.toString(num_players));
+        restClient.getSuggestionInfo().upvote(currGame.getGameId(), currGame.getCurrentSuggestion().getSuggestionId(), new Callback<SuggestionResponse>() {
+            @Override
+            public void success(SuggestionResponse suggestionResponses, Response response) {
+                votes = suggestionResponses.getCurrVotes();
+                TextView tv = (TextView) findViewById(R.id.num_supporters);
+                tv.setText(Integer.toString(votes) + "/" + Integer.toString(num_players));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Error ", error.getMessage());
+            }
+        });
+
+        btnPlayers = (Button) findViewById(R.id.btn_players);
+        btnPlayers.setOnClickListener(this);
 
         findViewById(R.id.btn_past_suggestions).setOnClickListener(
                 new View.OnClickListener() {
@@ -72,12 +94,12 @@ public class CurrGame extends Activity {
                                 public void success(SuggestionResponse suggestionResponses, Response response) {
                                     votes = suggestionResponses.getCurrVotes();
                                     TextView tv = (TextView) findViewById(R.id.num_supporters);
-                                    tv.setText(Integer.toString(votes)+"/"+Integer.toString(num_players));
+                                    tv.setText(Integer.toString(votes) + "/" + Integer.toString(num_players));
                                 }
 
                                 @Override
                                 public void failure(RetrofitError error) {
-
+                                    Log.i("Error ", error.getMessage());
                                 }
                             });
                         }
@@ -115,6 +137,40 @@ public class CurrGame extends Activity {
     }
 
     @Override
+    public void onClick(View v) {
+
+        restClient.getUserInfo().getUsers(currGame.getGameId(), new Callback<UserResponse>() {
+            @Override
+            public void success(UserResponse userResponse, Response response) {
+                List<String> listItems = new ArrayList<String>();
+
+                List<UserResponse> people = userResponse.getPlayers();
+
+                for(int i=0; i<people.size(); i++){
+                    listItems.add(people.get(i).getUserName());
+                }
+
+                final CharSequence[] players = listItems.toArray(new CharSequence[listItems.size()]);
+
+                builder.setTitle("Players in this game");
+                builder.setItems(players, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.i("Error ", error.getMessage());
+            }
+        });
+
+
+    }
+
+        @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_curr_game, menu);

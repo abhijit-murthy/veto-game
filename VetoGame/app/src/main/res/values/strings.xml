@@ -28,6 +28,8 @@
     <string name="zipCode">Zip Code</string>
     <string name="create_game">Create a new game</string>
     <string name="view_past_games">View Past Games</string>
+    <string name="all_players"><u><b>All Players</b></u></string>
+    <string name="past_suggestions"><u><b>Past Suggestions</b></u></string>
 
     <string-array name="game_topic">
         <item>breakfast</item>
