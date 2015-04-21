@@ -1,6 +1,5 @@
 package api.model;
 
-import com.example.viral.vetogame.Suggestion;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

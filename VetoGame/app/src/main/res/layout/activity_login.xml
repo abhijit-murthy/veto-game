@@ -11,7 +11,7 @@
         android:layout_height="200dp"
         android:id="@+id/logoView"
         android:layout_gravity="center"
-        android:src="@drawable/veto_stamp"
+        android:src="@drawable/muffin_logo"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="85dp" />

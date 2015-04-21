@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 public class Login extends Activity {
 
     private ImageButton loginButton;
+    private static String user = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +27,15 @@ public class Login extends Activity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(Login.this,GameList.class);
+                user = "ABMURTHY";
                 startActivity(intent);
             }
         });
     }
 
+    public static String getUser(){
+        return user;
+    }
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {

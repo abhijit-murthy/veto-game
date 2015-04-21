@@ -22,7 +22,9 @@ public interface SuggestionInfo {
     @FormUrlEncoded
     @POST("/suggestion_data/create")
     public void createSuggestion(@Field("user_id") String userId, @Field("game_id") String gameId,
-                           @Field("name") int suggestion, @Field("location") String location,
+                           @Field("name") String suggestion, @Field("location") String location,
+                           @Field("mobile_url") String mobile_url, @Field("image_url") String image_url,
+                           @Field("rating_url") String rating_url,
                            Callback<SuggestionResponse> callback);
 
     @FormUrlEncoded

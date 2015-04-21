@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.os.CountDownTimer;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -44,6 +45,9 @@ public class CurrGame extends Activity implements OnClickListener{
 
         currGame = (Game) getIntent().getSerializableExtra("currGame");
         num_players = currGame.getNumberOfMembers();
+        
+        Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
+        btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
 
         restClient = new RestClient();
         builder = new AlertDialog.Builder(this);
@@ -51,7 +55,7 @@ public class CurrGame extends Activity implements OnClickListener{
         restClient.getSuggestionInfo().upvote(currGame.getGameId(), currGame.getCurrentSuggestion().getSuggestionId(), new Callback<SuggestionResponse>() {
             @Override
             public void success(SuggestionResponse suggestionResponses, Response response) {
-                votes = suggestionResponses.getCurrVotes();
+                votes = suggestionResponses.getVotes();
                 TextView tv = (TextView) findViewById(R.id.num_supporters);
                 tv.setText(Integer.toString(votes) + "/" + Integer.toString(num_players));
             }
@@ -87,12 +91,12 @@ public class CurrGame extends Activity implements OnClickListener{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(votes < num_players){
+                        if (votes < num_players) {
 
                             restClient.getSuggestionInfo().upvote(currGame.getGameId(), currGame.getCurrentSuggestion().getSuggestionId(), new Callback<SuggestionResponse>() {
                                 @Override
                                 public void success(SuggestionResponse suggestionResponses, Response response) {
-                                    votes = suggestionResponses.getCurrVotes();
+                                    votes = suggestionResponses.getVotes();
                                     TextView tv = (TextView) findViewById(R.id.num_supporters);
                                     tv.setText(Integer.toString(votes) + "/" + Integer.toString(num_players));
                                 }
@@ -100,14 +104,12 @@ public class CurrGame extends Activity implements OnClickListener{
                                 @Override
                                 public void failure(RetrofitError error) {
                                     Log.i("Error ", error.getMessage());
+                                    System.out.println("CURRGAME FINISHED");
                                 }
                             });
                         }
                     }
                 });
-
-        Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
-        btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
 
         timeWin = (TextView) findViewById(R.id.remaining_time_win);
 
