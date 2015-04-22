@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import api.RestClient;
 import api.model.GameResponse;
@@ -55,12 +56,8 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
 
         // Configure device list.
         adapter = new PastGameAdapter(this,games);
-        ListView list = (ListView) findViewById(R.id.past_game_list);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(createOnItemClickListener());
-        TextView emptyText = (TextView)findViewById(R.id.emptyGamesView);
-        initGame(list, emptyText);
 
+        initGame();
         /*Button button = (Button) findViewById(R.id.btn_back);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -137,13 +134,18 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
         return false;
     }
 
-    public void initGame(ListView list, TextView emptyText){
+    public void initGame(){
         restClient = new RestClient();
         restClient.getGameInfo().getPastGames("ABMURTHY", new Callback<List<GameResponse>>() {
             @Override
             public void success(List<GameResponse> gameResponses, Response response) {
+                ListView list = (ListView) findViewById(R.id.past_game_list);
+                list.setAdapter(adapter);
+                list.setOnItemClickListener(createOnItemClickListener());
+                TextView emptyText = (TextView)findViewById(R.id.emptyPastGamesView);
+
                 for(int i=0; i < gameResponses.size(); i++){
-                    Calendar eventTime = Calendar.getInstance();
+                    Calendar eventTime = Calendar.getInstance(TimeZone.getDefault());
                     eventTime.setTime(gameResponses.get(i).getEventTime());
                     Calendar endingTime = Calendar.getInstance();
                     endingTime.setTime(gameResponses.get(i).getEventTime());
@@ -156,6 +158,11 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
 
                     adapter.addGame(game);
                 }
+
+                if(gameResponses.size()==0){
+                    emptyText.setText(R.string.empty_past_game_list);
+                    list.setEmptyView(emptyText);
+                }
             }
 
             @Override
@@ -163,10 +170,5 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
                 Log.i("Error ", error.getMessage());
             }
         });
-
-        if(games.size()>0){
-            emptyText.setText(R.string.no_results);
-        }
-        list.setEmptyView(emptyText);
     }
 }
