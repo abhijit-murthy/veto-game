@@ -110,7 +110,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "name",
+            "field": "game_name",
             "description": "<p>Name of the Game being created</p> "
           },
           {
