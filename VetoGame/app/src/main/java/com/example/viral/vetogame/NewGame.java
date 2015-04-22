@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import api.RestClient;
 import api.model.GameResponse;
@@ -462,6 +463,12 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
 
     // Date and time format: yyyy-mm-dd hh:mm:ss
     public String formatDatetime(Calendar calendar){
+
+        DateFormat converter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        converter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        String result = converter.format(calendar.getTime());
+        /*
         String tmp1 = "";
         String tmp2 = "";
         int m = calendar.get(Calendar.MONTH)+1;
@@ -485,8 +492,8 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         else tmp2 = ""+d;
 
         String time = calendar.get(Calendar.HOUR_OF_DAY) + ":" + tmp1 + ":" + tmp2;
-
-        return date+" "+time;
+        */
+        return result;
     }
 
 }
