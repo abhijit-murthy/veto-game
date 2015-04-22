@@ -166,6 +166,9 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
 
                     Suggestion currSuggestion = new Suggestion(gameResponses.get(i).getSuggestionResponse().getSuggestionName(),
                             gameResponses.get(i).getSuggestionResponse().getLocation(), gameResponses.get(i).getSuggestionResponse().getId());
+                    currSuggestion.setMobileURL(gameResponses.get(i).getSuggestionResponse().getMobile_url());
+                    currSuggestion.setRatingImg(gameResponses.get(i).getSuggestionResponse().getRating_url());
+                    currSuggestion.setImage(gameResponses.get(i).getSuggestionResponse().getImage_url());
                     Game game = new Game(gameResponses.get(i).getGameId(), gameResponses.get(i).getGameName(),
                             eventTime, gameResponses.get(i).getEventType(), endingTime, gameResponses.get(i).getSuggestionTtl(),
                             gameResponses.get(i).getCenter(), gameResponses.get(i).getRadius(), currSuggestion,  gameResponses.get(i).getUserCount());

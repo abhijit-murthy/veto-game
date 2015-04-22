@@ -45,9 +45,17 @@ public class CurrGame extends Activity implements OnClickListener{
 
         currGame = (Game) getIntent().getSerializableExtra("currGame");
         num_players = currGame.getNumberOfMembers();
-        
+
         Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
+
         btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
+
+        TextView addressView = (TextView) findViewById(R.id.curr_suggestion_address);
+        addressView.setText(currGame.getCurrentSuggestion().getLocation_string());
+
+        System.out.println("CURRGAME sug id: "+currGame.getCurrentSuggestion().getSuggestionId());
+        ImageView imageView = (ImageView) findViewById(R.id.curr_suggestion_image);
+        new GetImageFromURL(imageView).execute(currGame.getCurrentSuggestion().getImage());
 
         restClient = new RestClient();
         builder = new AlertDialog.Builder(this);

@@ -229,7 +229,7 @@ class GetImageFromURL extends AsyncTask<String, Void, Drawable> {
         try {
             InputStream is = (InputStream) new URL(url[0]).getContent();
             Drawable d = Drawable.createFromStream(is, "src name");
-            //System.out.println("YELP returning");
+            //System.out.println("Got the image");
             return d;
         } catch (Exception e) {
             System.out.println("YELP error");
@@ -240,6 +240,7 @@ class GetImageFromURL extends AsyncTask<String, Void, Drawable> {
 
     protected void onPostExecute(Drawable drawable) {
         imageView.setImageDrawable(drawable);
+        //imageView.invalidate();
         // TODO: check this.exception
         // TODO: do something with the feed
     }
