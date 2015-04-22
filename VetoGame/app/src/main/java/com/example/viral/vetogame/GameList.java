@@ -165,7 +165,8 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
                     endingTime.setTime(gameResponses.get(i).getEventTime());
 
                     Suggestion currSuggestion = new Suggestion(gameResponses.get(i).getSuggestionResponse().getSuggestionName(),
-                            gameResponses.get(i).getSuggestionResponse().getLocation(), gameResponses.get(i).getSuggestionResponse().getId());
+                            gameResponses.get(i).getSuggestionResponse().getLocation(), gameResponses.get(i).getSuggestionResponse().getId(),
+                            gameResponses.get(i).getSuggestionResponse().getCreatedAt());
                     currSuggestion.setMobileURL(gameResponses.get(i).getSuggestionResponse().getMobile_url());
                     currSuggestion.setRatingImg(gameResponses.get(i).getSuggestionResponse().getRating_url());
                     currSuggestion.setImage(gameResponses.get(i).getSuggestionResponse().getImage_url());

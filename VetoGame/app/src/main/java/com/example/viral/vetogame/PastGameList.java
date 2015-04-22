@@ -151,7 +151,8 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
                     endingTime.setTime(gameResponses.get(i).getEventTime());
 
                     Suggestion finalSuggestion = new Suggestion(gameResponses.get(i).getSuggestionResponse().getSuggestionName(),
-                            gameResponses.get(i).getSuggestionResponse().getLocation(), gameResponses.get(i).getSuggestionResponse().getId());
+                            gameResponses.get(i).getSuggestionResponse().getLocation(), gameResponses.get(i).getSuggestionResponse().getId(),
+                            gameResponses.get(i).getSuggestionResponse().getCreatedAt());
                     Game game = new Game(gameResponses.get(i).getGameId(), gameResponses.get(i).getGameName(),
                             eventTime, gameResponses.get(i).getEventType(), endingTime, gameResponses.get(i).getSuggestionTtl(),
                             gameResponses.get(i).getCenter(), gameResponses.get(i).getRadius(), finalSuggestion, gameResponses.get(i).getUserCount());

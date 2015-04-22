@@ -13,10 +13,14 @@ import android.os.CountDownTimer;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
+import java.util.Date;
 
 import api.RestClient;
 import api.model.SuggestionResponse;
@@ -132,9 +136,21 @@ public class CurrGame extends Activity implements OnClickListener{
 
         timeWin = (TextView) findViewById(R.id.remaining_time_win);
 
-        long startTime = Calendar.getInstance().getTimeInMillis();
-        long endTime = currGame.getTimeEnding().getTimeInMillis();
-        long diffTime = endTime - startTime;
+
+        DateFormat converter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        converter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        Calendar suggestionTime = Calendar.getInstance(TimeZone.getTimeZone("EDT"));
+        suggestionTime.setTime(currGame.getCurrentSuggestion().getCreatedAt());
+        long startTime = Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis();
+        long suggestionEndTime = suggestionTime.getTimeInMillis()+TimeUnit.MINUTES.toMillis(currGame.getSuggestionTTL());
+
+        String currTime = converter.format(Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTime());
+        String createdTime = converter.format(suggestionTime.getTime());
+        String ttlEndTime = converter.format(new Date(suggestionEndTime * 1000));
+
+        //long endTime = currGame.getTimeEnding().getTimeInMillis();
+        long diffTime = suggestionEndTime - startTime;
 
         new CountDownTimer(diffTime, 1000) { // adjust the milli seconds here
 

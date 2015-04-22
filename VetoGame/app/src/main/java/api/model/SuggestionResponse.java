@@ -36,6 +36,9 @@ public class SuggestionResponse {
     @SerializedName("rating_url")
     private String rating_url;
 
+    @SerializedName("createdAt")
+    private Date createdAt;
+
     public String getId() {
         return id;
     }
@@ -74,6 +77,10 @@ public class SuggestionResponse {
 
     public String getRating_url() {
         return rating_url;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
     //============= Setters ============================

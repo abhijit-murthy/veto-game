@@ -5,6 +5,7 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Viral on 2/19/2015.
@@ -24,12 +25,14 @@ public class Suggestion implements Serializable{
     private String ratingImg;
     private String image;
     private String mobileURL;
+    private Date createdAt;
     private int numReviews;
 
-    public Suggestion(String name, String location_string, String suggestionId){
+    public Suggestion(String name, String location_string, String suggestionId, Date createdAt){
         this.name = name;
         this.location_string = location_string;
         this.suggestionId = suggestionId;
+        this.createdAt = createdAt;
         votes = 1;
     }
 
@@ -97,6 +100,13 @@ public class Suggestion implements Serializable{
         this.location_string = address+", "+city+", "+state;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
     /*public int getRating() {
         return rating;
     }
