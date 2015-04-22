@@ -37,6 +37,7 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
     String TabFragmentLocate;
     String TabFragmentFind;
     boolean locationFound = false;
+    private Game currGame;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,8 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
         newSuggestionPagerAdapter = new NewSuggestionPagerAdapter(getSupportFragmentManager());
+
+        currGame = (Game) getIntent().getSerializableExtra("currGame");
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -160,5 +163,13 @@ public class NewSuggestion extends FragmentActivity implements ActionBar.TabList
 
     public ActionBar.Tab getTab(int index){
         return getActionBar().getTabAt(index);
+    }
+
+    public Game getCurrGame() {
+        return currGame;
+    }
+
+    public void setCurrGame(Game currGame) {
+        this.currGame = currGame;
     }
 }
