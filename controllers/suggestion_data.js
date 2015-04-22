@@ -193,7 +193,7 @@ function veto(req,res,next){
 			if(isGameFinished){
 				return sequelize.Promise.reject({code: "GameFinished",message: "Game has ended"});
 			}else {
-				return db.getSuggestion(req.params.suggestion_id);
+				return db.getSuggestion(req.params.curr_suggestion_id);
 			}
 		}
 	).then(
