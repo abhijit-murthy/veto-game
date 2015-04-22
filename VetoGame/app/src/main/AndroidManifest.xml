@@ -111,6 +111,9 @@
             android:label="@string/title_activity_curr_game"
             android:parentActivityName=".GameList"
             android:screenOrientation="portrait">
+            <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

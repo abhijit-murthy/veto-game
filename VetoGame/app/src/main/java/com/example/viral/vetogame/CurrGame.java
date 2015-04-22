@@ -2,6 +2,8 @@ package com.example.viral.vetogame;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -31,6 +34,15 @@ import retrofit.client.Response;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class CurrGame extends Activity implements OnClickListener{
@@ -42,6 +54,7 @@ public class CurrGame extends Activity implements OnClickListener{
     private int num_players;
     private Button btnPlayers;
     private AlertDialog.Builder builder;
+    private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +64,7 @@ public class CurrGame extends Activity implements OnClickListener{
         currGame = (Game) getIntent().getSerializableExtra("currGame");
         num_players = currGame.getNumberOfMembers();
 
+        map = ((MapFragment) this.getFragmentManager().findFragmentById(R.id.currGameMapView)).getMap();
         updateScreen(currGame);
 
         restClient = new RestClient();
@@ -260,6 +274,7 @@ public class CurrGame extends Activity implements OnClickListener{
     }
 
     public void updateScreen(final Game game){
+        LatLng latLng = getLocationFromAddress(game.getCurrentSuggestion().getLocation_string());
         Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
         btnCurrSuggestion.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -277,5 +292,39 @@ public class CurrGame extends Activity implements OnClickListener{
         //System.out.println("CURRGAME sug id: "+currGame.getCurrentSuggestion().getSuggestionId());
         ImageView imageView = (ImageView) findViewById(R.id.curr_suggestion_image);
         new GetImageFromURL(imageView).execute(game.getCurrentSuggestion().getImage());
+
+        if(map!=null){
+            if(latLng != null) {
+                map.clear();
+                MarkerOptions eventMark = new MarkerOptions().position(latLng)
+                        .title(game.getCurrentSuggestion().getName());
+                map.addMarker(eventMark);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng,13);
+                map.animateCamera(cameraUpdate);
+            }
+        }
     }
+
+    public LatLng getLocationFromAddress(String strAddress) {
+        LatLng latLng = null;
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                Toast.makeText(this, "Unable to geocode location", Toast.LENGTH_LONG).show();
+                return null;
+            }
+            Address location = address.get(0);
+            latLng = new LatLng(location.getLatitude(),location.getLongitude());
+
+            return latLng;
+        } catch (IOException e) {
+            Toast.makeText(this, "Unable to geocode location", Toast.LENGTH_LONG).show();
+        }
+
+        return latLng;
+    }
+
 }
