@@ -2,6 +2,7 @@ package com.example.viral.vetogame;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -47,20 +48,27 @@ public class CurrGame extends Activity implements OnClickListener{
         num_players = currGame.getNumberOfMembers();
 
         Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
+        btnCurrSuggestion.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Uri uri = Uri.parse(currGame.getCurrentSuggestion().getMobileURL());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
 
         btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
 
         TextView addressView = (TextView) findViewById(R.id.curr_suggestion_address);
         addressView.setText(currGame.getCurrentSuggestion().getLocation_string());
 
-        System.out.println("CURRGAME sug id: "+currGame.getCurrentSuggestion().getSuggestionId());
+        //System.out.println("CURRGAME sug id: "+currGame.getCurrentSuggestion().getSuggestionId());
         ImageView imageView = (ImageView) findViewById(R.id.curr_suggestion_image);
         new GetImageFromURL(imageView).execute(currGame.getCurrentSuggestion().getImage());
 
         restClient = new RestClient();
         builder = new AlertDialog.Builder(this);
 
-        restClient.getSuggestionInfo().upvote(currGame.getGameId(), currGame.getCurrentSuggestion().getSuggestionId(), new Callback<SuggestionResponse>() {
+        restClient.getSuggestionInfo().getCurrSuggestion(currGame.getGameId(), new Callback<SuggestionResponse>() {
             @Override
             public void success(SuggestionResponse suggestionResponses, Response response) {
                 votes = suggestionResponses.getVotes();
@@ -101,10 +109,13 @@ public class CurrGame extends Activity implements OnClickListener{
                     public void onClick(View v) {
                         if (votes < num_players) {
 
+                            //System.out.println("UPVOTE: before: "+votes);
+                            //System.out.println("UPVOTE: Sugg ID: "+currGame.getCurrentSuggestion().getSuggestionId());
                             restClient.getSuggestionInfo().upvote(currGame.getGameId(), currGame.getCurrentSuggestion().getSuggestionId(), new Callback<SuggestionResponse>() {
                                 @Override
                                 public void success(SuggestionResponse suggestionResponses, Response response) {
                                     votes = suggestionResponses.getVotes();
+                                    //System.out.println("UPVOTE after: "+votes);
                                     TextView tv = (TextView) findViewById(R.id.num_supporters);
                                     tv.setText(Integer.toString(votes) + "/" + Integer.toString(num_players));
                                 }
