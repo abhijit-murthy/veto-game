@@ -51,23 +51,7 @@ public class CurrGame extends Activity implements OnClickListener{
         currGame = (Game) getIntent().getSerializableExtra("currGame");
         num_players = currGame.getNumberOfMembers();
 
-        Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
-        btnCurrSuggestion.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Uri uri = Uri.parse(currGame.getCurrentSuggestion().getMobileURL());
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-            }
-        });
-
-        btnCurrSuggestion.setText(currGame.getCurrentSuggestion().toString());
-
-        TextView addressView = (TextView) findViewById(R.id.curr_suggestion_address);
-        addressView.setText(currGame.getCurrentSuggestion().getLocation_string());
-
-        //System.out.println("CURRGAME sug id: "+currGame.getCurrentSuggestion().getSuggestionId());
-        ImageView imageView = (ImageView) findViewById(R.id.curr_suggestion_image);
-        new GetImageFromURL(imageView).execute(currGame.getCurrentSuggestion().getImage());
+        updateScreen(currGame);
 
         restClient = new RestClient();
         builder = new AlertDialog.Builder(this);
@@ -104,7 +88,8 @@ public class CurrGame extends Activity implements OnClickListener{
                     public void onClick(View v) {
                         Intent intent = new Intent(CurrGame.this,
                                 NewSuggestion.class);
-                        startActivity(intent);
+                        intent.putExtra("currGame", currGame);
+                        startActivityForResult(intent,1);
                     }
                 });
         findViewById(R.id.btn_upvote).setOnClickListener(
@@ -227,5 +212,70 @@ public class CurrGame extends Activity implements OnClickListener{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        //System.out.println("requestCode "+requestCode);
+        //System.out.println("resultCode "+resultCode);
+        //System.out.println("number = "+data.getIntExtra("numberInvited",0));
+        if (requestCode == 1) {
+            if(data != null) {
+                final Game updatedGame = (Game) data.getSerializableExtra("currGame");
+                /*System.out.println("VETO gameID: "+updatedGame.getGameId());
+                System.out.println("VETO suggID: "+updatedGame.getCurrentSuggestion().getSuggestionId());
+                System.out.println("VETO suggID: "+currGame.getCurrentSuggestion().getSuggestionId());
+                System.out.println("VETO suggName: "+updatedGame.getCurrentSuggestion().getName());
+                System.out.println("VETO url: "+updatedGame.getCurrentSuggestion().getMobileURL());*/
+
+                restClient.getSuggestionInfo().
+                        veto(updatedGame.getGameId(), Login.getUser(),
+                                currGame.getCurrentSuggestion().getSuggestionId(),
+                                updatedGame.getCurrentSuggestion().getName(),
+                                updatedGame.getCurrentSuggestion().getLocation_string(),
+                                updatedGame.getCurrentSuggestion().getMobileURL(),
+                                updatedGame.getCurrentSuggestion().getImage(),
+                                updatedGame.getCurrentSuggestion().getRatingImg(),
+                                new Callback<SuggestionResponse>() {
+                    @Override
+                    public void success(SuggestionResponse suggestionResponses, Response response) {
+                        votes = suggestionResponses.getVotes();
+                        //System.out.println("VETO after: "+votes);
+                        TextView tv = (TextView) findViewById(R.id.num_supporters);
+                        tv.setText(Integer.toString(votes) + "/" + Integer.toString(num_players));
+                        updateScreen(updatedGame);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.i("Error ", error.getMessage());
+                        System.out.println("VETO FAILED");
+                    }
+                });
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void updateScreen(final Game game){
+        Button btnCurrSuggestion = (Button) findViewById(R.id.btn_curr_suggestion);
+        btnCurrSuggestion.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Uri uri = Uri.parse(game.getCurrentSuggestion().getMobileURL());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
+        btnCurrSuggestion.setText(game.getCurrentSuggestion().toString());
+
+        TextView addressView = (TextView) findViewById(R.id.curr_suggestion_address);
+        addressView.setText(game.getCurrentSuggestion().getLocation_string());
+
+        //System.out.println("CURRGAME sug id: "+currGame.getCurrentSuggestion().getSuggestionId());
+        ImageView imageView = (ImageView) findViewById(R.id.curr_suggestion_image);
+        new GetImageFromURL(imageView).execute(game.getCurrentSuggestion().getImage());
     }
 }

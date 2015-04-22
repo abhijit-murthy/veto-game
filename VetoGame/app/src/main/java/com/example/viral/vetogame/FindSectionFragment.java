@@ -124,15 +124,24 @@ public class FindSectionFragment extends Fragment implements SearchView.OnQueryT
             //Toast.makeText(getActivity(), "clicked",Toast.LENGTH_SHORT).show();
             //radius = locationFragment.getRadius();
             //centerText = locationFragment.getCenterText().getText().toString();
-            Intent intent = new Intent(getActivity(),
-                    NewGame.class);
-            radius = locationFragment.getRadius();
-            centerText = locationFragment.getEventZipCode();
-            intent.putExtra("radius", radius);
-            intent.putExtra("center", centerText);
-            intent.putExtra("suggestion",adapter.getSelected());
-            getActivity().setResult(getActivity().RESULT_OK, intent);
-            getActivity().finish();
+            if(((NewSuggestion)getActivity()).getCurrGame()!=null){
+                Intent intent = new Intent(getActivity(),
+                        CurrGame.class);
+                ((NewSuggestion)getActivity()).getCurrGame().setCurrentSuggestion(adapter.getSelected());
+                intent.putExtra("currGame",((NewSuggestion)getActivity()).getCurrGame());
+                getActivity().setResult(getActivity().RESULT_OK, intent);
+                getActivity().finish();
+            }else {
+                Intent intent = new Intent(getActivity(),
+                        NewGame.class);
+                radius = locationFragment.getRadius();
+                centerText = locationFragment.getEventZipCode();
+                intent.putExtra("radius", radius);
+                intent.putExtra("center", centerText);
+                intent.putExtra("suggestion", adapter.getSelected());
+                getActivity().setResult(getActivity().RESULT_OK, intent);
+                getActivity().finish();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

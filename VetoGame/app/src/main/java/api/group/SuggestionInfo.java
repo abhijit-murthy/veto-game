@@ -33,10 +33,11 @@ public interface SuggestionInfo {
                          Callback<SuggestionResponse> callback);
 
     @FormUrlEncoded
-    @POST("/suggestion_data/vote")
+    @POST("/suggestion_data/veto")
     public void veto(@Field("game_id") String gameId, @Field("user_id") String userId,
                      @Field("curr_suggestion_id") String currSuggestionId, @Field("new_suggestion_name") String newSuggestion,
-                     @Field("new_suggestion_loc") String newLocation,
+                     @Field("new_suggestion_loc") String newLocation, @Field("new_suggestion_mobile_url") String newMobileUrl,
+                     @Field("new_suggestion_image_url") String newImageUrl, @Field("new_suggestion_rating_url") String newLRatingUrl,
                      Callback<SuggestionResponse> callback);
 
 
