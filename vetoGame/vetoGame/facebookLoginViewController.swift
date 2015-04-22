@@ -20,8 +20,9 @@ class facebookLoginViewController : UIViewController, FBLoginViewDelegate {
         self.fbLoginView.readPermissions = ["public_profile", "email", "user_friends"]
     }
     
+    //MARK: Facebook Login Specific Functions
     func loginViewShowingLoggedInUser(loginView : FBLoginView!) {
-        //Segue to go to Home Page after logging in
+        //TODO: Segue to go to Home Page after logging in
         self.performSegueWithIdentifier("afterLogin", sender: self)
     }
     
@@ -29,7 +30,6 @@ class facebookLoginViewController : UIViewController, FBLoginViewDelegate {
         println("User Name: \(user.name)")
         
         self.userID = user.objectForKey("id") as! String
-        
     }
     
     func loginViewShowingLoggedOutUser(loginView : FBLoginView!) {
@@ -39,6 +39,7 @@ class facebookLoginViewController : UIViewController, FBLoginViewDelegate {
     func loginView(loginView : FBLoginView!, handleError:NSError) {
         println("Error: \(handleError.localizedDescription)")
     }
+    //MARK:
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -46,15 +47,15 @@ class facebookLoginViewController : UIViewController, FBLoginViewDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        //this segue should be afterLogin
+        //TODO: this segue should be afterLogin
         if (segue.identifier == "mainPage"){
             var navigationController : UINavigationController = segue.destinationViewController as! UINavigationController
         
             var destViewController : ViewController = navigationController.topViewController as! ViewController
             destViewController.fbSession = FBSession.activeSession()
             
-            //Take this out at the end
-            self.userID = "ABC"
+            //TODO: Hardcoded userID
+            self.userID = "CHUCRISTINA"
             destViewController.userID = self.userID
         }
     }

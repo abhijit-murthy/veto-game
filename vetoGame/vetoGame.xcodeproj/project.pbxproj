@@ -22,6 +22,7 @@
 		6BA5C07F1AE4AE3300F68BF7 /* gameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5C07E1AE4AE3300F68BF7 /* gameCell.swift */; };
 		6BA5C0811AE56C3900F68BF7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA5C0801AE56C3900F68BF7 /* CoreLocation.framework */; };
 		6BA5C0831AE57D1900F68BF7 /* businessCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5C0821AE57D1900F68BF7 /* businessCell.swift */; };
+		6BD797A41AE715B30085602B /* gameScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD797A31AE715B30085602B /* gameScreenViewController.swift */; };
 		6BE2998F1AE02C400065A974 /* NewMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BE2998D1AE02C400065A974 /* NewMain.storyboard */; };
 		6BFB8E3A1AD6924300D674E3 /* selectPlayersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFB8E391AD6924300D674E3 /* selectPlayersViewController.swift */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 		6BA5C07E1AE4AE3300F68BF7 /* gameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = gameCell.swift; sourceTree = "<group>"; };
 		6BA5C0801AE56C3900F68BF7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6BA5C0821AE57D1900F68BF7 /* businessCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = businessCell.swift; sourceTree = "<group>"; };
+		6BD797A31AE715B30085602B /* gameScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = gameScreenViewController.swift; sourceTree = "<group>"; };
 		6BE2998E1AE02C400065A974 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/NewMain.storyboard; sourceTree = "<group>"; };
 		6BFB8E391AD6924300D674E3 /* selectPlayersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = selectPlayersViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -112,6 +114,7 @@
 				6B00C9FD1AD6F20500657501 /* initialSuggestionListViewController.swift */,
 				6B00C9FB1AD6F1DE00657501 /* initialSuggestionMapViewController.swift */,
 				6BFB8E391AD6924300D674E3 /* selectPlayersViewController.swift */,
+				6BD797A31AE715B30085602B /* gameScreenViewController.swift */,
 				6BA5C07A1AE47EAD00F68BF7 /* pastGamesTableViewController.swift */,
 				6BA5C07E1AE4AE3300F68BF7 /* gameCell.swift */,
 				6BA5C0821AE57D1900F68BF7 /* businessCell.swift */,
@@ -206,6 +209,7 @@
 				TargetAttributes = {
 					6B4F96811AC0802F00666EDA = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 89JRG4TE28;
 					};
 					6B4F96961AC0802F00666EDA = {
 						CreatedOnToolsVersion = 6.2;
@@ -259,6 +263,7 @@
 			files = (
 				6BA5C07B1AE47EAD00F68BF7 /* pastGamesTableViewController.swift in Sources */,
 				6B4F968A1AC0802F00666EDA /* ViewController.swift in Sources */,
+				6BD797A41AE715B30085602B /* gameScreenViewController.swift in Sources */,
 				6B00C9FE1AD6F20500657501 /* initialSuggestionListViewController.swift in Sources */,
 				6B4F96881AC0802F00666EDA /* AppDelegate.swift in Sources */,
 				6BA5C07F1AE4AE3300F68BF7 /* gameCell.swift in Sources */,
@@ -390,6 +395,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/cristina/Documents/FacebookSDK,
@@ -397,6 +404,7 @@
 				INFOPLIST_FILE = vetoGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "vetoGame/Bridge-Header.h";
 			};
 			name = Debug;
@@ -405,6 +413,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/cristina/Documents/FacebookSDK,
@@ -412,6 +422,7 @@
 				INFOPLIST_FILE = vetoGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "vetoGame/Bridge-Header.h";
 			};
 			name = Release;

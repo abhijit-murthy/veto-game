@@ -13,13 +13,13 @@ class createGameViewController : UIViewController {
     
     let date = NSDate()
     var userID: String!
+    var radius : Int!
     
     @IBOutlet weak var gameNameTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var selectPlayers: UIButton!
     @IBOutlet weak var eventDate: UITextField!
     @IBOutlet weak var gameEndTime: UITextField!
-    @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var initialSuggestionButton: UIButton!
     @IBOutlet weak var createGameButton: UIButton!
     
@@ -90,11 +90,14 @@ class createGameViewController : UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "initialSuggestion" {
             var tabBar : UITabBarController = segue.destinationViewController as! UITabBarController
+    
+            var destViewMap: initialSuggestionMapViewController = tabBar.viewControllers?.first as! initialSuggestionMapViewController
+            var destViewList: initialSuggestionListViewController = tabBar.viewControllers?[1] as! initialSuggestionListViewController
             
-            var destViewMap: initialSuggestionMapViewController = tabBar.viewControllers?[1] as! initialSuggestionMapViewController
-            var destViewList: initialSuggestionListViewController = tabBar.viewControllers?[2] as! initialSuggestionListViewController
+            destViewList.eventType = self.categoryTextField.text
             
-            
+            //sending the mapView to the listView
+            destViewList.mapView = destViewMap
         }
     }
     

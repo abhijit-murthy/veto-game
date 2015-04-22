@@ -25,11 +25,10 @@ class profileViewController : UIViewController {
         getUserInfo()
     }
     
-    
     //Getting user information through a REST API call
     func getUserInfo() {
         //var url : String = "http://173.236.253.103:28080/user_data/"+self.userID
-        var url : String = "http://173.236.253.103:28080/user_data/ABC"
+        var url : String = "http://173.236.253.103:28080/user_data/"+self.userID
         var request : NSMutableURLRequest = NSMutableURLRequest()
         
         request.URL = NSURL(string: url)

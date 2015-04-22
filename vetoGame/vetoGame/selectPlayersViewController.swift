@@ -10,13 +10,16 @@ import Foundation
 import UIKit
 
 class selectPlayersViewController : UITableViewController {
+
+    let friends : [NSArray] = [["ABMURTHY", "Abhijit Murthy"], ["EKIM305", "Eunki Kim"], ["IAN1639", "Ian Stainbrook"], ["VIRAL9793", "Viral Patel"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //something
     }
     
-    func getFriends () {
+    //TODO: get friends directly from Facebook
+    func getFacebookFriends () {
         var friendsRequest: FBRequest = FBRequest.requestForMyFriends()
         /*
         friendsRequest.startWithCompletionHandler{(connection:FBRequestConnection!, result:AnyObject, error:NSError!) -> Void in
@@ -36,6 +39,12 @@ class selectPlayersViewController : UITableViewController {
             println("Found \(friends.count) friends")
         }
         */
+    }
+    
+    func getFriends() {
+        
+        ///http://173.236.253.103:28080/game_data/add_user_to_game/
+        //userid, gameid
     }
     
 }

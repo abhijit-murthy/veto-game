@@ -9,46 +9,50 @@
 import Foundation
 import UIKit
 
-class pastGamesTableViewController : UITableViewController {
+class pastGamesTableViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     var userID : String!
-    var candies = [String]()
     var games = [NSArray]()
-        //game = [name, id, eventType, suggestionTTL, radius, center, currentSuggestionName, eventTime, timeEnding]
-    var total : Int = 0
+        //game = [name, id, currentSuggestionName, eventTime, timeEnding]
     
-    override func viewDidLoad() {
-        //getPastGames()
+    @IBOutlet weak var tableView: UITableView!
+    
+    override func viewDidAppear(animated: Bool){
+        super.viewDidAppear(true)
+        getPastGames()
         
-        super.viewDidLoad()
-        
-        //getPastGames()
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.total
+    //MARK: TableView Code
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! gameCell
-
-        var game : NSArray
-        game = games[indexPath.row]
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.games.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell : gameCell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! gameCell
         
-        //cell.gameName.text = game[0] as! String
-        //cell.currentSuggestion.text = game[6] as! String
+        let row = indexPath.row
         
-        cell.gameName.text = "Hi"
-        cell.currentSuggestion.text = "This"
-        
-        println("Cell stuff")
+        cell.gameName.text = self.games[row][0] as! String
+        cell.timeLeft.text = "game over"
+        cell.numberOfPlayers.text = "3"
+        cell.currentSuggestion.text = self.games[row][2] as! String
         
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
     func getPastGames() {
-        //var url : String = "http://173.236.253.103:28080/game_data/get_past_games/"+self.userID
-        var url : String = "http://173.236.253.103:28080/game_data/get_past_games/ABC"
+        var url : String = "http://173.236.253.103:28080/game_data/get_past_games/"+self.userID
         var request : NSMutableURLRequest = NSMutableURLRequest()
         
         request.URL = NSURL(string: url)
@@ -60,16 +64,16 @@ class pastGamesTableViewController : UITableViewController {
             let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error: error)
             
             var totalGames : Int = jsonResult!.count as Int
-            self.total = totalGames
             
-            if (jsonResult != nil && self.total>0) {
-                // process jsonResult - assigning values to labels
-                //TODO --> put all the stuff in an array
+            // process jsonResult - assigning values to labels
+            if (jsonResult != nil && totalGames>0) {
                 
-                //Going through all the games
+                //Going through all the games in jsonResult
                 for (var i=0; i<2; i++) {
                     //Getting each game through index
                     var result = jsonResult!.objectAtIndex(i)
+                    
+                    println(result)
                     
                     //formatting dates (eventTime, timeEnding)
                     var dateFormatter = NSDateFormatter()
@@ -81,15 +85,11 @@ class pastGamesTableViewController : UITableViewController {
                     //Getting all the information from the jsonResult
                     var name = result.objectForKey("name") as! String
                     var id = result.objectForKey("id") as! Int
-                    var eventType = result.objectForKey("eventType") as! String
-                    var suggestionTTL = result.objectForKey("suggestionTTL") as! Int
-                    var radius = result.objectForKey("radius") as! Int
-                    var currentSuggestionName = (result.objectForKey("currentSuggestion"))!.objectForKey("name") as! String
                     
-                    //needs to be change to location
-                    var center = result.objectForKey("center") as! String
-                    
-                    var newGame = [name, id, eventType, suggestionTTL, radius, center, currentSuggestionName, eventTime, timeEnding]
+                    //TODO: currentSuggestionName should always be in db needs
+                    var currentSuggestionName = "No suggestion"
+
+                    var newGame = [name, id, currentSuggestionName, eventTime, timeEnding] as NSArray
                     
                     self.games.append(newGame)
                 }

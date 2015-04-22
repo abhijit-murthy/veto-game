@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var logout: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -18,17 +18,40 @@ class ViewController: UIViewController {
     var total : Int = 0
     var games = [NSArray]()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
+    override func viewDidAppear(animated: Bool){
+        super.viewDidAppear(true)
         getCurrentGames()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    //MARK: TableView Code
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
     }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.games.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell : gameCell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! gameCell
+        
+        let row = indexPath.row
+        
+        cell.gameName.text = self.games[row][0] as! String
+        cell.timeLeft.text = toString(self.games[row][3])
+        cell.numberOfPlayers.text = "3"
+        cell.currentSuggestion.text = self.games[row][6] as! String
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    //MARK:
     
     @IBAction func logginOut(sender: AnyObject) {
         fbSession.closeAndClearTokenInformation()
@@ -55,16 +78,22 @@ class ViewController: UIViewController {
             destViewController.userID = self.userID
         }
         
+        if (segue.identifier == "gameScreen"){
+            var destViewController : gameScreenViewController = segue.destinationViewController as! gameScreenViewController
+            
+            //TODO: send information to the game screen
+        }
+        
         if (segue.identifier == "logout"){
             //var destViewController : facebookLoginViewController = segue.destinationViewController as facebookLoginViewController
             
-            //TODO Restart App
+            //TODO: Restart App
         }
     }
     
+    //MARK: API call to get current games
     func getCurrentGames() {
-        //var url : String = "http://173.236.253.103:28080/game_data/get_current_games/"+self.userID
-        var url : String = "http://173.236.253.103:28080/game_data/get_current_games/ABC"
+        var url : String = "http://173.236.253.103:28080/game_data/get_current_games/"+self.userID
         var request : NSMutableURLRequest = NSMutableURLRequest()
         
         request.URL = NSURL(string: url)
@@ -76,14 +105,12 @@ class ViewController: UIViewController {
             let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error: error)
             
             var totalGames : Int = jsonResult!.count as Int
-            self.total = totalGames
             
-            if (jsonResult != nil && self.total>0) {
-                // process jsonResult - assigning values to labels
-                //TODO --> put all the stuff in an array
+            // process jsonResult - assigning values to labels
+            if (jsonResult != nil && totalGames>0) {
                 
                 //Going through all the games
-                for (var i=0; i<2; i++) {
+                for (var i=0; i<totalGames; i++) {
                     //Getting each game through index
                     var result = jsonResult!.objectAtIndex(i)
                     
@@ -100,7 +127,10 @@ class ViewController: UIViewController {
                     var eventType = result.objectForKey("eventType") as! String
                     var suggestionTTL = result.objectForKey("suggestionTTL") as! Int
                     var radius = result.objectForKey("radius") as! Int
+                    
+                    //TODO: make sure that all games have currentSuggestion
                     var currentSuggestionName = (result.objectForKey("currentSuggestion"))!.objectForKey("name") as! String
+                    //var currentSuggestionName = "Placeholder"
                     
                     //needs to be change to location
                     var center = result.objectForKey("center") as! String
@@ -111,12 +141,16 @@ class ViewController: UIViewController {
                 }
                 
             } else {
-                // no current games!
+                // there are no current games!
                 println("No current games")
             }
+            println(self.games)
         })
     }
-
-
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
 }
 
