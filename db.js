@@ -365,7 +365,7 @@ function isGameFinished (game)
 				.then(function(suggestion) {
 					game.getUsers().then(function(users) { 
 					
-							if (users.count == suggestion.votes - 1)   
+							if (suggestion.votes >= (users.count - 1))   
 							{
 								game.finished = true;
 								game.save().then(function() { } );	
