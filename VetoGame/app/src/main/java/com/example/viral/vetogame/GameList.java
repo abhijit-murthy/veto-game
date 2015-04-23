@@ -5,6 +5,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,13 +29,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-
 public class GameList extends Activity implements SearchView.OnQueryTextListener{
 
     private GameAdapter adapter;
     private ArrayList<Game> games = new ArrayList<Game>();
     private SearchView searchView;
     private RestClient restClient;
+    private SwipeRefreshLayout swipeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +58,28 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
 
         // Configure device list.
         adapter = new GameAdapter(this, games);
-        ListView list = (ListView) findViewById(R.id.game_list);
+        final ListView list = (ListView) findViewById(R.id.game_list);
         list.setAdapter(adapter);
         list.setOnItemClickListener(createOnItemClickListener());
-        TextView emptyText = (TextView)findViewById(R.id.emptyGamesView);
+        final TextView emptyText = (TextView)findViewById(R.id.emptyGamesView);
         initGame(list, emptyText);
+
+        swipeView = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeView.setRefreshing(true);
+                Log.d("Swipe", "Refreshing Number");
+                ( new Handler()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeView.setRefreshing(false);
+                        System.out.println("REFRESHING");
+                        initGame(list,emptyText);
+                    }
+                }, 3000);
+            }
+        });
 
         Button button = (Button) findViewById(R.id.btn_new_game);
         button.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +174,8 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
 
     public void initGame(ListView list, TextView emptyText){
         restClient = new RestClient();
-        restClient.getGameInfo().getCurrentGames("ABMURTHY", new Callback<List<GameResponse>>() {
+        adapter.clearData();
+        restClient.getGameInfo().getCurrentGames(Login.getUser(), new Callback<List<GameResponse>>() {
             @Override
             public void success(List<GameResponse> gameResponses, Response response) {
                 for(int i=0; i < gameResponses.size(); i++){

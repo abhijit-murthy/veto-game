@@ -284,7 +284,7 @@ public class CurrGame extends Activity implements OnClickListener{
                         .title(game.getCurrentSuggestion().getName());
                 map.addMarker(eventMark);
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng,13);
-                map.animateCamera(cameraUpdate);
+                map.moveCamera(cameraUpdate); //.animateCamera(cameraUpdate);
             }
         }
     }

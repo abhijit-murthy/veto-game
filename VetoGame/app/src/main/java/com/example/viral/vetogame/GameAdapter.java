@@ -36,6 +36,11 @@ public class GameAdapter extends ArrayAdapter<Game> {
         }
     }
 
+    public void clearData(){
+        games.clear();
+        displayList.clear();
+    }
+
     public void replaceWith(Collection<Game> newGames) {
         this.games.clear();
         this.games.addAll(newGames);
@@ -45,7 +50,7 @@ public class GameAdapter extends ArrayAdapter<Game> {
     public void addGame(Game game){
         games.add(game);
         displayList.add(game);
-        System.out.println("game added\nsize is: "+games.size());
+        //System.out.println("game added\nsize is: "+games.size());
         notifyDataSetChanged();
     }
 
@@ -81,11 +86,11 @@ public class GameAdapter extends ArrayAdapter<Game> {
 
     private void bind(Game game, View view) {
         ViewHolder holder = (ViewHolder) view.getTag();
-        if(holder == null){
+        /*if(holder == null){
             System.out.println("holder null");
         }else{
             System.out.println(" holder not null");
-        }
+        }*/
         holder.gameNameTextView.setText(game.getGameName());
         holder.currentSuggestionTextView.setText(game.getCurrentSuggestion().toString());
         String timeRemaining = calcTimeRemaining(calendar,game.getTimeEnding());
