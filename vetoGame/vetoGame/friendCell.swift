@@ -1,20 +1,18 @@
 //
-//  businessCell.swift
+//  friendCell.swift
 //  vetoGame
 //
-//  Created by Cristina on 4/20/15.
+//  Created by Cristina on 4/21/15.
 //  Copyright (c) 2015 CristinaChu. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class businessCell: UITableViewCell {
+class friendCell: UITableViewCell {
     
-    @IBOutlet weak var businessButton: UIButton!
-    @IBOutlet weak var distanceLabel: UILabel!
-    @IBOutlet weak var ratingLabel: UILabel!
-    @IBOutlet weak var addSuggestion: UIButton!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var checkImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -8,20 +8,19 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 class initialSuggestionListViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-    
-    var swiftBlogs = ["Ray Wenderlich", "NSHipster", "iOS Developer Tips", "Jameson Quave", "Natasha The Robot", "Coding Explorer", "That Thing In Swift", "Andrew Bancroft", "iAchieved.it", "Airspeed Velocity"]
 
     var eventType : String!
     var radius : String!
     var center : String!
     var mapView : initialSuggestionMapViewController!
     
-    var businesses = [NSArray]()
-    var total : Int = 0
+    var businesses = NSMutableArray()
+        //business = [name, mobileURL, rating, distance, address, ratingURL, imageURL, id]
     
     /*
     override func viewDidLoad() {
@@ -45,14 +44,17 @@ class initialSuggestionListViewController : UIViewController, UITableViewDataSou
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return swiftBlogs.count
+        return self.businesses.count
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell : UITableViewCell = tableView.dequeueReusableCellWithIdentifier("businessCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell : businessCell = tableView.dequeueReusableCellWithIdentifier("businessCell", forIndexPath: indexPath) as! businessCell
         
         let row = indexPath.row
-        cell.textLabel?.text = swiftBlogs[row]
+        
+        cell.businessButton.setTitle(self.businesses[row][0] as! String, forState: UIControlState.Normal)
+        cell.distanceLabel.text = "Distance: "+(self.businesses[row][3] as! String)+" km"
+        cell.ratingLabel.text = "Rating: "+toString(self.businesses[row][2])
         
         return cell
     }
@@ -61,7 +63,6 @@ class initialSuggestionListViewController : UIViewController, UITableViewDataSou
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
         let row = indexPath.row
-        println(swiftBlogs[row])
     }
     
     //MARK: API call to Yelp for suggestions
@@ -80,12 +81,60 @@ class initialSuggestionListViewController : UIViewController, UITableViewDataSou
             let jsonResult: NSDictionary! = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error: error) as? NSDictionary
             
             if (jsonResult != nil) {
-                println(jsonResult)
-                self.swiftBlogs.append("YELP")
-                // process jsonResult - assigning values to labels
-                //self.userName.text = (jsonResult.objectForKey("name") as! String)
-                //self.numberWins.text = toString(jsonResult.objectForKey("wins") as! NSNumber)
-                //self.numberPoints.text = toString(jsonResult.objectForKey("points") as! NSNumber)
+                //Get businesses
+                var totalBusinessesFound = jsonResult.objectForKey("total") as! Int
+                var businessesFound = jsonResult.objectForKey("businesses") as! NSArray
+                println(totalBusinessesFound)
+                println(self.businesses.count)
+                
+                //TODO: get all 40 businesses up
+                for (var i=0; i<20; i++){
+                    //get each of the businesses
+                    var current = businessesFound[i] as! NSDictionary
+                    
+                    //get business information
+                    var mobileURL : String = ""
+                    var imageURL : String = ""
+                    var ratingURL : String = ""
+                    var name : String = ""
+                    var id : String = ""
+                    var rating : Int = 0
+                    
+                    mobileURL = current.objectForKey("mobile_url") as! String
+                    name = current.objectForKey("name") as! String
+                    id = current.objectForKey("id") as! String
+                    if (current.objectForKey("image_url") != nil) {imageURL = current.objectForKey("image_url") as! String}
+                    if (current.objectForKey("rating_img_url") != nil) {ratingURL = current.objectForKey("rating_img_url") as! String}
+                    if (current.objectForKey("rating") != nil) {rating = current.objectForKey("rating") as! Int}
+                    
+                    //get all the location information
+                    var location = NSDictionary()
+                    var coordinate = NSDictionary()
+                    var displayAddress = NSArray()
+                    
+                    if (current.objectForKey("location") != nil) {location = current.objectForKey("location") as! NSDictionary}
+                    if (location.objectForKey("coordinate") != nil) {coordinate = location.objectForKey("coordinate") as! NSDictionary}
+                    if (location.objectForKey("display_address") != nil) {displayAddress = location.objectForKey("display_address") as! NSArray}
+                    
+                    //calculating distance between business and current location
+                    var locA = CLLocation(latitude: self.mapView.address.latitude, longitude: self.mapView.address.longitude)
+                    var locB = CLLocation(latitude: coordinate.objectForKey("latitude") as! Double, longitude: coordinate.objectForKey("longitude") as! Double)
+                    
+                    var meters = locA.distanceFromLocation(locB)
+                    var distance = meters/1000.0
+                    
+                    //obtaining correct address
+                    var address = ""
+                    for (var x=0; x<displayAddress.count; x++){
+                        address = address + (displayAddress[x] as! String)
+                    }
+                    
+                    //adding it to the businesses array
+                    var newBusiness = [name, mobileURL, rating, String(format: "%.1f",distance), address, ratingURL, imageURL, id]
+                    
+                    self.businesses.addObject(newBusiness)
+                    println(newBusiness)
+                }
                 
             } else {
                 // couldn't load JSON, look at error

@@ -9,14 +9,55 @@
 import Foundation
 import UIKit
 
-class selectPlayersViewController : UITableViewController {
+class selectPlayersViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let friends : [NSArray] = [["ABMURTHY", "Abhijit Murthy"], ["EKIM305", "Eunki Kim"], ["IAN1639", "Ian Stainbrook"], ["VIRAL9793", "Viral Patel"]]
+    var gameID : String!
+    var selectedFriends = [NSArray]()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        //something
+    @IBOutlet weak var tableView: UITableView!
+    
+    override func viewDidAppear(animated: Bool){
+        super.viewDidAppear(true)
+        
+        tableView.delegate = self
+        tableView.dataSource = self
     }
+    
+    //MARK: TableView Code
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.friends.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell : friendCell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! friendCell
+        
+        let row = indexPath.row
+        
+        cell.nameLabel.text = self.friends[row][1] as! String
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        var selectedCell = tableView.cellForRowAtIndexPath(indexPath)
+        
+        //TODO: unselect
+        if (selectedCell?.selected == false) {
+            selectedCell?.selected = true
+        }
+        else {
+            selectedCell?.selected = false
+        }
+        //self.selectedFriends.append(self.friends[indexPath.row])
+    }
+    //MARK:
     
     //TODO: get friends directly from Facebook
     func getFacebookFriends () {
@@ -41,7 +82,7 @@ class selectPlayersViewController : UITableViewController {
         */
     }
     
-    func getFriends() {
+    func addFriendsToGame() {
         
         ///http://173.236.253.103:28080/game_data/add_user_to_game/
         //userid, gameid

@@ -12,17 +12,21 @@ import UIKit
 class pastGamesTableViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     var userID : String!
-    var games = [NSArray]()
+    var games = NSMutableArray()
         //game = [name, id, currentSuggestionName, eventTime, timeEnding]
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidAppear(animated: Bool){
-        super.viewDidAppear(true)
-        getPastGames()
+        super.viewDidAppear(false)
         
         tableView.delegate = self
         tableView.dataSource = self
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        getPastGames()
     }
     
     //MARK: TableView Code
@@ -46,10 +50,11 @@ class pastGamesTableViewController : UIViewController, UITableViewDataSource, UI
         
         return cell
     }
-    
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
     }
+    //MARK:
     
     func getPastGames() {
         var url : String = "http://173.236.253.103:28080/game_data/get_past_games/"+self.userID
@@ -69,7 +74,7 @@ class pastGamesTableViewController : UIViewController, UITableViewDataSource, UI
             if (jsonResult != nil && totalGames>0) {
                 
                 //Going through all the games in jsonResult
-                for (var i=0; i<2; i++) {
+                for (var i=0; i<totalGames; i++) {
                     //Getting each game through index
                     var result = jsonResult!.objectAtIndex(i)
                     
@@ -87,11 +92,12 @@ class pastGamesTableViewController : UIViewController, UITableViewDataSource, UI
                     var id = result.objectForKey("id") as! Int
                     
                     //TODO: currentSuggestionName should always be in db needs
-                    var currentSuggestionName = "No suggestion"
-
+                    //var currentSuggestionName = "No suggestion"
+                    var currentSuggestionName = result.objectForKey("currentSuggestion")!.objectForKey("name") as! String
+                    
                     var newGame = [name, id, currentSuggestionName, eventTime, timeEnding] as NSArray
                     
-                    self.games.append(newGame)
+                    self.games.addObject(newGame)
                 }
                 
             } else {

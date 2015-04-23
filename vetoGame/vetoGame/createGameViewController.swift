@@ -11,10 +11,16 @@ import UIKit
 
 class createGameViewController : UIViewController {
     
-    let date = NSDate()
+    let currentDate = NSDate()
     var userID: String!
     var radius : Int!
+    var friends : NSArray!
     
+    //used for the POST request
+    var eventTimePOST : String!
+    var gameTimeEndPOST : String!
+    
+    //variables on the UI
     @IBOutlet weak var gameNameTextField: UITextField!
     @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var selectPlayers: UIButton!
@@ -22,7 +28,6 @@ class createGameViewController : UIViewController {
     @IBOutlet weak var gameEndTime: UITextField!
     @IBOutlet weak var initialSuggestionButton: UIButton!
     @IBOutlet weak var createGameButton: UIButton!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +44,7 @@ class createGameViewController : UIViewController {
         
         datePickerView.datePickerMode = UIDatePickerMode.DateAndTime
         sender.inputView = datePickerView
-        datePickerView.minimumDate = date
+        datePickerView.minimumDate = self.currentDate
         datePickerView.addTarget(self, action: Selector("handleDateStart:"), forControlEvents: UIControlEvents.ValueChanged)
         
         //TODO: make start date only possible for up to a certain amount of days (datePickerView.maximumDate)
@@ -54,14 +59,17 @@ class createGameViewController : UIViewController {
         datePickerView.addTarget(self, action: Selector("handleDateEnd:"), forControlEvents: UIControlEvents.ValueChanged)
         
         //TODO: make ending date only possible for later dates and up to a certain amount of days
-        datePickerView.minimumDate = date
+        datePickerView.minimumDate = self.currentDate
     }
     
     func handleDateStart(sender: UIDatePicker) {
         var timeFormatter = NSDateFormatter()
         timeFormatter.dateStyle = .LongStyle
         timeFormatter.timeStyle = .ShortStyle
-        eventDate.text = timeFormatter.stringFromDate(sender.date)
+        self.eventDate.text = timeFormatter.stringFromDate(sender.date)
+        
+        timeFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'"
+        self.eventTimePOST = timeFormatter.stringFromDate(sender.date)
     }
 
     func handleDateEnd(sender: UIDatePicker) {
@@ -69,8 +77,10 @@ class createGameViewController : UIViewController {
         timeFormatter.dateStyle = .LongStyle
         timeFormatter.timeStyle = .ShortStyle
         gameEndTime.text = timeFormatter.stringFromDate(sender.date)
+        
+        timeFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'"
+        self.gameTimeEndPOST = timeFormatter.stringFromDate(sender.date)
     }
-    
     
     @IBAction func createGame(sender: AnyObject) {
         //TODO: Call database API to create new game
@@ -88,7 +98,7 @@ class createGameViewController : UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "initialSuggestion" {
+        if (segue.identifier == "initialSuggestion") {
             var tabBar : UITabBarController = segue.destinationViewController as! UITabBarController
     
             var destViewMap: initialSuggestionMapViewController = tabBar.viewControllers?.first as! initialSuggestionMapViewController
@@ -103,21 +113,20 @@ class createGameViewController : UIViewController {
     
     //Sending all info to database
     func createGameDB() {
-        //var url : String = "http://173.236.253.103:28080/game_data/create"+self.userID
-        
-        //Need to properly get these
-        var suggestionTTL = 15
-        var radius = 5
-        
-        //userid, eventType, suggetionTTL, center, radius, name, event_time, time_ending
-        //var parameters = self.userID + self.categoryTextField.text + toString(suggestionTTL) + self.locationTextField.text + toString(radius) + self.gameNameTextField.text + self.eventDate.text + self.gameEndTime.text
-        
         var url : String = "http://173.236.253.103:28080/game_data/create"
         var request : NSMutableURLRequest = NSMutableURLRequest()
-        
         request.URL = NSURL(string: url)
         request.HTTPMethod = "POST"
         
+        
+        //Creating the post parameters
+        
+        //missing suggestion_ttl, center, radius
+        var postParams = "user_id="+self.userID+"&event_type="+self.categoryTextField.text+"&game_name="+self.gameNameTextField.text+"&event_time="+self.eventTimePOST+"&time_ending="+self.gameTimeEndPOST
+        
+        request.HTTPBody = postParams.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+
+        //sending the request
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue(), completionHandler:{ (response:NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             var error: AutoreleasingUnsafeMutablePointer<NSError?> = nil
             let jsonResult: NSDictionary! = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error: error) as? NSDictionary
@@ -134,5 +143,9 @@ class createGameViewController : UIViewController {
             }
         })
     }
+    
+    //TODO: add players to the game
+    ///http://173.236.253.103:28080/game_data/add_user_to_game/
+    //userid, gameid
     
 }

@@ -12,15 +12,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var logout: UIButton!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var noGamesLabel: UILabel!
     
     var userID : String!
     var fbSession : FBSession!
     var total : Int = 0
-    var games = [NSArray]()
+    var games = NSMutableArray()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        getCurrentGames()
+    }
     
     override func viewDidAppear(animated: Bool){
         super.viewDidAppear(true)
-        getCurrentGames()
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -108,6 +113,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             // process jsonResult - assigning values to labels
             if (jsonResult != nil && totalGames>0) {
+                self.noGamesLabel.text = ""
                 
                 //Going through all the games
                 for (var i=0; i<totalGames; i++) {
@@ -137,14 +143,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     
                     var newGame = [name, id, eventType, suggestionTTL, radius, center, currentSuggestionName, eventTime, timeEnding]
                     
-                    self.games.append(newGame)
+                    self.games.addObject(newGame)
                 }
-                
             } else {
                 // there are no current games!
                 println("No current games")
+                self.noGamesLabel.text = "No current games."
             }
-            println(self.games)
         })
     }
     
