@@ -391,16 +391,25 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="STA-sn-PTi">
+                                <rect key="frame" x="279" y="290" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="rGd-Kb-uP3" firstAttribute="leading" secondItem="cib-Cc-yhf" secondAttribute="leadingMargin" id="2eW-En-BTY"/>
+                            <constraint firstAttribute="centerY" secondItem="STA-sn-PTi" secondAttribute="centerY" id="7cP-vv-l3a"/>
                             <constraint firstItem="rGd-Kb-uP3" firstAttribute="top" secondItem="cib-Cc-yhf" secondAttribute="topMargin" id="MJZ-jc-O6d"/>
+                            <constraint firstAttribute="centerX" secondItem="STA-sn-PTi" secondAttribute="centerX" id="d2X-Fw-pWS"/>
                             <constraint firstAttribute="trailingMargin" secondItem="rGd-Kb-uP3" secondAttribute="trailing" id="kLl-Lc-K7i"/>
                             <constraint firstItem="fep-Oa-tbv" firstAttribute="top" secondItem="rGd-Kb-uP3" secondAttribute="bottom" id="yGv-9B-pxF"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="noGamesLabel" destination="STA-sn-PTi" id="tSY-lF-hqx"/>
                         <outlet property="tableView" destination="rGd-Kb-uP3" id="3OB-UR-RDp"/>
                     </connections>
                 </viewController>
@@ -510,6 +519,9 @@
                                                     <state key="normal" title="Business">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="goToBusinessURL:" destination="ER8-8R-5fi" eventType="touchUpInside" id="BsA-fL-TTs"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7PI-o1-gi9">
                                                     <rect key="frame" x="71" y="40" width="49" height="15"/>

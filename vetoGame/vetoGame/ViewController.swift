@@ -147,7 +147,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             } else {
                 // there are no current games!
-                println("No current games")
                 self.noGamesLabel.text = "No current games."
             }
         })

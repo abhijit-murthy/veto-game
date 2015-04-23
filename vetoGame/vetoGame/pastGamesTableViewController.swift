@@ -15,6 +15,7 @@ class pastGamesTableViewController : UIViewController, UITableViewDataSource, UI
     var games = NSMutableArray()
         //game = [name, id, currentSuggestionName, eventTime, timeEnding]
     
+    @IBOutlet weak var noGamesLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidAppear(animated: Bool){
@@ -72,13 +73,12 @@ class pastGamesTableViewController : UIViewController, UITableViewDataSource, UI
             
             // process jsonResult - assigning values to labels
             if (jsonResult != nil && totalGames>0) {
+                self.noGamesLabel.text = ""
                 
                 //Going through all the games in jsonResult
                 for (var i=0; i<totalGames; i++) {
                     //Getting each game through index
                     var result = jsonResult!.objectAtIndex(i)
-                    
-                    println(result)
                     
                     //formatting dates (eventTime, timeEnding)
                     var dateFormatter = NSDateFormatter()
@@ -102,9 +102,8 @@ class pastGamesTableViewController : UIViewController, UITableViewDataSource, UI
                 
             } else {
                 // no current games!
-                println("No past games")
+                self.noGamesLabel.text = "No past games."
             }
-            println(self.games)
         })
     }
     

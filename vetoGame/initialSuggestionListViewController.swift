@@ -55,6 +55,7 @@ class initialSuggestionListViewController : UIViewController, UITableViewDataSou
         cell.businessButton.setTitle(self.businesses[row][0] as! String, forState: UIControlState.Normal)
         cell.distanceLabel.text = "Distance: "+(self.businesses[row][3] as! String)+" km"
         cell.ratingLabel.text = "Rating: "+toString(self.businesses[row][2])
+        cell.mobileURL = self.businesses[row][1] as! String
         
         return cell
     }
@@ -84,11 +85,13 @@ class initialSuggestionListViewController : UIViewController, UITableViewDataSou
                 //Get businesses
                 var totalBusinessesFound = jsonResult.objectForKey("total") as! Int
                 var businessesFound = jsonResult.objectForKey("businesses") as! NSArray
-                println(totalBusinessesFound)
-                println(self.businesses.count)
+                
+                if (totalBusinessesFound > 20) {
+                    totalBusinessesFound = 20
+                }
                 
                 //TODO: get all 40 businesses up
-                for (var i=0; i<20; i++){
+                for (var i=0; i<totalBusinessesFound; i++){
                     //get each of the businesses
                     var current = businessesFound[i] as! NSDictionary
                     

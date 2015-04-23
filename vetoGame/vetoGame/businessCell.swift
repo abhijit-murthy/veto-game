@@ -16,12 +16,21 @@ class businessCell: UITableViewCell {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var addSuggestion: UIButton!
     
+    var mobileURL : String!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    @IBAction func goToBusinessURL(sender: UIButton) {
+        let newURL = NSURL(string: self.mobileURL)
+        println(mobileURL)
+        
+        UIApplication.sharedApplication().openURL(newURL!)
     }
     
 }
