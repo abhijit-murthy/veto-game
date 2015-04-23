@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.io.IOException;
 import java.util.Calendar;
@@ -84,6 +85,11 @@ public class CurrGame extends Activity implements OnClickListener{
             }
         });
 
+        Calendar testTime = currGame.getEventTime();
+
+        TextView eventTime = (TextView) findViewById(R.id.event_time);
+        eventTime.setText(testTime.getTime().toString());
+
         btnPlayers = (Button) findViewById(R.id.btn_players);
         btnPlayers.setOnClickListener(this);
 
@@ -135,21 +141,24 @@ public class CurrGame extends Activity implements OnClickListener{
 
         timeWin = (TextView) findViewById(R.id.remaining_time_win);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        DateFormat converter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        converter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date suggestionDate = new Date();   // Time when suggestion is created
 
-        Calendar suggestionTime = Calendar.getInstance(TimeZone.getTimeZone("EDT"));
-        suggestionTime.setTime(currGame.getCurrentSuggestion().getCreatedAt());
-        long startTime = Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis();
-        long suggestionEndTime = suggestionTime.getTimeInMillis()+TimeUnit.MINUTES.toMillis(currGame.getSuggestionTTL());
+        try {
+            suggestionDate = sdf.parse(currGame.getCurrentSuggestion().getCreatedAt());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        String currTime = converter.format(Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTime());
-        String createdTime = converter.format(suggestionTime.getTime());
-        String ttlEndTime = converter.format(new Date(suggestionEndTime * 1000));
+        Calendar suggestionCal = Calendar.getInstance();
+        suggestionCal.setTime(suggestionDate);
 
-        //long endTime = currGame.getTimeEnding().getTimeInMillis();
-        long diffTime = suggestionEndTime - startTime;
+        long currTime = Calendar.getInstance().getTimeInMillis();  // current time
+        long suggestionEndTime = suggestionCal.getTimeInMillis()+TimeUnit.MINUTES.toMillis(currGame.getSuggestionTTL());
+
+        long diffTime = suggestionEndTime - currTime;   // remaining time until the current suggestion wins considering suggestion TTL
 
         new CountDownTimer(diffTime, 1000) { // adjust the milli seconds here
 

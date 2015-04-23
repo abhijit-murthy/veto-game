@@ -25,10 +25,10 @@ public class Suggestion implements Serializable{
     private String ratingImg;
     private String image;
     private String mobileURL;
-    private Date createdAt;
+    private String createdAt;
     private int numReviews;
 
-    public Suggestion(String name, String location_string, String suggestionId, Date createdAt){
+    public Suggestion(String name, String location_string, String suggestionId, String createdAt){
         this.name = name;
         this.location_string = location_string;
         this.suggestionId = suggestionId;
@@ -100,11 +100,11 @@ public class Suggestion implements Serializable{
         this.location_string = address+", "+city+", "+state;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
     /*public int getRating() {

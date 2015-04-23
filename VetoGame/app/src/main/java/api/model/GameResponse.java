@@ -22,10 +22,10 @@ public class GameResponse {
     private String eventType;
 
     @SerializedName("eventTime")
-    private Date eventTime;
+    private String eventTime;
 
     @SerializedName("timeEnding")
-    private Date timeEnding;
+    private String timeEnding;
 
     @SerializedName("suggestionTTL")
     private int suggestionTtl;
@@ -58,11 +58,11 @@ public class GameResponse {
         return eventType;
     }
 
-    public Date getEventTime() {
+    public String getEventTime() {
         return eventTime;
     }
 
-    public Date getTimeEnding() {
+    public String getTimeEnding() {
         return timeEnding;
     }
 
@@ -97,11 +97,11 @@ public class GameResponse {
         this.eventType = eventType;
     }
 
-    public void setEventTime(Date eventTime) {
+    public void setEventTime(String eventTime) {
         this.eventTime = eventTime;
     }
 
-    public void setTimeEnding(Date timeEnding) {
+    public void setTimeEnding(String timeEnding) {
         this.timeEnding = timeEnding;
     }
 

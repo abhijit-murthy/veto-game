@@ -23,9 +23,13 @@ import retrofit.client.Response;
 
 import android.util.Log;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 
 public class GameList extends Activity implements SearchView.OnQueryTextListener{
@@ -159,10 +163,23 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
             @Override
             public void success(List<GameResponse> gameResponses, Response response) {
                 for(int i=0; i < gameResponses.size(); i++){
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                    Date  eventDate = new Date();
+                    Date endingDate = new Date();
+
+                    try {
+                        eventDate = sdf.parse(gameResponses.get(i).getEventTime());
+                        endingDate = sdf.parse(gameResponses.get(i).getTimeEnding());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
                     Calendar eventTime = Calendar.getInstance();
-                    eventTime.setTime(gameResponses.get(i).getEventTime());
+                    eventTime.setTime(eventDate);
                     Calendar endingTime = Calendar.getInstance();
-                    endingTime.setTime(gameResponses.get(i).getEventTime());
+                    endingTime.setTime(endingDate);
 
                     Suggestion currSuggestion = new Suggestion(gameResponses.get(i).getSuggestionResponse().getSuggestionName(),
                             gameResponses.get(i).getSuggestionResponse().getLocation(), gameResponses.get(i).getSuggestionResponse().getId(),

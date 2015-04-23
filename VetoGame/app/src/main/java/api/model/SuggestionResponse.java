@@ -37,7 +37,7 @@ public class SuggestionResponse {
     private String rating_url;
 
     @SerializedName("createdAt")
-    private Date createdAt;
+    private String createdAt;
 
     public String getId() {
         return id;
@@ -79,7 +79,7 @@ public class SuggestionResponse {
         return rating_url;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 

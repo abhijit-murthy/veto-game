@@ -467,33 +467,7 @@ public class NewGame extends Activity implements DatePickerDialog.OnDateSetListe
         DateFormat converter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         converter.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        String result = converter.format(calendar.getTime());
-        /*
-        String tmp1 = "";
-        String tmp2 = "";
-        int m = calendar.get(Calendar.MONTH)+1;
-        int d = calendar.get(Calendar.DAY_OF_MONTH);
-
-        if(m < 10) tmp1 = "0"+m;
-        else tmp1 = ""+m;
-
-        if(d < 10) tmp2 = "0"+d;
-        else tmp2 = ""+d;
-
-        String date = calendar.get(Calendar.YEAR) + "-" + tmp1 + "-" + tmp2;
-
-        m = calendar.get(Calendar.MINUTE);
-        d = calendar.get(Calendar.SECOND);
-
-        if(m < 10) tmp1 = "0"+m;
-        else tmp1 = ""+m;
-
-        if(d < 10) tmp2 = "0"+d;
-        else tmp2 = ""+d;
-
-        String time = calendar.get(Calendar.HOUR_OF_DAY) + ":" + tmp1 + ":" + tmp2;
-        */
-        return result;
+        return converter.format(calendar.getTime());
     }
 
 }

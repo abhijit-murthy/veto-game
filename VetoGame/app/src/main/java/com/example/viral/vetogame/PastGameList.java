@@ -16,8 +16,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -145,10 +148,23 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
                 TextView emptyText = (TextView)findViewById(R.id.emptyPastGamesView);
 
                 for(int i=0; i < gameResponses.size(); i++){
-                    Calendar eventTime = Calendar.getInstance(TimeZone.getDefault());
-                    eventTime.setTime(gameResponses.get(i).getEventTime());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                    Date eventDate = new Date();
+                    Date endingDate = new Date();
+
+                    try {
+                        eventDate = sdf.parse(gameResponses.get(i).getEventTime());
+                        endingDate = sdf.parse(gameResponses.get(i).getTimeEnding());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    Calendar eventTime = Calendar.getInstance();
+                    eventTime.setTime(eventDate);
                     Calendar endingTime = Calendar.getInstance();
-                    endingTime.setTime(gameResponses.get(i).getEventTime());
+                    endingTime.setTime(endingDate);
 
                     Suggestion finalSuggestion = new Suggestion(gameResponses.get(i).getSuggestionResponse().getSuggestionName(),
                             gameResponses.get(i).getSuggestionResponse().getLocation(), gameResponses.get(i).getSuggestionResponse().getId(),
