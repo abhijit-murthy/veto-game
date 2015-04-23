@@ -120,7 +120,7 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
 
     public void initGame(){
         restClient = new RestClient();
-        restClient.getGameInfo().getPastGames("ABMURTHY", new Callback<List<GameResponse>>() {
+        restClient.getGameInfo().getPastGames(Login.getUser(), new Callback<List<GameResponse>>() {
             @Override
             public void success(List<GameResponse> gameResponses, Response response) {
                 ListView list = (ListView) findViewById(R.id.past_game_list);
