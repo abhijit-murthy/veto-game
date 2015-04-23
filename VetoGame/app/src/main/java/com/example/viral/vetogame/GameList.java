@@ -81,7 +81,7 @@ public class GameList extends Activity implements SearchView.OnQueryTextListener
                         System.out.println("REFRESHING");
                         initGame(list,emptyText);
                     }
-                }, 3000);
+                }, 1000);
             }
         });
 
