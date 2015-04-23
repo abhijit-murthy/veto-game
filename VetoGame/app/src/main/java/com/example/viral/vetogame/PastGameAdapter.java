@@ -11,10 +11,13 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by Viral on 2/19/2015.
@@ -56,36 +59,17 @@ public class PastGameAdapter extends ArrayAdapter<Game> {
         return view;
     }
 
-    public String calcTimePast (Calendar timeEnding, Calendar currentTime)
-    {
-        long endTime = timeEnding.getTimeInMillis();
-        long curTime = currentTime.getTimeInMillis();
-        long diffTime = curTime - endTime;
-        // divide the milliseconds by # of milliseconds in a day to get days difference
-        int days = (int)( diffTime / (1000 * 60 * 60 * 24) );
-        int hours = (int)( diffTime / (1000 * 60 * 60) );
-        int minutes = (int)( diffTime / (1000 * 60) );
-        int seconds = (int)( diffTime / (1000 * 60) );
-        if(days > 0){
-            return(""+days+" d");
-        }else if(hours > 0){
-            return(""+hours+" h");
-        }else if(minutes > 0){
-            return(""+minutes+" m");
-        }else if(seconds > 0){
-            return(""+seconds+" s");
-        }else{
-            return("game over");
-        }
-    }
-
     private void bind(Game game, View view) {
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.gameNameTextView.setText(game.getGameName());
         holder.winningSuggestionTextView.setText(game.getCurrentSuggestion().getName());
         holder.winnerTextView.setText(game.getWinner());
-        String timeRemaining = calcTimePast(game.getTimeEnding(),calendar);
-        holder.timePastTextView.setText(timeRemaining);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String eventTime = sdf.format(game.getEventTime().getTime());
+
+        holder.timePastTextView.setText(eventTime);
         holder.numberOfMembersTextView.setText(""+game.getNumberOfMembers());
     }
 

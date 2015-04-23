@@ -44,29 +44,10 @@ public class PastGameList extends Activity implements SearchView.OnQueryTextList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_game_list);
 
-        /*ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>();
-        suggestions.add(new Suggestion("Muffin Shop","2.2",5,1.5));
-        suggestions.add(new Suggestion("The Swamp","2.2",4,10));
-        suggestions.add(new Suggestion("Good Burger","2.2",3,15));
-        suggestions.add(new Suggestion("The Shore Shack","2.2",4,45));
-        suggestions.add(new Suggestion("Krusty Krab","2.2",1,50));
-
-        games.add(new Game("monday lunch", suggestions.get(0), 5,"viral"));
-        games.add(new Game("feast", suggestions.get(1), 5,"Shrek"));
-        games.add(new Game("dinner", suggestions.get(4), 5,"Patrick"));
-        games.add(new Game("snacktime", suggestions.get(3), 5,"Squid"));
-        games.add(new Game("monday lunch2", suggestions.get(2), 5,"Kel"));*/
-
         // Configure device list.
         adapter = new PastGameAdapter(this,games);
 
         initGame();
-        /*Button button = (Button) findViewById(R.id.btn_back);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                finish();
-            }
-        });*/
     }
 
 

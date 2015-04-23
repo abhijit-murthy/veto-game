@@ -59,7 +59,7 @@
                         android:layout_height="fill_parent"
                         android:layout_gravity="center"
                         android:paddingTop="0dp"
-                        android:src="@drawable/clock"/>
+                        android:src="@drawable/timer"/>
 
                     <TextView
                         android:tag="timeRemaining"
