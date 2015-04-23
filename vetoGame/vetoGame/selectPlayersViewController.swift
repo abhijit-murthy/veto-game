@@ -15,6 +15,7 @@ class selectPlayersViewController : UIViewController, UITableViewDataSource, UIT
     var gameID : String!
     var selectedFriends = [NSArray]()
     
+    @IBOutlet weak var addPlayersButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidAppear(animated: Bool){
@@ -49,13 +50,8 @@ class selectPlayersViewController : UIViewController, UITableViewDataSource, UIT
         var selectedCell = tableView.cellForRowAtIndexPath(indexPath)
         
         //TODO: unselect
-        if (selectedCell?.selected == false) {
-            selectedCell?.selected = true
-        }
-        else {
-            selectedCell?.selected = false
-        }
-        //self.selectedFriends.append(self.friends[indexPath.row])
+        selectedCell?.selected = true
+        self.selectedFriends.append(self.friends[indexPath.row])
     }
     //MARK:
     
@@ -80,6 +76,15 @@ class selectPlayersViewController : UIViewController, UITableViewDataSource, UIT
             println("Found \(friends.count) friends")
         }
         */
+    }
+    
+    @IBAction func sendPlayersBack(sender: AnyObject) {
+        //send info back
+        self.navigationController?.popViewControllerAnimated(true)
+        
+        var prevView : createGameViewController = self.navigationController?.viewControllers?.last as! createGameViewController
+        
+        prevView.friends = self.selectedFriends
     }
     
     func addFriendsToGame() {

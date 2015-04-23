@@ -31,7 +31,7 @@ class initialSuggestionListViewController : UIViewController, UITableViewDataSou
     }*/
     
     override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(false)
+        super.viewDidAppear(true)
         getYelpSuggestions()
         
         tableView.delegate = self
@@ -56,8 +56,24 @@ class initialSuggestionListViewController : UIViewController, UITableViewDataSou
         cell.distanceLabel.text = "Distance: "+(self.businesses[row][3] as! String)+" km"
         cell.ratingLabel.text = "Rating: "+toString(self.businesses[row][2])
         cell.mobileURL = self.businesses[row][1] as! String
+        cell.info = self.businesses[row] as! NSArray
+        cell.viewController = self
+        
+        //var controller = self.navigationController?.viewControllers[2]
+        //cell.prevController = controller as! UIViewController
         
         return cell
+    }
+    
+    func returnSuggestion(info: NSArray) {
+        var controller = self.navigationController?.viewControllers[1]
+        self.navigationController?.popViewControllerAnimated(true)
+        
+        var prevView : createGameViewController = self.navigationController?.viewControllers?.last as! createGameViewController
+        
+        prevView.suggestionInfo = info
+        prevView.radius = self.radius
+        prevView.center = self.center
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -136,7 +152,6 @@ class initialSuggestionListViewController : UIViewController, UITableViewDataSou
                     var newBusiness = [name, mobileURL, rating, String(format: "%.1f",distance), address, ratingURL, imageURL, id]
                     
                     self.businesses.addObject(newBusiness)
-                    println(newBusiness)
                 }
                 
             } else {

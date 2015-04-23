@@ -13,12 +13,14 @@ class createGameViewController : UIViewController {
     
     let currentDate = NSDate()
     var userID: String!
-    var radius : Int!
-    var friends : NSArray!
+    var radius : String!
+    var center : String!
+    var friends = [NSArray]()
+    var suggestionInfo = NSArray()
     
     //used for the POST request
-    var eventTimePOST : String!
-    var gameTimeEndPOST : String!
+    var eventTimePOST : String = ""
+    var gameTimeEndPOST : String = ""
     
     //variables on the UI
     @IBOutlet weak var gameNameTextField: UITextField!
@@ -49,7 +51,6 @@ class createGameViewController : UIViewController {
         
         //TODO: make start date only possible for up to a certain amount of days (datePickerView.maximumDate)
     }
-    
     
     @IBAction func selectGameEndTime(sender: UITextField) {
         var datePickerView  : UIDatePicker = UIDatePicker()
@@ -87,6 +88,12 @@ class createGameViewController : UIViewController {
         //TODO: Create new game in the app
             //TODO: Make sure that all elements are valid/exist
         
+        createGameDB()
+        
+        //get the gameID
+        //createNewSuggestion()
+        //addPlayers()
+        
         //Going back to the Home page
         self.navigationController?.popViewControllerAnimated(true)
     }
@@ -109,6 +116,10 @@ class createGameViewController : UIViewController {
             //sending the mapView to the listView
             destViewList.mapView = destViewMap
         }
+        
+        if (segue.identifier == "selectPlayers"){
+            var destView : selectPlayersViewController = segue.destinationViewController as! selectPlayersViewController
+        }
     }
     
     //Sending all info to database
@@ -118,34 +129,82 @@ class createGameViewController : UIViewController {
         request.URL = NSURL(string: url)
         request.HTTPMethod = "POST"
         
+        //Creating the POST parameters
+        //check that all information is there
+        var suggestionExists : Bool = self.suggestionInfo.count > 0
+        var nameExists : Bool = self.gameNameTextField.text != ""
+        var categoryExists : Bool = self.categoryTextField.text != ""
+        var eventTimeExists : Bool = self.eventTimePOST != ""
+        var gameTimeExists : Bool = self.gameTimeEndPOST != ""
         
-        //Creating the post parameters
-        
-        //missing suggestion_ttl, center, radius
-        var postParams = "user_id="+self.userID+"&event_type="+self.categoryTextField.text+"&game_name="+self.gameNameTextField.text+"&event_time="+self.eventTimePOST+"&time_ending="+self.gameTimeEndPOST
-        
-        request.HTTPBody = postParams.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-
-        //sending the request
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue(), completionHandler:{ (response:NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            var error: AutoreleasingUnsafeMutablePointer<NSError?> = nil
-            let jsonResult: NSDictionary! = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error: error) as? NSDictionary
+        if (suggestionExists && nameExists && categoryExists && eventTimeExists && gameTimeExists){
+            //TODO: suggestionTTL
+            var postParams1 = "user_id="+self.userID+"&event_type="+self.categoryTextField.text+"&game_name="+self.gameNameTextField.text+"&event_time="+(self.eventTimePOST as String)
+            var postParams2 = "&time_ending="+(self.gameTimeEndPOST as String)+"&center="+(self.center as String)+"&radius="+(self.radius as String)+"&suggestion_ttl=15"
             
-            if (jsonResult != nil) {
-                // process jsonResult - assigning values to labels
-                //self.userName.text = (jsonResult.objectForKey("name") as! String)
-                //self.numberWins.text = toString(jsonResult.objectForKey("wins") as! NSNumber)
-                //self.numberPoints.text = toString(jsonResult.objectForKey("points") as! NSNumber)
-                
-            } else {
-                // couldn't load JSON, look at error
-                println("return is null")
-            }
-        })
+            let postParams = postParams1 + postParams2
+            let data = (postParams as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+            
+            //Sending the POST request
+            request.HTTPBody = data
+            
+            var connection = NSURLConnection(request: request, delegate: self, startImmediately: false)
+            
+            connection!.start()
+        }
+        else {
+            println("Missing information")
+        }
     }
     
-    //TODO: add players to the game
-    ///http://173.236.253.103:28080/game_data/add_user_to_game/
-    //userid, gameid
+    func createNewSuggestion(gameID: String) {
+        var url : String = "http://173.236.253.103:28080/suggestion_data/create"
+        var request : NSMutableURLRequest = NSMutableURLRequest()
+        request.URL = NSURL(string: url)
+        request.HTTPMethod = "POST"
+
+        //make sure all parameters exist
+        if (self.suggestionInfo.count > 0) {
+            var post = "user_id="+(self.userID as String)+"&game_id="+gameID+"&name="+(self.suggestionInfo[0] as! String)+"&location="+(self.suggestionInfo[4] as! String)+"&mobile_url="+(self.suggestionInfo[1] as! String)+"&image_url="+(self.suggestionInfo[6] as! String)+"&rating_url="+(self.suggestionInfo[5] as! String)
+
+            let data = (post as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+        
+            //Sending the POST request
+            request.HTTPBody = data
+        
+            var connection = NSURLConnection(request: request, delegate: self, startImmediately: false)
+        
+            connection!.start()
+        }
+        else {
+            println("Bad suggestion")
+        }
+    }
     
+    func addPlayers(gameID: String) {
+        var url : String = "http://173.236.253.103:28080/game_data/add_user_to_game/"
+        var request : NSMutableURLRequest = NSMutableURLRequest()
+        request.URL = NSURL(string: url)
+        request.HTTPMethod = "POST"
+        
+        //make sure all parameters exist
+        if (self.friends.count > 0) {
+            for (var i=0; i<self.friends.count; i++){
+                var user_id : String = self.friends[i][0] as! String
+                var post = "user_id="+user_id+"&game_id="+gameID
+            
+                var data = (post as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+            
+                //Sending the POST request
+                request.HTTPBody = data
+            
+                var connection = NSURLConnection(request: request, delegate: self, startImmediately: false)
+            
+                connection!.start()
+            }
+        }
+        else {
+            println("No players to add.")
+        }
+    }
 }

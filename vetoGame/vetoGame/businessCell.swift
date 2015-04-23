@@ -17,6 +17,9 @@ class businessCell: UITableViewCell {
     @IBOutlet weak var addSuggestion: UIButton!
     
     var mobileURL : String!
+    var info : NSArray!
+        //info = [name, mobileURL, rating, distance, address, ratingURL, imageURL, id]
+    var viewController : initialSuggestionListViewController!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,9 +31,11 @@ class businessCell: UITableViewCell {
     
     @IBAction func goToBusinessURL(sender: UIButton) {
         let newURL = NSURL(string: self.mobileURL)
-        println(mobileURL)
         
         UIApplication.sharedApplication().openURL(newURL!)
     }
     
+    @IBAction func suggestionSelected(sender: AnyObject) {
+        viewController.returnSuggestion(info)
+    }
 }
