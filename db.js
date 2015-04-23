@@ -363,7 +363,7 @@ function isGameFinished (game)
 					}
 				)
 				.then(function(suggestion) {
-					game.getUsers().then(function(users) { 
+					return game.getUsers().then(function(users) { 
 					
 							if (suggestion.votes >= (users.count - 1))   
 							{
