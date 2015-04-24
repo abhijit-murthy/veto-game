@@ -18,10 +18,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var fbSession : FBSession!
     var total : Int = 0
     var games = NSMutableArray()
+        //game = [name, id, eventType, suggestionTTL, radius, center, currentSuggestionName, eventTime, timeEnding]
     
+    var currentGame : NSArray!
+    
+    /*
     override func viewDidLoad() {
         super.viewDidLoad()
         getCurrentGames()
+    }*/
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        getCurrentGames()
+        
+        self.tableView.reloadData()
     }
     
     override func viewDidAppear(animated: Bool){
@@ -55,6 +67,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+
+        self.currentGame = self.games[indexPath.row] as! NSArray
     }
     //MARK:
     
@@ -86,7 +100,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if (segue.identifier == "gameScreen"){
             var destViewController : gameScreenViewController = segue.destinationViewController as! gameScreenViewController
             
-            //TODO: send information to the game screen
+            destViewController.game = self.currentGame
         }
         
         if (segue.identifier == "logout"){
@@ -136,7 +150,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     
                     //TODO: make sure that all games have currentSuggestion
                     var currentSuggestionName = (result.objectForKey("currentSuggestion"))!.objectForKey("name") as! String
-                    //var currentSuggestionName = "Placeholder"
                     
                     //needs to be change to location
                     var center = result.objectForKey("center") as! String
@@ -145,6 +158,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     
                     self.games.addObject(newGame)
                 }
+                
+                self.currentGame = self.games.objectAtIndex(0) as! NSArray
+                
             } else {
                 // there are no current games!
                 self.noGamesLabel.text = "No current games."

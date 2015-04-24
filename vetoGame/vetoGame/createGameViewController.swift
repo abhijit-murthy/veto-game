@@ -17,6 +17,7 @@ class createGameViewController : UIViewController {
     var center : String!
     var friends = [NSArray]()
     var suggestionInfo = NSArray()
+    var gameID : String = ""
     
     //used for the POST request
     var eventTimePOST : String = ""
@@ -84,20 +85,21 @@ class createGameViewController : UIViewController {
     }
     
     @IBAction func createGame(sender: AnyObject) {
-        //TODO: Call database API to create new game
-        //TODO: Create new game in the app
-            //TODO: Make sure that all elements are valid/exist
-        
+        //call database and create a new game
+        println("creating game")
         createGameDB()
+        println(self.gameID)
         
-        //get the gameID
-        //createNewSuggestion()
-        //addPlayers()
+        //get the gameID and send the new suggestion and add the players
+        //println("creating suggestion")
+        //createNewSuggestion(self.gameID)
+        
+        //println("creating players")
+        //addPlayers(self.gameID)
         
         //Going back to the Home page
         self.navigationController?.popViewControllerAnimated(true)
     }
-    
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         view.endEditing(true)
@@ -140,7 +142,7 @@ class createGameViewController : UIViewController {
         if (suggestionExists && nameExists && categoryExists && eventTimeExists && gameTimeExists){
             //TODO: suggestionTTL
             var postParams1 = "user_id="+self.userID+"&event_type="+self.categoryTextField.text+"&game_name="+self.gameNameTextField.text+"&event_time="+(self.eventTimePOST as String)
-            var postParams2 = "&time_ending="+(self.gameTimeEndPOST as String)+"&center="+(self.center as String)+"&radius="+(self.radius as String)+"&suggestion_ttl=15"
+            var postParams2 = "&time_ending="+(self.gameTimeEndPOST as String)+"&center="+(self.center as String)+"&radius="+(self.radius as String)+"&suggestion_ttl=180"
             
             let postParams = postParams1 + postParams2
             let data = (postParams as NSString).dataUsingEncoding(NSUTF8StringEncoding)
@@ -157,6 +159,20 @@ class createGameViewController : UIViewController {
         }
     }
     
+    func connection(connection: NSURLConnection, didReceiveData data: NSData) {
+        var err : NSErrorPointer = nil
+        var jsonResult: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: err) as! NSDictionary
+        
+        if (self.gameID == ""){
+            self.gameID = toString(jsonResult.objectForKey("id") as! Int)
+            println(self.gameID)
+            
+            createNewSuggestion(self.gameID)
+            
+            addPlayers(self.gameID)
+        }
+    }
+
     func createNewSuggestion(gameID: String) {
         var url : String = "http://173.236.253.103:28080/suggestion_data/create"
         var request : NSMutableURLRequest = NSMutableURLRequest()
@@ -182,14 +198,14 @@ class createGameViewController : UIViewController {
     }
     
     func addPlayers(gameID: String) {
-        var url : String = "http://173.236.253.103:28080/game_data/add_user_to_game/"
-        var request : NSMutableURLRequest = NSMutableURLRequest()
-        request.URL = NSURL(string: url)
-        request.HTTPMethod = "POST"
-        
         //make sure all parameters exist
         if (self.friends.count > 0) {
             for (var i=0; i<self.friends.count; i++){
+                var url : String = "http://173.236.253.103:28080/game_data/add_user_to_game/"
+                var request : NSMutableURLRequest = NSMutableURLRequest()
+                request.URL = NSURL(string: url)
+                request.HTTPMethod = "POST"
+                
                 var user_id : String = self.friends[i][0] as! String
                 var post = "user_id="+user_id+"&game_id="+gameID
             

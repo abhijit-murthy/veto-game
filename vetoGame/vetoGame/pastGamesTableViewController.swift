@@ -70,6 +70,7 @@ class pastGamesTableViewController : UIViewController, UITableViewDataSource, UI
             let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers, error: error)
             
             var totalGames : Int = jsonResult!.count as Int
+            if (totalGames>20) {totalGames=19}
             
             // process jsonResult - assigning values to labels
             if (jsonResult != nil && totalGames>0) {
@@ -92,7 +93,6 @@ class pastGamesTableViewController : UIViewController, UITableViewDataSource, UI
                     var id = result.objectForKey("id") as! Int
                     
                     //TODO: currentSuggestionName should always be in db needs
-                    //var currentSuggestionName = "No suggestion"
                     var currentSuggestionName = result.objectForKey("currentSuggestion")!.objectForKey("name") as! String
                     
                     var newGame = [name, id, currentSuggestionName, eventTime, timeEnding] as NSArray

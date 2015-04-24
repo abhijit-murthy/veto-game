@@ -19,7 +19,8 @@ class businessCell: UITableViewCell {
     var mobileURL : String!
     var info : NSArray!
         //info = [name, mobileURL, rating, distance, address, ratingURL, imageURL, id]
-    var viewController : initialSuggestionListViewController!
+    var initialViewController : initialSuggestionListViewController!
+    var viewController : newSuggestionListViewController!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,6 +37,11 @@ class businessCell: UITableViewCell {
     }
     
     @IBAction func suggestionSelected(sender: AnyObject) {
-        viewController.returnSuggestion(info)
+        if (self.initialViewController != nil) {
+            self.initialViewController.returnSuggestion(info)
+        }
+        else{
+            self.viewController.returnSuggestion(info)
+        }
     }
 }

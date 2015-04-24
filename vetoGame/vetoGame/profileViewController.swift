@@ -20,7 +20,6 @@ class profileViewController : UIViewController {
     
     override func viewDidLoad() {
         //something
-        //label.text = userID
         
         getUserInfo()
     }
